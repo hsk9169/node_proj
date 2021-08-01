@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 const { Client } = require('pg');
+const assert = require('assert');
 
 const pgClient = new Client({
     user: 'testuser',
@@ -12,8 +13,8 @@ const pgClient = new Client({
     connectionTimeoutMillis: 2000,
 });
 
-router.get('/',
-    function(req, res, next){
+router.get('/', (req, res) => { 
+
         res.json({
             success: true,
             message: 'users page'});
@@ -21,37 +22,39 @@ router.get('/',
 });
 
 
-router.get('/data', 
-    function(req, res) {
-        var ret = {};
-
-        pgClient
-            .connect()
-            .then(() => {
-                console.log('DB connected');
-                //queryDatabase();
-                var rows = await queryGet();
-                console.log('Received data');
-                console.log(rows);
-            })
-            .catch(err => console.error('DB connection error', err.stack));
-
-        res.send(ret);
-        //res.json({
-        //    success: true});
-        //console.log('GET /api/users/data');
+router.get('/data',
+    function(req, res, next) {
+        pgClient.connect(err => {
+            if (err) {
+                console.error('connection error', err.stack)
+            } else {
+                console.log('connected')
+            }
+        })
+        queryDatabase();
+        queryGet()
+            .then((value) => {
+                res.send(value); 
+            });
 });
 
 function queryDatabase() {
     const createQuery = `
         CREATE TABLE userData (id serial PRIMARY KEY, name VARCHAR(20), subtitle VARCHAR(50));
     `;
+    const dropTable = `
+        DROP TABLE userData;
+    `;
     const insertQuery = `
-        INSERT INTO userData (name, subtitle) VALUES ('Hansu Kim', 'Cloud Developer');
-        INSERT INTO userData (name, subtitle) VALUES ('Hansu Kim', 'Cloud Developer');
         INSERT INTO userData (name, subtitle) VALUES ('Hansu Kim', 'Cloud Developer');
     `;
 
+    pgClient
+        .query(dropTable)
+        .catch(err => console.log(err))
+        .then(() => {
+            console.log('Table deleted');
+        });
     pgClient
         .query(createQuery)
         .catch(err => console.log(err))
@@ -68,7 +71,7 @@ function queryDatabase() {
 
 async function queryGet(){
     const query = `SELECT * FROM userData`;
-    var rows = {};
+    let rows = {};
     console.log('Running QUERY to PostgreSQL server');
 
     pgClient
@@ -84,7 +87,13 @@ async function queryGet(){
             console.log('Finished execution');
         });
         
+    return new Promise(resolve =>
+        setTimeout(() => {
+            resolve(rows);
+        }, 3000));
+    
     return rows;
 }
+
 
 module.exports = router;
