@@ -1,6 +1,6 @@
 // ENV
 require('dotenv').config();
-// DEPENDENCIES
+// Dependencies
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
@@ -8,6 +8,8 @@ const bodyParser = require('body-parser');
 const app = express();
 
 const { PORT, MONGO_URI} = process.env;
+const { swaggerUi, specs } = require('./config/swagger');
+const logger = require('./config/winston');
 
 // Static File Services
 //app.use(express.static('public'));
@@ -18,7 +20,7 @@ app.use(function (req, res, next) {
     next();
 });
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.urlencoded({ extended: true }));
 
 // Using native Promise of Node.js
 mongoose.Promise = global.Promise;
@@ -31,10 +33,13 @@ const options = {
 // Connect to MongoDB
 mongoose
     .connect(MONGO_URI, options)
-    .then(() => console.log('MongoDB connect Success'))
-    .catch(e => console.error(e));
+    .then(() => logger.info('MongoDB connect Success'))
+    .catch(e => logger.error(e.stack));
 
-// ROUTERS
-app.use('/todos', require('./routes/todos'));
+// Routers
+app.use('/tests', require('./routes/tests'));
+
+// Swagger
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 
 app.listen(PORT, () => console.log(`Server listening on port ${PORT}`));
