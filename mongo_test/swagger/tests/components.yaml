@@ -1,0 +1,18 @@
+components:
+    schemas:
+        Test:
+            type: object
+            properties:
+                testid:
+                    type: integer
+                    description: test ID
+                    example: 0
+                content:
+                    type: string
+                    description: content type
+                    example: name
+                completed:
+                    type: string
+                    description: value
+                    exmaple: hansu kim
+

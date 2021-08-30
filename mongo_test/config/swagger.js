@@ -22,12 +22,11 @@ const swaggerDefinition = {
             description: 'Dev server',
         },
     ],
-    //basePath:'/'
 };
         
 const options = { 
     swaggerDefinition, 
-    apis: ['./routes/*.js', './models/*.js'], 
+    apis: ['./swagger/tests/*.yaml'], 
 };
 
 const specs = swaggereJsdoc(options);

@@ -2,73 +2,119 @@ const router = require('express').Router();
 const Test = require('../models/test');
 const logger = require('../config/winston');
 
-/**
- * @swagger
- * /tests:
- *  get:
- *      tags:
- *      - test
- *      description: get all test data
- *      
- *      responses:
- *        200:
- *          description: get test data success
- *          content:
- *            application/json:
- *               $ref: '#/components/schemas/Test'
- *
- */
-
 // Create new test document
-router.post('/', (req, res) => {
+router.post('/', async (req, res) => {
     logger.info('POST /tests/');
-    Test.create(req.body)
-        .then(test => res.send(test))
+    await Test.create(req.body)
+        .then(test => {
+            logger.info('success POST');
+            res.json(test);
+        })
         .catch(e => {
             logger.error('POST /tests/');
             logger.error(e.stack);
-            res.status(500).send(e)
+            res.status(500).send(e);
         });
 });
 
 // Find All
-router.get('/', (req, res) => {
+router.get('/', async (req, res) => {
     logger.info('GET /tests/');
-    Test.findAll()
+    await Test.findAll()
         .then((tests) => {
             if (!tests.length) {
+                logger.error('no data to GET');
                 return res.status(404).send(
-                    { err: 'To do not found' });
-                logger.error('No data to GET');
+                    { err: 'data not found' });
             }
-            res.send(`find successfully: ${tests}`);
+            logger.info('success GET');
+            res.json(tests);
         })
-        .catch(err => res.status(500).send(err));
+        .catch(err => {
+            logger.error('GET /tests/');
+            logger.error(err.stack);
+            res.status(500).send(err);
+        });
 });
 
 // Find One by testid
-router.get('/testid/:testid', (req, res) => {
-      Test.findOneByTestid(req.params.testid)
+router.get('/testid/:testid', async (req, res) => {
+    logger.info(`GET /tests/{req.params.testid}`);
+    await Test.findOneByTestid(req.params.testid)
         .then((test) => {
-                  if (!test) return res.status(404).send(
-                      { err: 'Test not found' });
-                  res.send(`findOne successfully: ${test}`);
-                })
-        .catch(err => res.status(500).send(err));
+            if (!test) {
+                logger.error('no data to GET');
+                return res.status(404).send(
+                    { err: 'Test not found' });
+            }
+            logger.info('success GET');
+            res.json(test);
+        })
+        .catch(err => {
+            logger.error(`GET /tests/{req.params.testid}`);
+            logger.error(err.stack);
+            res.status(500).send(err);
+        });
 });
 
 // Update by testid
-router.put('/testid/:testid', (req, res) => {
-    Test.updateByTestid(req.params.testid, req.body)
-        .then(test => res.send(test))
-        .catch(err => res.status(500).send(err));
+router.put('/testid/:testid', async (req, res) => {
+    logger.info(`PUT /tests/{req.params.testid}`);
+    await Test.updateByTestid(req.params.testid, req.body)
+        .then(test => {
+            logger.info('success PUT');
+            res.json(test);
+        })
+        .catch(err => {
+            logger.error(`PUT /tests/{req.params.testid}`);
+            logger.error(err.stack);
+            res.status(500).send(err);
+        });
 });
 
 // Delete by testid
-router.delete('/testid/:testid', (req, res) => {
-    Test.deleteByTestid(req.params.testid)
-        .then(() => res.sendStatus(200))
-        .catch(err => res.status(500).send(err));
+router.delete('/testid/:testid', async (req, res) => {
+    logger.info(`DELETE /tests/{req.params.testid}`);
+    await Test.deleteByTestid(req.params.testid)
+        .then(() => {
+            logger.info('success DELETE');
+            res.sendStatus(200);
+        })
+        .catch(err => {
+            logger.error(`DELETE /tests/{req.params.testid}`);
+            logger.error(err.stack);
+            res.status(500).send(err);
+        });
+});
+
+// Get by Contents
+router.get('/', async (req, res) => {
+    logger.info(`GET /tests/{req.params.content}`);
+    await Test.findByContents(req.params.content)
+        .then(() => {
+            logger.info('success GET');
+            res.json(test);
+        })
+        .catch(err => {
+            logger.error(`GET /tests/{req.params.content}`);
+            logger.error(err.stack);
+            res.status(500).send(err);
+        });
+});
+
+// Get by Completed
+router.get('/', async (req, res) => {
+    logger.info(`GET /tests/{req.params.completed}`);
+    await Test.findByCompleted(req.params.completed)
+        .then(() => {
+            logger.info('success GET');
+            res.json(test);
+        })
+        .catch(err => {
+            logger.error(`GET /tests/{req.params.completed}`);
+            logger.error(err.stack);
+            res.status(500).send(err);
+        });
 });
 
 

@@ -1,26 +1,5 @@
 const mongoose = require('mongoose');
 
-/**
- * @swagger
- * components:
- *      schemas:
- *          Test:
- *              type: object
- *              properties:
- *                  testid:
- *                      type: integer
- *                      description: test ID
- *                      example: 0
- *                  content:
- *                      type: string
- *                      description: content type
- *                      example: name
- *                  completed:
- *                      type: string
- *                      description: value
- *                      example: hansu kim
- */
-
 // Define Scehmas
 const testSchema = new mongoose.Schema(
     {
@@ -81,6 +60,11 @@ testSchema.statics.deleteByTestid = function (testid) {
 // Find By Contents
 testSchema.methods.findByContents = function(content, cb) {
     return this.find({ contents: new RegExp(content, 'i') }, cb);
+};
+
+// Find By Completed
+testSchema.methods.findByCompleted = function(completed, cb) {
+    return this.find({ completed: new RegExp(completed, 'i') }, cb);
 };
 
 
