@@ -1,14 +1,12 @@
 {
   "name": "ec2-user",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
   "dependencies": {
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "mongoose": "^6.0.0",
-    "pg": "^8.6.0",
-    "pg-native": "^3.0.0",
+    "package.json": "^2.0.1",
     "text-encoder": "0.0.4",
     "whatwg-url": "^9.1.0",
     "winston": "^3.3.3",
@@ -22,5 +20,14 @@
   "devDependencies": {
     "swagger-jsdoc": "^6.1.0",
     "swagger-ui-express": "^4.1.6"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hsk9169/node_proj.git"
+  },
+  "bugs": {
+    "url": "https://github.com/hsk9169/node_proj/issues"
+  },
+  "homepage": "https://github.com/hsk9169/node_proj#readme",
+  "description": ""
 }

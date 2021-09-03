@@ -18,7 +18,8 @@ const swaggerDefinition = {
     },
     servers: [
         {
-            url: 'http://ec2-3-16-107-134.us-east-2.compute.amazonaws.com:8000',
+            //url: 'http://ec2-3-16-107-134.us-east-2.compute.amazonaws.com:8000',
+            url: 'localhost:8000',
             description: 'Dev server',
         },
     ],
