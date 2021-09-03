@@ -39,19 +39,19 @@ userSchema.statics.findAll = function () {
 };
 
 // Find One by userid
-userSchema.statics.findOneByTestid = function (userid) {
+userSchema.statics.findOneByUserid = function (userid) {
     return this.findOne({ userid });
 };
 
 // Update by userid
-userSchema.statics.updateByTestid = function (userid, payload) {
+userSchema.statics.updateByUserid = function (userid, payload) {
     // {new: true }: return the modified document 
     // rather than the original. defaults to false
     return this.findOneAndUpdate({ userid }, payload, { new: true });
 };
 
 // Delete by userid
-userSchema.statics.deleteByTestid = function (userid) {
+userSchema.statics.deleteByUserid = function (userid) {
     return this.deleteOne({ userid });
 };
 
@@ -69,4 +69,4 @@ userSchema.methods.findByCompleted = function(completed, cb) {
 
 
 // Create Model & Export
-module.exports = mongoose.model('Test', userSchema);
+module.exports = mongoose.model('User', userSchema);

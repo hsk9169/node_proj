@@ -26,7 +26,7 @@ const swaggerDefinition = {
         
 const options = { 
     swaggerDefinition, 
-    apis: ['./swagger/tests/*.yaml'], 
+    apis: ['./swagger/tests/*.yaml', './swagger/users/*.yaml',], 
 };
 
 const specs = swaggereJsdoc(options);

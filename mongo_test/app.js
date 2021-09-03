@@ -38,6 +38,7 @@ mongoose
 
 // Routers
 app.use('/tests', require('./routes/tests'));
+app.use('/users', require('./routes/users'));
 
 // Swagger
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
