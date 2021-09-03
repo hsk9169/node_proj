@@ -1,0 +1,18 @@
+components:
+    schemas:
+        User:
+            type: object
+            properties:
+                userid:
+                    type: integer
+                    description: user ID
+                    example: 0
+                content:
+                    type: string
+                    description: content type
+                    example: name
+                completed:
+                    type: string
+                    description: value
+                    exmaple: hansu kim
+
