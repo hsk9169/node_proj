@@ -56,7 +56,7 @@ app.get('/', (req,res,next) => {
 
 app.get('/profile', (req,res,next) => {
     console.log(req.query);
-    res.render('./profile');
+    res.render('./profile', req.query);
 });
 
 

@@ -105,8 +105,6 @@ router.get('/kakao/callback/result/success', async (req,res) => {
                     gender: res.data.kakao_account.gender,
                 };
             }
-            console.log('get profile success');
-            console.log(getProfile);
             result = 'success';
             return result;
         })
@@ -116,8 +114,7 @@ router.get('/kakao/callback/result/success', async (req,res) => {
             return result;
         })
         .then(() => {
-            //logger.info(`get user(${getProfile.id}) profile success`);
-            //logger.info(getProfile);
+            logger.info(`get user(${getProfile.id}) profile success`);
             res.redirect(url.format({
                 pathname: '/profile',
                 query: getProfile,
