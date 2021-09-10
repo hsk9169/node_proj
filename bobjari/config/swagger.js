@@ -1,12 +1,21 @@
 const swaggerUi = require('swagger-ui-express');
 const swaggereJsdoc = require('swagger-jsdoc'); 
 
+let url;
+const env = process.argv[2];
+
+if(env == 'ec2') {
+    url = 'http://ec2-3-16-107-134.us-east-2.compute.amazonaws.com:8000';
+} else {
+    url = 'localhost:8000';
+}
+
 const swaggerDefinition = {
     openapi: '3.0.0',
     info: {
-        title: 'Test API', 
+        title: '밥자리 API', 
         version: '1.0.0',
-        description: 'Test API with express',
+        description: '밥자리 API with Express',
         license: {
             name: 'Licensed Under MIT',
             url: 'https://spdx.org/licenses/MIT.html',
@@ -18,9 +27,8 @@ const swaggerDefinition = {
     },
     servers: [
         {
-            //url: 'http://ec2-3-16-107-134.us-east-2.compute.amazonaws.com:8000',
-            url: 'localhost:8000',
-            description: 'Dev server',
+            url: url,
+            description: 'Dev Server',
         },
     ],
 };

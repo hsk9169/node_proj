@@ -9,29 +9,6 @@ const kakao = {
     callbackURI: 'http://localhost:8000/auth/kakao/callback',
 };
 
-
-router.get('/kakao', (req,res) => {
-    const kakaoAuthUri = `https://kauth.kakao.com/oauth/authorize?client_id=${kakao.clientID}&redirect_uri=${kakao.callbackURI}&response_type=code`;
-    // redirect with response (accessCode)
-    res.redirect(kakaoAuthUri);
-});
-
-function linkUser(session, provider, authData) {
-    let result = false;
-    if (session.authData) {
-        if (session.authData[provider]) {
-            return result;
-        }
-        sesison.authData[provider] = authData;
-    }else {
-        session.authData = {
-            [provider]: authData
-        };
-    }
-    result = true;
-    return result;
-}
-
 let getToken = {
     tokenType: 'tokenType',
     accessToken: 'accessToken',
@@ -47,6 +24,15 @@ let getProfile = {
     kakaoAccount: {},
 };
 
+let result = 'fail';
+
+router.get('/kakao', (req,res) => {
+    const kakaoAuthUri = `https://kauth.kakao.com/oauth/authorize?client_id=${kakao.clientID}&redirect_uri=${kakao.callbackURI}&response_type=code`;
+    // redirect with response (accessCode)
+    logger.info(`get user(${req.query.client_id}) accessCode : ${req.query.code}`);
+    res.redirect(kakaoAuthUri);
+});
+
 router.get('/kakao/callback', async (req,res) => {
     const accessCode = req.query.code;
 
@@ -61,8 +47,6 @@ router.get('/kakao/callback', async (req,res) => {
         }),
         url: 'https://kauth.kakao.com/oauth/token',
     }
-
-    let result = 'fail';
     
     axios(options)
         .then(res => {
@@ -86,6 +70,7 @@ router.get('/kakao/callback', async (req,res) => {
         })
         .then(() => {
             const url = `${kakao.callbackURI}/result/${result}`;
+            logger.info(`accessToken : ${getToken.accessToken}`);
             res.redirect(url);
         });
 });
@@ -118,8 +103,8 @@ router.get('/kakao/callback/result/success', async (req,res) => {
             return result;
         })
         .then(() => {
-            logger.info('get profile success');
-            console.log(result);
+            logger.info(`get user(${getProfile.id}) profile success`);
+            logger.info(getProfile.kakaoAccount);
             res.redirect('/');
         });
 });
