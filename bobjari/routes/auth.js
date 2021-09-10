@@ -2,11 +2,12 @@ const router = require('express').Router();
 const logger = require('../config/winston');
 const axios = require('axios');
 const qs = require('qs');
+const url = require('url');
 
 const kakao = {
     clientID: 'e343c9f82222cc6cc84c721b9e869b3c',
     clientSecret: 'dRmnbLf8JJClsU7NjPWEkjKLTb4F1T6K',
-    callbackURI: 'http://localhost:8000/auth/kakao/callback',
+    callbackURI: 'http://http://ec2-3-16-107-134.us-east-2.compute.amazonaws.com:8000/auth/kakao/callback',
 };
 
 let getToken = {
@@ -21,20 +22,27 @@ let getToken = {
 let getProfile = {
     id: 0,
     connectedAt: 0,
-    kakaoAccount: {},
+    profileImage: '',
+    email: '',
+    ageRange: '',
+    birthday: '',
+    gender: '',
 };
 
 let result = 'fail';
 
 router.get('/kakao', (req,res) => {
+    logger.info('GET /auth/kakao');
     const kakaoAuthUri = `https://kauth.kakao.com/oauth/authorize?client_id=${kakao.clientID}&redirect_uri=${kakao.callbackURI}&response_type=code`;
     // redirect with response (accessCode)
-    logger.info(`get user(${req.query.client_id}) accessCode : ${req.query.code}`);
     res.redirect(kakaoAuthUri);
 });
 
 router.get('/kakao/callback', async (req,res) => {
     const accessCode = req.query.code;
+    logger.info('GET /auth/kakao/callback');
+    logger.info(req.query);
+    logger.info(`get user(${req.query.client_id}) accessCode : ${req.query.code}`);
 
     let options = {
         method: 'POST',
@@ -76,6 +84,7 @@ router.get('/kakao/callback', async (req,res) => {
 });
 
 router.get('/kakao/callback/result/success', async (req,res) => {
+    logger.info('GET /auth/kakao/callback/result/success');
     let options = {
         method: 'GET',
         headers: { 'Authorization': `Bearer ${getToken.accessToken}` },
@@ -89,10 +98,12 @@ router.get('/kakao/callback/result/success', async (req,res) => {
                 getProfile = {
                     id: res.data.id,
                     connectedAt: res.data.connected_at,
-                    kakaoAccount: res.data.kakao_account,
+                    profileImg: res.data.properties.profile_image,
+                    email: res.data.kakaoAccount.email,
+                    ageRange: res.data.kakaoAccount.age_range,
+                    birthday: res.data.kakaoAccount.birthday,
+                    gender: res.data.kakaoAccount.gender,
                 };
-                //console.log(getProfile);
-                console.log(res);
             }
             result = 'success';
             return result;
@@ -104,8 +115,11 @@ router.get('/kakao/callback/result/success', async (req,res) => {
         })
         .then(() => {
             logger.info(`get user(${getProfile.id}) profile success`);
-            logger.info(getProfile.kakaoAccount);
-            res.redirect('/');
+            logger.info(getProfile);
+            res.redirect(url.format({
+                pathname: '/profile',
+                query: getProfile,
+            }));
         });
 });
 
