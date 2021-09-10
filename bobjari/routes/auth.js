@@ -99,10 +99,10 @@ router.get('/kakao/callback/result/success', async (req,res) => {
                     id: res.data.id,
                     connectedAt: res.data.connected_at,
                     profileImg: res.data.properties.profile_image,
-                    email: res.data.kakaoAccount.email,
-                    ageRange: res.data.kakaoAccount.age_range,
-                    birthday: res.data.kakaoAccount.birthday,
-                    gender: res.data.kakaoAccount.gender,
+                    email: res.data.kakao_account.email,
+                    ageRange: res.data.kakao_account.age_range,
+                    birthday: res.data.kakao_account.birthday,
+                    gender: res.data.kakao_account.gender,
                 };
             }
             console.log('get profile success');
