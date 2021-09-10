@@ -7,7 +7,7 @@ const url = require('url');
 const kakao = {
     clientID: 'e343c9f82222cc6cc84c721b9e869b3c',
     clientSecret: 'dRmnbLf8JJClsU7NjPWEkjKLTb4F1T6K',
-    callbackURI: 'http://http://ec2-3-16-107-134.us-east-2.compute.amazonaws.com:8000/auth/kakao/callback',
+    callbackURI: 'http://ec2-3-17-139-14.us-east-2.compute.amazonaws.com:8000/auth/kakao/callback',
 };
 
 let getToken = {
@@ -105,6 +105,8 @@ router.get('/kakao/callback/result/success', async (req,res) => {
                     gender: res.data.kakaoAccount.gender,
                 };
             }
+            console.log('get profile success');
+            console.log(getProfile);
             result = 'success';
             return result;
         })
@@ -114,8 +116,8 @@ router.get('/kakao/callback/result/success', async (req,res) => {
             return result;
         })
         .then(() => {
-            logger.info(`get user(${getProfile.id}) profile success`);
-            logger.info(getProfile);
+            //logger.info(`get user(${getProfile.id}) profile success`);
+            //logger.info(getProfile);
             res.redirect(url.format({
                 pathname: '/profile',
                 query: getProfile,
