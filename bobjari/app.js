@@ -13,8 +13,8 @@ const { swaggerUi, specs } = require('./config/swagger');
 const logger = require('./config/winston');
 
 //  View HTMLs
-app.set('view engine', 'html');
-app.engine('html', require('ejs').renderFile);
+app.set('view engine','ejs'); // 1
+app.use(express.static(__dirname + '/public'));
 
 // Static File Services
 //app.use(express.static('public'));
