@@ -1,5 +1,12 @@
 <div>
-    <% if (req.id) { %>
-        <h2><%= req.id %></h2>
+    <img src="/profile" />
+    <% if (id) { %>
+        <h2><%= id %></h2>
+    <% } %>
+    <% if (email) { %>
+        <h2><%= email %></h2>
+    <% } %>
+    <% if (profileImg) { %>
+        <img src="<%= profileImg %>" />
     <% } %>
 </div>
