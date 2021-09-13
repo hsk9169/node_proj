@@ -1,12 +1,7 @@
 <div>
-    <img src="/views/img/bobjari_icon.png" />
-    <% if (id) { %>
+    <% if (id && email && profileImg) { %>
         <h2><%= id %></h2>
-    <% } %>
-    <% if (email) { %>
         <h2><%= email %></h2>
-    <% } %>
-    <% if (profileImg) { %>
         <img src="<%= profileImg %>" />
     <% } %>
 </div>

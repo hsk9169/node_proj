@@ -54,10 +54,6 @@ app.get('/', (req,res,next) => {
 });
 
 app.get('/profile', (req,res,next) => {
-    fs.readFile('views/img/bobjari_icon.png', (err,data) => {
-        res.writeHead(200, { 'Content-Type': 'text/html' });
-        res.end(data);
-    });
     res.render('./profile', req.query);
 });
 
