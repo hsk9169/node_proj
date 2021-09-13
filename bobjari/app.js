@@ -43,7 +43,6 @@ mongoose
     .catch(e => logger.error(e.stack));
 
 // Routers
-app.use('/tests', require('./routes/tests'));
 app.use('/users', require('./routes/users'));
 app.use('/auth', require('./routes/auth'));
 

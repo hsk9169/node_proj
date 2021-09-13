@@ -5,17 +5,38 @@ const userSchema = new mongoose.Schema(
     {
         userid: {
             type: Number,
-            require: true,
-            unique: true 
+            required: true,
+            unique: true ,
         },
-        content: { 
-            type: String,
-            require: true
+        updated: { 
+            type: Date,
+            required: true,
+            default: Date.now,
         },
-        completed: { 
+        email: { 
             type: String,
-            defalt: false 
-        }
+            required: true,
+        },
+        age: {
+            type: Number,
+            required: true,
+            max: 80,
+        },
+        gender: {
+            type: String,
+            required: true,
+        },
+        userId: {
+            type: String,
+            required: true,
+        },
+        userPwd: {
+            type: String,
+            required: true,
+        },
+        profileImg: Buffer,
+        profileImgType: String,
+        mbti: String,
     },
     {
         timestamps: true
