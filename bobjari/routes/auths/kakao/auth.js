@@ -7,7 +7,7 @@ const url = require('url');
 const kakao = {
     clientID: 'e343c9f82222cc6cc84c721b9e869b3c',
     clientSecret: 'dRmnbLf8JJClsU7NjPWEkjKLTb4F1T6K',
-    callbackURI: 'http://ec2-3-17-139-14.us-east-2.compute.amazonaws.com:8000/auth/kakao/callback',
+    callbackURI: 'http://ec2-3-17-139-14.us-east-2.compute.amazonaws.com:8000/api/auth/kakao/callback',
 };
 
 let getToken = {
