@@ -31,8 +31,8 @@ let getProfile = {
 
 let result = 'fail';
 
-router.get('/', (req,res) => {
-    logger.info('GET /auth/kakao');
+router.get('/access', (req,res) => {
+    logger.info('GET /auth/kakao/access');
     const kakaoAuthUri = `https://kauth.kakao.com/oauth/authorize?client_id=${kakao.clientID}&redirect_uri=${kakao.callbackURI}&response_type=code`;
     // redirect with response (accessCode)
     res.redirect(kakaoAuthUri);
