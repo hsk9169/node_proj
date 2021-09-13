@@ -31,14 +31,14 @@ let getProfile = {
 
 let result = 'fail';
 
-router.get('/kakao', (req,res) => {
+router.get('/', (req,res) => {
     logger.info('GET /auth/kakao');
     const kakaoAuthUri = `https://kauth.kakao.com/oauth/authorize?client_id=${kakao.clientID}&redirect_uri=${kakao.callbackURI}&response_type=code`;
     // redirect with response (accessCode)
     res.redirect(kakaoAuthUri);
 });
 
-router.get('/kakao/callback', async (req,res) => {
+router.get('/callback', async (req,res) => {
     const accessCode = req.query.code;
     logger.info('GET /auth/kakao/callback');
     logger.info(req.query);
@@ -83,7 +83,7 @@ router.get('/kakao/callback', async (req,res) => {
         });
 });
 
-router.get('/kakao/callback/result/success', async (req,res) => {
+router.get('/callback/result/success', async (req,res) => {
     logger.info('GET /auth/kakao/callback/result/success');
     let options = {
         method: 'GET',
