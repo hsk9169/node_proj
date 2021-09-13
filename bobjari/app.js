@@ -50,7 +50,7 @@ app.use('/', require('./routes'));
 // Swagger
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 
-app.get('/', (req,res,next) => {
+app.get('/login', (req,res,next) => {
     res.render('./index');
 });
 
