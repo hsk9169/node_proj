@@ -26,7 +26,8 @@ exports.loginKakaoCallback = async (accessCode) => {
             return getProfileUri;
         })
         .catch(err => {
-            logger.error(err);
+            console.log('getAccessToken error');
+            //logger.error(err);
             return err;
         });
 }
@@ -38,7 +39,8 @@ exports.loginKakaoGetProfile = async() => {
             return profile;
         })
         .catch(err => {
-            logger.error(err);
+            console.log('getProfile error');
+            //logger.error(err);
             return err;
         });
 }
