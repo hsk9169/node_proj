@@ -32,7 +32,7 @@ exports.getKakaoProfile = async (req, res, next) => {
     logger.info('GET /auth/kakao/profile');
     await authService.loginKakaoGetProfile()
         .then((profile) => {
-            res.redirect('../views/profile.ejs');
+            res.redirect('/profile.ejs');
         })
         .catch(err => {
             logger.error('GET /auth/kakao/profile');
