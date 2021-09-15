@@ -24,14 +24,14 @@ class kakaoLogin {
         return this.makeAuthUri();
     }
 
-    getAccessToken() {
+    getAccessToken(accessCode) {
         const options = {
             method: 'POST',
             headers: { 'content-type': 'application/x-www-form-urlencoded' },
             data: qs.stringify({
                 grant_type: 'authorization_code',
-                client_id: kakao.clientID,
-                redirect_uri: kakao.callbackURI,
+                client_id: this.clientID,
+                redirect_uri: this.callbackURI,
                 code: accessCode, 
             }),
             url: 'https://kauth.kakao.com/oauth/token',
