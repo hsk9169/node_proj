@@ -25,7 +25,7 @@ class kakaoLogin {
         return this.makeAuthUri();
     }
 
-    async getAccessToken(accessCode) {
+    getAccessToken(accessCode) {
         const options = {
             method: 'POST',
             headers: { 'content-type': 'application/x-www-form-urlencoded' },
@@ -39,7 +39,7 @@ class kakaoLogin {
             url: 'https://kauth.kakao.com/oauth/token',
         };
 
-        await axios(options)
+        axios(options)
             .then(res => {
                 if(res.status == 200) {
                     const getToken = {
@@ -59,14 +59,14 @@ class kakaoLogin {
             });
     }
 
-    async getProfile() {
+    getProfile() {
         const options = {
             method: 'GET',
             headers: { 'Authorization': `Bearer ${this.accessToken}` },
             url: 'https://kapi.kakao.com/v2/user/me',
         };
 
-        await axios(options)
+        axios(options)
             .then(res => {
                 if(res.status == 200) {
                     const getProfile = {

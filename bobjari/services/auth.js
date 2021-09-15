@@ -17,14 +17,14 @@ exports.loginKakao = async () => {
 }
 
 exports.loginKakaoCallback = async (accessCode) => {
-    const token = kakao.getAccessToken(accessCode)
+    const token = await kakao.getAccessToken(accessCode)
     console.log(token);
     const getProfileUri = `${kakao.callbackURI}/profile`;
     return getProfileUri;
 }
 
 exports.loginKakaoGetProfile = async() => {
-    profile = kakao.getProfile()
+    profile = await kakao.getProfile()
     console.log(profile);
     return profile;
 }
