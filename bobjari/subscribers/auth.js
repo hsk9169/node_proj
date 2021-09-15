@@ -46,6 +46,7 @@ class kakaoLogin {
         axios(options)
             .then(res => {
                 if(res.status == 200) {
+                    console.log('get token success');
                     const getToken = {
                         tokenType: res.data.token_type,
                         accessToken: res.data.access_token,
