@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const logger = require('../../../config/winston');
+const logger = require('../config/winston');
 const axios = require('axios');
 const qs = require('qs');
 const url = require('url');
