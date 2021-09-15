@@ -3,6 +3,7 @@ const logger = require('../config/winston');
 const axios = require('axios');
 const qs = require('qs');
 const url = require('url');
+const { resolve } = require('path/posix');
 
 class kakaoLogin {
     constructor(apiConfig) {
@@ -25,6 +26,8 @@ class kakaoLogin {
     }
 
     getAccessToken(accessCode) {
+        const promise = new Promise(resolve, reject);
+
         const options = {
             method: 'POST',
             headers: { 'content-type': 'application/x-www-form-urlencoded' },
@@ -48,12 +51,12 @@ class kakaoLogin {
                         refreshtokenExpiresIn: res.data.refresh_token_expires_in,
                         scope: res.data.scope,
                     };
-                    return getToken;
+                    resolve(getToken);
                 }
             })
             .catch(err => {
                 logger.info.error(err);
-                return err;
+                reject(err);
             });
     }
 
