@@ -19,16 +19,22 @@ exports.loginKakao = async () => {
 }
 
 exports.loginKakaoCallback = async (accessCode) => {
-    const token = kakao.getAccessToken(accessCode)
-    console.log(token);
-    const getProfileUri = `${kakao.callbackURI}/profile`;
-    return getProfileUri;
+    kakao.getAccessToken(accessCode)
+        .then(token => {
+            console.log(token);
+            const getProfileUri = `${kakao.callbackURI}/profile`;
+            return getProfileUri;
+        })
+        .catch(err => {
+            logger.error(err);
+            return err;
+        });
 }
 
 exports.loginKakaoGetProfile = async() => {
     kakao.getProfile()
         .then(profile => {
-            console.log(profile);
+            //console.log(profile);
             return profile;
         })
         .catch(err => {
