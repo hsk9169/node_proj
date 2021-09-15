@@ -24,6 +24,6 @@ exports.loginKakaoCallback = async (accessCode) => {
 }
 
 exports.loginKakaoGetProfile = async() => {
-    profile = await kakao.getProfile();
+    const profile = await kakao.getProfile();
     return profile;
 }
