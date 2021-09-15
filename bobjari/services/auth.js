@@ -8,12 +8,13 @@ const config = {
     clientSecret: CLIENT_SECRET,
     callbackURI: CALLBACK_URI,
 };
-console.log(config);
+
 let kakao = new kakaoLogin(config);
 
 exports.loginKakao = async () => {
-    console.log(kakao.cliendID);
+    console.log(kakao.clientID);
     const uri = kakao.getAuthUri();
+    console.log(uri);
     return uri;
 }
 

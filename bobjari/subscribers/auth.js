@@ -11,17 +11,17 @@ class kakaoLogin {
         this.callbackURI = apiConfig.callbackURI;
     }
 
-    getAuthUri() {
-        return this.makeAuthUri();
+    makeAuthUri() {
+        let  baseUri = 'https://kauth.kakao.com/oauth/authorize?';
+        baseUri = baseUri.concat('client_id=', this.clientID, '&');
+        baseUri = baseUri.concat('client_secret=', this.clientSecret, '&');
+        baseUri = baseUri.concat('redirect_uri=', this.callbackURI, '&');
+        baseUri = baseUri.concat('response_type=', 'code');
+        return baseUri;
     }
 
-    makeAuthUri() {
-        const  baseUri = 'https://kauth.kakao.com/oauth/authorize?';
-        baseUri.concat('client_id=', this.clientID, '&');
-        baseUri.concat('client_secret=', this.clientSecret, '&');
-        baseUri.concat('redirect_uri=', this.callbackURI, '&');
-        baseUri.concat('response_type=', 'code');
-        return baseUri;
+    getAuthUri() {
+        return this.makeAuthUri();
     }
 
     getAccessToken() {
