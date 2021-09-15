@@ -25,7 +25,7 @@ class kakaoLogin {
         return this.makeAuthUri();
     }
 
-    getAccessToken(accessCode) {
+    async getAccessToken(accessCode) {
         const options = {
             method: 'POST',
             headers: { 'content-type': 'application/x-www-form-urlencoded' },
@@ -59,7 +59,7 @@ class kakaoLogin {
             });
     }
 
-    getProfile() {
+    async getProfile() {
         const options = {
             method: 'GET',
             headers: { 'Authorization': `Bearer ${this.accessToken}` },
