@@ -35,6 +35,7 @@ class kakaoLogin {
                     client_id: this.clientID,
                     redirect_uri: this.callbackURI,
                     code: accessCode, 
+                    client_secret: this.clientSecret,
                 }),
                 url: 'https://kauth.kakao.com/oauth/token',
             };
