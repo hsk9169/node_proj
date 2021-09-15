@@ -41,12 +41,12 @@ class kakaoLogin {
             .then(res => {
                 if(res.status == 200) {
                     const getToken = {
-                        tokenType = res.data.token_type,
-                        accessToken = res.data.access_token,
-                        expiresIn = res.data.expires_in,
-                        refreshToken = res.data.refresh_token,
-                        refreshtokenExpiresIn = res.data.refresh_token_expires_in,
-                        scope = res.data.scope,
+                        tokenType: res.data.token_type,
+                        accessToken: res.data.access_token,
+                        expiresIn: res.data.expires_in,
+                        refreshToken: res.data.refresh_token,
+                        refreshtokenExpiresIn: res.data.refresh_token_expires_in,
+                        scope: res.data.scope,
                     };
                     return getToken;
                 }
