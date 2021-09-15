@@ -61,32 +61,33 @@ class kakaoLogin {
     }
 
     getProfile() {
-        const options = {
-            method: 'GET',
-            headers: { 'Authorization': `Bearer ${this.accessToken}` },
-            url: 'https://kapi.kakao.com/v2/user/me',
-        };
-
-        axios(options)
-        .then(res => {
-            if(res.status == 200) {
-                const getProfile = {
-                    id: res.data.id,
-                    connectedAt: res.data.connected_at,
-                    profileImg: res.data.properties.profile_image,
-                    email: res.data.kakao_account.email,
-                    ageRange: res.data.kakao_account.age_range,
-                    birthday: res.data.kakao_account.birthday,
-                    gender: res.data.kakao_account.gender,
-                };
-                return getProfile;
-            }
-        })
-        .catch(err => {
-            logger.info.error(err);
-            return err;
-        });
-    }
+        const promise = new Promise((resolve, reject) => {
+            const options = {
+                method: 'GET',
+                headers: { 'Authorization': `Bearer ${this.accessToken}` },
+                url: 'https://kapi.kakao.com/v2/user/me',
+            };
+    
+            axios(options)
+            .then(res => {
+                if(res.status == 200) {
+                    const getProfile = {
+                        id: res.data.id,
+                        connectedAt: res.data.connected_at,
+                        profileImg: res.data.properties.profile_image,
+                        email: res.data.kakao_account.email,
+                        ageRange: res.data.kakao_account.age_range,
+                        birthday: res.data.kakao_account.birthday,
+                        gender: res.data.kakao_account.gender,
+                    };
+                    return getProfile;
+                }
+            })
+            .catch(err => {
+                logger.info.error(err);
+                return err;
+            });
+    });
 }
 
 
