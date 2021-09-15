@@ -12,9 +12,7 @@ const config = {
 let kakao = new kakaoLogin(config);
 
 exports.loginKakao = async () => {
-    console.log(kakao.clientID);
     const uri = kakao.getAuthUri();
-    console.log(uri);
     return uri;
 }
 

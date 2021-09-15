@@ -39,7 +39,7 @@ class kakaoLogin {
             url: 'https://kauth.kakao.com/oauth/token',
         };
 
-        axios(options)
+        await axios(options)
             .then(res => {
                 if(res.status == 200) {
                     const getToken = {
@@ -66,7 +66,7 @@ class kakaoLogin {
             url: 'https://kapi.kakao.com/v2/user/me',
         };
 
-        axios(options)
+        await axios(options)
             .then(res => {
                 if(res.status == 200) {
                     const getProfile = {
