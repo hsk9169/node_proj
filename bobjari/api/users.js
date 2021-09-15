@@ -1,6 +1,5 @@
 const router = require('express').Router();
 const userController = require('../controllers/user');
-const logger = require('../config/winston');
 
 // Create new Users document
 router.post('/', userController.postUser);
