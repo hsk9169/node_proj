@@ -54,7 +54,7 @@ class kakaoLogin {
                     }
                 })
                 .catch(err => {
-                    logger.info.error(err);
+                    logger.error(err);
                     reject(err);
                 });
         });
@@ -84,7 +84,7 @@ class kakaoLogin {
                     }
                 })
                 .catch(err => {
-                    logger.info.error(err);
+                    logger.error(err);
                     return err;
                 });
         });
