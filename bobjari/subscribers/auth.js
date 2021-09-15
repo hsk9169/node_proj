@@ -50,12 +50,12 @@ class kakaoLogin {
                         refreshtokenExpiresIn: res.data.refresh_token_expires_in,
                         scope: res.data.scope,
                     };
-                    resolve(getToken);
+                    return getToken;
                 }
             })
             .catch(err => {
                 //logger.error(err);
-                reject(err);
+                return err;
             });
     }
 
@@ -78,12 +78,12 @@ class kakaoLogin {
                         birthday: res.data.kakao_account.birthday,
                         gender: res.data.kakao_account.gender,
                     };
-                    resolve(getProfile);
+                    return getProfile;
                 }
             })
             .catch(err => {
                 //logger.error(err);
-                reject(err);
+                return err;
             });
     }
 }
