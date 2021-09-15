@@ -35,7 +35,7 @@ exports.getKakaoProfile = async (req, res, next) => {
         .then((profile) => {
             console.log(profile);
             res.redirect(url.format({
-                pathname: '/views/profile',
+                pathname: '/profile',
                 query: profile
             }));
         })
