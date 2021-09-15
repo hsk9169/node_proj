@@ -26,38 +26,38 @@ class kakaoLogin {
     }
 
     getAccessToken(accessCode) {
-        const promise = new Promise(resolve, reject);
-
-        const options = {
-            method: 'POST',
-            headers: { 'content-type': 'application/x-www-form-urlencoded' },
-            data: qs.stringify({
-                grant_type: 'authorization_code',
-                client_id: this.clientID,
-                redirect_uri: this.callbackURI,
-                code: accessCode, 
-            }),
-            url: 'https://kauth.kakao.com/oauth/token',
-        };
-
-        axios(options)
-            .then(res => {
-                if(res.status == 200) {
-                    const getToken = {
-                        tokenType: res.data.token_type,
-                        accessToken: res.data.access_token,
-                        expiresIn: res.data.expires_in,
-                        refreshToken: res.data.refresh_token,
-                        refreshtokenExpiresIn: res.data.refresh_token_expires_in,
-                        scope: res.data.scope,
-                    };
-                    resolve(getToken);
-                }
-            })
-            .catch(err => {
-                logger.info.error(err);
-                reject(err);
-            });
+        const promise = new Promise((resolve, reject) => {
+            const options = {
+                method: 'POST',
+                headers: { 'content-type': 'application/x-www-form-urlencoded' },
+                data: qs.stringify({
+                    grant_type: 'authorization_code',
+                    client_id: this.clientID,
+                    redirect_uri: this.callbackURI,
+                    code: accessCode, 
+                }),
+                url: 'https://kauth.kakao.com/oauth/token',
+            };
+    
+            axios(options)
+                .then(res => {
+                    if(res.status == 200) {
+                        const getToken = {
+                            tokenType: res.data.token_type,
+                            accessToken: res.data.access_token,
+                            expiresIn: res.data.expires_in,
+                            refreshToken: res.data.refresh_token,
+                            refreshtokenExpiresIn: res.data.refresh_token_expires_in,
+                            scope: res.data.scope,
+                        };
+                        resolve(getToken);
+                    }
+                })
+                .catch(err => {
+                    logger.info.error(err);
+                    reject(err);
+                });
+        });
     }
 
     getProfile() {
