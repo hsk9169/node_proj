@@ -1,3 +1,4 @@
+const url = require('url');
 const logger = require('../config/winston');
 const authService = require('../services/auth');
 
@@ -33,7 +34,10 @@ exports.getKakaoProfile = async (req, res, next) => {
     await authService.loginKakaoGetProfile()
         .then((profile) => {
             console.log(profile);
-            res.redirect('../profile');
+            res.redirect(url.format({
+                pathname: '/views/profile',
+                query: profile
+            }));
         })
         .catch(err => {
             logger.error('GET /auth/kakao/profile');
