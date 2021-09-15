@@ -8,7 +8,7 @@ const config = {
     clientSecret: CLIENT_SECRET,
     callbackURI: CALLBACK_URI,
 };
-
+console.log(config);
 let kakao = new kakaoLogin(config);
 
 exports.loginKakao = async () => {
