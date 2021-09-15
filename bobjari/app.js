@@ -43,9 +43,9 @@ mongoose
     .catch(e => logger.error(e.stack));
 
 // Routers
-//app.use('/users', require('./routes/users'));
-//app.use('/auth', require('./routes/auth'));
-app.use('/api', require('./routes/index'));
+//app.use('/users', require('./api/users'));
+//app.use('/auth', require('./api/auth'));
+app.use('/api', require('./api/index'));
 
 // Swagger
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
