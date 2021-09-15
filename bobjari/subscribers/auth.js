@@ -11,7 +11,7 @@ class kakaoLogin {
         this.callbackURI = apiConfig.callbackURI;
     }
 
-    get getAuthUri() {
+    getAuthUri() {
         return this.makeAuthUri();
     }
 
