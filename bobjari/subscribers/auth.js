@@ -80,12 +80,12 @@ class kakaoLogin {
                             birthday: res.data.kakao_account.birthday,
                             gender: res.data.kakao_account.gender,
                         };
-                        return getProfile;
+                        resolve(getProfile);
                     }
                 })
                 .catch(err => {
                     logger.error(err);
-                    return err;
+                    reject(err);
                 });
         });
     }
