@@ -10,14 +10,6 @@ class kakaoLogin {
         this.clientID = apiConfig.clientID;
         this.clientSecret = apiConfig.clientSecret;
         this.callbackURI = apiConfig.callbackURI;
-        this.profile = class {
-            getProfile(kakaoData) {
-                this.profile.email = kakaoData.email;
-                this.profile.gender = kakaoData.gender;
-                this.profile.ageRange = kakaoData.age_range;
-                this.profile.profileImage = kakaoData.profile.profile_image_url;
-            }
-        }
     }
 
     makeAuthUri() {
@@ -69,7 +61,13 @@ class kakaoLogin {
         await axios(options)
             .then(res => {
                 if(res.status == 200) {
-                    this.profile.getProfile(res.data.kakao_account);
+                    const profile = {
+                        email: kakaoData.email,
+                        gender: kakaoData.gender,
+                        ageRange: kakaoData.age_range,
+                        profileImage: kakaoData.profile.profile_image_url,
+                    }
+                    this.profile = profile;
                 }
             })
             .catch(err => {
