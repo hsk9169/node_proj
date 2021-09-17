@@ -31,8 +31,7 @@ exports.loginKakaoGetProfile = async() => {
         profileImage: kakao.account.profile.profile_image_url,
     }
     const ageRange = profile.age.split("~");
-    console.log(ageRange);
-    const age = (ageRange[0] + ageRange[1]) / 2;
+    const age = (Number(ageRange[0]) + Number(ageRange[1])) / 2;
     profile.age = age;
     return profile;
 }
