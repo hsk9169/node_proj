@@ -47,7 +47,7 @@ class kakaoLogin {
         await axios(options)
             .then(res => {
                 if(res.status == 200) {
-                    console.log(`get token success: ${res}`);
+                    console.log(res);
                     return res.data;
                 }
             })
