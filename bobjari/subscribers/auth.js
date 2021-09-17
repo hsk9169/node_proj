@@ -47,6 +47,7 @@ class kakaoLogin {
             .then(res => {
                 if(res.status == 200) {
                     const token = res.data.access_token;
+                    console.log(`axios result ${token}`);
                     return token;
                 }
             })
