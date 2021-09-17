@@ -24,14 +24,14 @@ exports.loginKakaoCallback = async (accessCode) => {
 
 exports.loginKakaoGetProfile = async() => {
     await kakao.getAccount();
-    console.log(kakao.account);
     const profile = {
         email: kakao.account.email,
         gender: kakao.account.gender,
         age: kakao.account.age_range,
         profileImage: kakao.account.profile.profile_image_url,
     }
-    const ageRange = profile.age.split('~');
+    const ageRange = profile.age.split("~");
+    console.log(ageRange);
     const age = (ageRange[0] + ageRange[1]) / 2;
     profile.age = age;
     return profile;
