@@ -29,7 +29,7 @@ class kakaoLogin {
         this.accessToken = token;
     }
 
-    async getAccessToken(accessCode) {
+    getAccessToken(accessCode) {
         const options = {
             method: 'POST',
             headers: { 'content-type': 'application/x-www-form-urlencoded' },
@@ -43,7 +43,7 @@ class kakaoLogin {
             url: 'https://kauth.kakao.com/oauth/token',
         };
 
-        await axios(options)
+        axios(options)
             .then(res => {
                 if(res.status == 200) {
                     console.log('get token success');
