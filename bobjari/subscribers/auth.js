@@ -62,10 +62,10 @@ class kakaoLogin {
             .then(res => {
                 if(res.status == 200) {
                     const profile = {
-                        email: kakaoData.email,
-                        gender: kakaoData.gender,
-                        ageRange: kakaoData.age_range,
-                        profileImage: kakaoData.profile.profile_image_url,
+                        email: res.data.kakao_account.email,
+                        gender: res.data.kakao_account.gender,
+                        ageRange: res.data.kakao_account.age_range,
+                        profileImage: res.data.kakao_account.profile.profile_image_url,
                     }
                     this.profile = profile;
                 }
