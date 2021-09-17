@@ -27,6 +27,7 @@ class kakaoLogin {
 
     setAccessToken(token) {
         this.accessToken = token;
+        console.log(`kakao.token ${this.accessToken}`);
     }
 
     async getAccessToken(accessCode) {
@@ -64,8 +65,7 @@ class kakaoLogin {
             });
     }
 
-    async getProfile(accessToken) {
-        console.log(accessToken);
+    async getProfile() {
         const options = {
             method: 'GET',
             headers: { 'Authorization': `Bearer ${this.accessToken}` },
