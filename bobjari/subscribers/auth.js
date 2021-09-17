@@ -55,7 +55,6 @@ class kakaoLogin {
                         refreshtokenExpiresIn: res.data.refresh_token_expires_in,
                         scope: res.data.scope,
                     };
-                    console.log(getToken);
                     return getToken;
                 }
             })
@@ -71,7 +70,7 @@ class kakaoLogin {
             headers: { 'Authorization': `Bearer ${this.accessToken}` },
             url: 'https://kapi.kakao.com/v2/user/me',
         };
-
+        console.log(this.accessToken);
         axios(options)
             .then(res => {
                 if(res.status == 200) {
