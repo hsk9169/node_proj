@@ -64,13 +64,14 @@ class kakaoLogin {
             });
     }
 
-    getProfile() {
+    getProfile(accessToken) {
         const options = {
             method: 'GET',
-            headers: { 'Authorization': `Bearer ${this.accessToken}` },
+            headers: { 'Authorization': `Bearer ${accessToken}` },
             url: 'https://kapi.kakao.com/v2/user/me',
         };
         console.log(this.accessToken);
+
         axios(options)
             .then(res => {
                 if(res.status == 200) {
