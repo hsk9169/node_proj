@@ -23,7 +23,8 @@ exports.loginKakaoCallback = async (accessCode) => {
 }
 
 exports.loginKakaoGetProfile = async() => {
-    await account.getAccount();
+    await kakao.getAccount();
+    console.log(kakao.account);
     const profile = {
         email: kakao.account.email,
         gender: kakao.account.gender,
