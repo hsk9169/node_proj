@@ -51,7 +51,7 @@ class kakaoLogin {
             });
     }
 
-    async getProfile() {
+    async getAccount() {
         const options = {
             method: 'GET',
             headers: { 'Authorization': `Bearer ${this.accessToken}` },
@@ -61,13 +61,7 @@ class kakaoLogin {
         await axios(options)
             .then(res => {
                 if(res.status == 200) {
-                    const profile = {
-                        email: res.data.kakao_account.email,
-                        gender: res.data.kakao_account.gender,
-                        age: res.data.kakao_account.age_range,
-                        profileImage: res.data.kakao_account.profile.profile_image_url,
-                    }
-                    this.profile = profile;
+                    this.account = res.data.kakao_account;
                 }
             })
             .catch(err => {
