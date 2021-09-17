@@ -7,12 +7,38 @@ components:
                     type: integer
                     description: user ID
                     example: 0
-                content:
+                updated:
+                    type: date
+                    description: last updated date
+                    example: 2021-09-13 08:00:00
+                email:
                     type: string
-                    description: content type
-                    example: name
-                completed:
+                    description: user email
+                    exmaple: example@google.com
+                age:
+                    type: integer
+                    description: user age (max 80)
+                    example: 30
+                gender:
                     type: string
-                    description: value
-                    exmaple: hansu kim
-
+                    description: user gender
+                    example: male
+                userId:
+                    type: string
+                    description: user account ID
+                    example: bobby
+                userPwd:
+                    type: string
+                    description: user account PWD
+                    example: encrpytedpwd
+                profileImg: 
+                    type: buffer
+                    description: user profile image
+                profileImgType: 
+                    type: string
+                    description: user profile image type
+                    example: image file
+                mbti:
+                    type: string
+                    description: user mbti type
+                    example: infp
