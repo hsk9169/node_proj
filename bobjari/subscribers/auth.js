@@ -61,7 +61,10 @@ class kakaoLogin {
         await axios(options)
             .then(res => {
                 if(res.status == 200) {
-                    this.profile = res.data.kakao_account;
+                    this.profile.email = res.data.kakao_account.email;
+                    this.profile.gender = res.data.kakao_account.gender;
+                    this.profile.ageRange = res.data.kakao_account.age_range;
+                    this.profile.profileImage = res.data.kakao_account.profile.profile_image_url;
                 }
             })
             .catch(err => {
