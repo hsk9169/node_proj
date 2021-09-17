@@ -61,8 +61,7 @@ class kakaoLogin {
         await axios(options)
             .then(res => {
                 if(res.status == 200) {
-                    console.log(res.data);
-                    this.profile = res.data;
+                    this.profile = res.data.kakao_account;
                 }
             })
             .catch(err => {

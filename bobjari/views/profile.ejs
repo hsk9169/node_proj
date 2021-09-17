@@ -1,7 +1,8 @@
 <div>
-    <% if (id && email && profileImg) { %>
-        <h2><%= id %></h2>
+    <% if (email && gender && birthday && profile.profile_image_url) { %>
         <h2><%= email %></h2>
-        <img src="<%= profileImg %>" />
+        <h2><%= gender %></h2>
+        <h2><%= birthday %></h2>
+        <img src="<%= profile.profile_image_url %>" />
     <% } %>
 </div>
