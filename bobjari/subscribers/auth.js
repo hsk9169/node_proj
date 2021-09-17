@@ -29,7 +29,7 @@ class kakaoLogin {
         this.accessToken = token;
     }
 
-    getAccessToken(accessCode) {
+    async getAccessToken(accessCode) {
         const options = {
             method: 'POST',
             headers: { 'content-type': 'application/x-www-form-urlencoded' },
@@ -43,7 +43,7 @@ class kakaoLogin {
             url: 'https://kauth.kakao.com/oauth/token',
         };
 
-        axios(options)
+        await axios(options)
             .then(res => {
                 if(res.status == 200) {
                     console.log('get token success');
@@ -55,6 +55,7 @@ class kakaoLogin {
                         refreshtokenExpiresIn: res.data.refresh_token_expires_in,
                         scope: res.data.scope,
                     };
+                    console.log(token);
                     return getToken;
                 }
             })
