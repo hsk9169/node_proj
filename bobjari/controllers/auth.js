@@ -20,6 +20,7 @@ exports.getKakaoCallback = async (req, res, next) => {
     const accessCode = req.query.code;
     await authService.loginKakaoCallback(accessCode)
         .then((accessRoute, accessToken) => {
+            console.log(`redirect token ${accessToken}`);
             res.redirect(url.format({
                 pathname: accessRoute,
                 query: accessToken,
