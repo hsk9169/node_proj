@@ -55,7 +55,7 @@ class kakaoLogin {
                         refreshtokenExpiresIn: res.data.refresh_token_expires_in,
                         scope: res.data.scope,
                     };
-                    console.log(token);
+                    console.log(getToken);
                     return getToken;
                 }
             })
