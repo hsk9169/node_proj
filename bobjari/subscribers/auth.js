@@ -68,7 +68,7 @@ class kakaoLogin {
         console.log(accessToken);
         const options = {
             method: 'GET',
-            headers: { 'Authorization': `Bearer ${accessToken}` },
+            headers: { 'Authorization': `Bearer ${this.accessToken}` },
             url: 'https://kapi.kakao.com/v2/user/me',
         };
 
