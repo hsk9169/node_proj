@@ -20,7 +20,10 @@ exports.getKakaoCallback = async (req, res, next) => {
     const accessCode = req.query.code;
     await authService.loginKakaoCallback(accessCode)
         .then((accessRoute, accessToken) => {
-            res.redirect(accessRoute, accessToken);
+            res.redirect(url.format({
+                pathname: accessRoute,
+                query: accessToken,
+            }));
         })
         .catch(err => {
             logger.error('GET /auth/kakao/callback');
