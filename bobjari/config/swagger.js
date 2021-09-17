@@ -36,7 +36,10 @@ const swaggerDefinition = {
 const options = { 
     customCss: '.swagger-ui .topbar { background-color: blue }',
     swaggerDefinition, 
-    apis: ['./swagger/users/*.yaml',], 
+    apis: [
+        './swagger/users/*.yaml',
+        './swagger/auths/*.yaml',
+    ], 
 };
 
 const specs = swaggereJsdoc(options);

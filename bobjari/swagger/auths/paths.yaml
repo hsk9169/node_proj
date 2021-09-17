@@ -3,94 +3,14 @@ tags:
     description: auths API
 
 paths:
-    /auths:
+    /auths/kakao:
         get:
-            summary: get all user data
+            summary: start login with kakao
             tags:
-                - users
-            parameters:
-                - in: query
-                  name: content
-                  schema:
-                      type: string
-                - in: query
-                  name: completed
-                  schema:
-                      type: string
+                - auths
             responses:
                 200:
-                    description: get user data success
+                    description: kakao login success, got user profile
                     content:
                         application/json:
-                            $ref: '#/components/schemas/User'
-        post:
-            summary: post user data
-            tags:
-                - users
-            requestBody:
-                required: true
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/User'
-            responses:
-                200:
-                    description: post user data success
-                    content:
-                        application/json:
-                            $ref: '#/components/schemas/User'
-    /users/userid/{userid}:
-        get:
-            summary: get user data by {userid}
-            tags:
-                - users
-            parameters:
-                - in: path
-                  name: userid
-                  schema:
-                      type: integer
-                  required: true
-                  description: userid
-            responses:
-                200:
-                    description: get user data by {userid} success
-                    content:
-                        application/json:
-                            $ref: '#/components/schemas/User'
-        put:
-            summary: put user data by {userid}
-            tags:
-                - users
-            parameters:
-                - in: path
-                  name: userid
-                  schema:
-                      type: integer
-                  required: true
-                  description: userid
-            requestBody:
-                required: true
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/User'
-            responses:
-                200:
-                    description: put user data by {userid} success
-                    content:
-                        application/json:
-                            $ref: '#/components/schemas/User'
-        delete:
-            summary: delete user data by {userid}
-            tags:
-                - users
-            parameters:
-                - in: path
-                  name: userid
-                  schema:
-                      type: integer
-                  required: true
-                  description: userid
-            responses:
-                200:
-                    description: delete user data by {userid} success
+                            $ref: '#/components/schemas/kakaoProfile'
