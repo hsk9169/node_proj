@@ -23,6 +23,15 @@ exports.loginKakaoCallback = async (accessCode) => {
 }
 
 exports.loginKakaoGetProfile = async() => {
-    await kakao.getProfile();
-    return kakao.profile;
+    await account.getAccount();
+    const profile = {
+        email: kakao.account.email,
+        gender: kakao.account.gender,
+        age: kakao.account.age_range,
+        profileImage: kakao.account.profile.profile_image_url,
+    }
+    const ageRange = profile.age.split('~');
+    const age = (ageRange[0] + ageRange[1]) / 2;
+    profile.age = age;
+    return profile;
 }

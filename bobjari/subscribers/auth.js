@@ -64,7 +64,7 @@ class kakaoLogin {
                     const profile = {
                         email: res.data.kakao_account.email,
                         gender: res.data.kakao_account.gender,
-                        ageRange: res.data.kakao_account.age_range,
+                        age: res.data.kakao_account.age_range,
                         profileImage: res.data.kakao_account.profile.profile_image_url,
                     }
                     this.profile = profile;
