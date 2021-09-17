@@ -25,10 +25,6 @@ class kakaoLogin {
         return this.makeAuthUri();
     }
 
-    setAccessToken(token) {
-        this.accessToken = token;
-    }
-
     async getAccessToken(accessCode) {
         const options = {
             method: 'POST',
@@ -42,37 +38,35 @@ class kakaoLogin {
             }),
             url: 'https://kauth.kakao.com/oauth/token',
         };
-
+        
+        let token;
         await axios(options)
             .then(res => {
                 if(res.status == 200) {
-                    const token = res.data.access_token;
-                    console.log(`axios result ${token}`);
-                    return token;
+                    this.accessToken = res.data.access_token;
                 }
             })
             .catch(err => {
-                //logger.error(err);
-                return err;
+                logger.error(err);
             });
     }
 
-    async getProfile(token) {
+    async getProfile() {
         const options = {
             method: 'GET',
-            headers: { 'Authorization': `Bearer ${token}` },
+            headers: { 'Authorization': `Bearer ${this.accessToken}` },
             url: 'https://kapi.kakao.com/v2/user/me',
         };
 
         await axios(options)
             .then(res => {
                 if(res.status == 200) {
-                    return res.data;
+                    console.log(res.data);
+                    this.profile = res.data;
                 }
             })
             .catch(err => {
-                //logger.error(err);
-                return err;
+                logger.error(err);
             });
     }
 }
