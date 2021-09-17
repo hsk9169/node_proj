@@ -3,7 +3,6 @@ const logger = require('../config/winston');
 const axios = require('axios');
 const qs = require('qs');
 const url = require('url');
-const { resolve } = require('path/posix');
 
 class kakaoLogin {
     constructor(apiConfig) {

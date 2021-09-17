@@ -1,10 +1,10 @@
 const { data } = require('../config/winston');
 const logger = require('../config/winston');
-const userSchema = require('../models/user');
+const userModel = require('../models/user/handler');
 
 exports.postUser = async (user) => {
     try {
-        let data = await userSchema.create(user);
+        let data = await userModel.create(user);
         return data;
     } catch(err) { 
         logger.error(err.stack);
@@ -14,7 +14,7 @@ exports.postUser = async (user) => {
 
 exports.getUsers = async () => {
     try {
-        let data = await userSchema.findAll();
+        let data = await userModel.findAll();
         return data;
     } catch(err) {
         logger.error(err.stack);
@@ -24,7 +24,7 @@ exports.getUsers = async () => {
 
 exports.getUserByUserid = async(userId) => { 
     try {
-        let data = await userSchema.findOneByUserid(userId);
+        let data = await userModel.findOneByUserid(userId);
         return data;
     } catch(err) {
         logger.error(err.stack);
@@ -34,7 +34,7 @@ exports.getUserByUserid = async(userId) => {
 
 exports.putUserByUserid = async(userId, user) => {
     try {
-        let data = await userSchema.updateByUserid(userId, user);
+        let data = await userModel.updateByUserid(userId, user);
         return data;
     } catch(err) {
         logger.error(err.stack);
@@ -44,7 +44,7 @@ exports.putUserByUserid = async(userId, user) => {
 
 exports.deleteUserByUserid = async(userId) => {
     try {
-        await userSchema.deleteByUserid(userId);
+        await userModel.deleteByUserid(userId);
     } catch(err) {
         logger.error(err.stack);
         throw Error(err);

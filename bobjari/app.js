@@ -43,8 +43,6 @@ mongoose
     .catch(e => logger.error(e.stack));
 
 // Routers
-//app.use('/users', require('./api/users'));
-//app.use('/auth', require('./api/auth'));
 app.use('/api', require('./api/index'));
 
 // Swagger

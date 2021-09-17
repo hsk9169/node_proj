@@ -3,7 +3,7 @@ tags:
     description: user API
 
 paths:
-    /users:
+    /api/users:
         get:
             summary: get all user data
             tags:
@@ -39,7 +39,7 @@ paths:
                     content:
                         application/json:
                             $ref: '#/components/schemas/User'
-    /users/userid/{userid}:
+    /api/users/userid/{userid}:
         get:
             summary: get user data by {userid}
             tags:
