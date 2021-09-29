@@ -38,13 +38,8 @@ userModel.statics.deleteByUserid = function (userid) {
 
 //------------ Custom Methods ------------//
 // Find By Contents
-userModel.methods.findByContents = function(content, cb) {
-    return this.find({ contents: new RegExp(content, 'i') }, cb);
-};
-
-// Find By Completed
-userModel.methods.findByCompleted = function(completed, cb) {
-    return this.find({ completed: new RegExp(completed, 'i') }, cb);
+userModel.methods.findOneByUseremail = function(email, cb) {
+    return this.findOne({ email: new RegExp(email, 'i') }, cb);
 };
 
 // Create Model & Export

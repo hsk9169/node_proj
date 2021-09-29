@@ -17,6 +17,12 @@ exports.loginKakaoCallback = async (accessCode) => {
 
 exports.loginKakaoGetProfile = async() => {
     await kakao.getAccount();
+    /* To-do
+     * get session of this user from DB
+     * if session exists, update session ttl automatically
+     * else, route to register page and save sessionb
+    */
+
     const profile = {
         email: kakao.account.email,
         gender: kakao.account.gender,
@@ -26,5 +32,6 @@ exports.loginKakaoGetProfile = async() => {
     const ageRange = profile.age.split("~");
     const age = Math.round((Number(ageRange[0]) + Number(ageRange[1])) / 2);
     profile.age = age;
+    kakao.setProfile(profile);
     return profile;
 }

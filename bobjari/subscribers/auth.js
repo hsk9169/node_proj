@@ -24,6 +24,10 @@ class kakaoLogin {
         return this.makeAuthUri();
     }
 
+    setProfile(profile) {
+        this.profile = profile;
+    }
+
     async getAccessToken(accessCode) {
         const options = {
             method: 'POST',

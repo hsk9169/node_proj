@@ -44,3 +44,7 @@ exports.getKakaoProfile = async (req, res, next) => {
             res.status(500).send(err);
         })
 }
+
+exports.getSessionStatus = async (req, res, next) => {
+    logger.info('GET /auth/kakao/')
+}

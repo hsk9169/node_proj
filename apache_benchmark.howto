@@ -1,0 +1,1 @@
+ab -n 100 -c 100 -vvv -t 20 http://localhost:8000/api/users
