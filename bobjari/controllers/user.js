@@ -75,13 +75,35 @@ exports.deleteUserByUserid = async (req, res, next) => {
     logger.info(`DELETE /userid/{req.params.userid}`);
     let userId = req.params.userid;
     await userService.deleteUserByUserid(userId)
-        .then((r) => {
+        .then((ret) => {
             logger.info('success DELETE');
-            console.log(r);
+            console.log(ret);
             res.status(200).send('success DELETE');
         })
         .catch(err => {
             logger.error(`DELETE /users/{req.params.userid}`);
+            logger.error(err.stack);
+            res.status(500).send(err);
+        });
+}
+
+exports.getUserByUseremail = async (req, res, next) => {
+    logger.info('GET /user/{req.params.email}');
+    let email = req.params.email;
+    await userService.getUserByUseremail(email)
+        .then((user) => {
+            if(!user) {
+                logger.error('no data to GET');
+                return res.status(404).send(
+                    { err: 'data not found' }
+                );
+            } else {
+                logger.info('success GET');
+                res.json(user);
+            }
+        })
+        .catch(err => {
+            logger.error('GET /user');
             logger.error(err.stack);
             res.status(500).send(err);
         });

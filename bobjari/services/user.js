@@ -50,3 +50,13 @@ exports.deleteUserByUserid = async(userId) => {
         throw Error(err);
     }
 }
+
+exports.getUserByUseremail = async(email) => {
+    try {
+        let email = await userModel.findOneByUseremail(email);
+        return email;
+    } catch(err) {
+        logger.error(err.stack);
+        throw Error(err);
+    }
+}
