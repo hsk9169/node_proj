@@ -1,9 +1,16 @@
 const { data } = require('../config/winston');
 const logger = require('../config/winston');
 const userModel = require('../models/user/handler');
+const config = require('../config/index');
+const crypto = require('crypto');
 
 exports.postUser = async (user) => {
     try {
+        let pwd = user.userPwd;
+        pwd = crypto.createHmac('sha1', config.secret)
+                      .update(pwd)
+                      .digest('base64')
+        user.userPwd = pwd;
         let data = await userModel.create(user);
         return data;
     } catch(err) { 
@@ -53,8 +60,8 @@ exports.deleteUserByUserid = async(userId) => {
 
 exports.getUserByUseremail = async(email) => {
     try {
-        let email = await userModel.findOneByUseremail(email);
-        return email;
+        let ret = await userModel.findOneByUseremail(email);
+        return ret;
     } catch(err) {
         logger.error(err.stack);
         throw Error(err);

@@ -17,6 +17,6 @@ router.put('/userid/:userid', userController.putUserByUserid);
 router.delete('/userid/:userid', userController.deleteUserByUserid);
 
 // Find One by useremail
-router.get('/user/:email', userController.getUserByUseremail);
+router.get('/check', userController.getUserByUseremail);
 
 module.exports = router;

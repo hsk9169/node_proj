@@ -1,5 +1,5 @@
 const logger = require('../config/winston');
-const  kakaoLogin = require('../subscribers/auth');
+const kakaoLogin = require('../subscribers/auth');
 const config = require('../config/index');
 
 let kakao = new kakaoLogin(config.auth.kakao);

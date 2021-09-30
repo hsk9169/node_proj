@@ -9,7 +9,8 @@ const config = {
             clientSecret: process.env.CLIENT_SECRET,
             callbackURI: process.env.CALLBACK_URI,
         }
-    }
+    },
+    secret: "ThIsIsSeCrEtKeYfOrEnCrYpT",
 }
 
 module.exports = config;

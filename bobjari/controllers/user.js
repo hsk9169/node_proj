@@ -88,9 +88,8 @@ exports.deleteUserByUserid = async (req, res, next) => {
 }
 
 exports.getUserByUseremail = async (req, res, next) => {
-    logger.info('GET /user/{req.params.email}');
-    let email = req.params.email;
-    await userService.getUserByUseremail(email)
+    logger.info('GET /users/check');
+    await userService.getUserByUseremail(req.query.email)
         .then((user) => {
             if(!user) {
                 logger.error('no data to GET');
@@ -103,7 +102,7 @@ exports.getUserByUseremail = async (req, res, next) => {
             }
         })
         .catch(err => {
-            logger.error('GET /user');
+            logger.error('GET /users/check');
             logger.error(err.stack);
             res.status(500).send(err);
         });

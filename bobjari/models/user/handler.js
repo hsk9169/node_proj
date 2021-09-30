@@ -35,10 +35,8 @@ userModel.statics.deleteByUserid = function (userid) {
     return this.deleteOne({ userid });
 };
 
-
-//------------ Custom Methods ------------//
-// Find By Contents
-userModel.methods.findOneByUseremail = function(email, cb) {
+// Find By user email
+userModel.statics.findOneByUseremail = function(email, cb) {
     return this.findOne({ email: new RegExp(email, 'i') }, cb);
 };
 

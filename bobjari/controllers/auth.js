@@ -1,5 +1,6 @@
 const url = require('url');
 const logger = require('../config/winston');
+const { authMiddleware } = require('../middlewares/auth');
 const authService = require('../services/auth');
 
 exports.getAuthKakao = async (req, res, next) => {
@@ -30,11 +31,11 @@ exports.getKakaoCallback = async (req, res, next) => {
 }
 
 exports.getKakaoProfile = async (req, res, next) => {
-    logger.info('GET /auth/kakao/profile');
+    logger.info('GET /auth/kakao/callback/profile');
     await authService.loginKakaoGetProfile()
         .then((profile) => {
             res.redirect(url.format({
-                pathname: '/profile',
+                pathname: '/api/users/check',
                 query: profile
             }));
         })
@@ -45,6 +46,10 @@ exports.getKakaoProfile = async (req, res, next) => {
         })
 }
 
-exports.getSessionStatus = async (req, res, next) => {
-    logger.info('GET /auth/kakao/')
+exports.checkSession = async (req, res, next) => {
+    logger.info(`GET /auth/check`);
+    res.json({
+        success: true,
+        info: req.decoded,
+    });
 }
