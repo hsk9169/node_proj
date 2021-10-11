@@ -92,13 +92,14 @@ exports.getUserByUseremail = async (req, res, next) => {
     await userService.getUserByUseremail(req.query.email)
         .then((user) => {
             if(!user) {
-                logger.error('no data to GET');
-                return res.status(404).send(
-                    { err: 'data not found' }
-                );
+                logger.info('no user account');
+                res.status(201).send('no user account');
             } else {
-                logger.info('success GET');
-                res.json(user);
+                logger.info('user account exists');
+                res.redirect(url.format({
+                    pathname: '/api/auths/checkSession',
+                    query: user
+                }));
             }
         })
         .catch(err => {
