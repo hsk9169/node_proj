@@ -2,7 +2,6 @@ const logger = require('../config/winston');
 const kakaoAuth = require('../subscribers/auth');
 
 exports.authKakao = async (authData) => {
-    console.log('authData', authData);
     const accessToken = await kakaoAuth.getAccessToken(authData);
     console.log('accessToken', accessToken);
     const account = await kakaoAuth.getAccount(accessToken);

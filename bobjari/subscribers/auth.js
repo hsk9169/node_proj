@@ -9,13 +9,13 @@ exports.getAccessToken = async (authData) => {
     const options = {
         method: 'POST',
         headers: { 'content-type': 'application/x-www-form-urlencoded' },
-        data: qs.stringify({
+        data: {
             grant_type: 'authorization_code',
             client_id: authData.client_id,
             redirect_uri: authData.redirect_uri,
             code: authData.access_code, 
             client_secret: authData.secret_key,
-        }),
+        },
         url: 'https://kauth.kakao.com/oauth/token',
     };
     
