@@ -4,7 +4,7 @@ const qs = require('qs');
 const url = require('url');
 const logger = require('../config/winston');
 
-exports.authKakao = async (authData) => {
+exports.getAccessToken = async (authData) => {
     let accessToken;
     const options = {
         method: 'POST',
@@ -23,15 +23,15 @@ exports.authKakao = async (authData) => {
         .then(res => {
             if(res.status == 200) {
                 accessToken = res.data.access_token;  
+                return accessToken;
             }
         })
         .catch(err => {
             logger.error(err);
         });
-    return accessToken;
 };
 
-exports.kakaoProfile = async (accessToken) => {
+exports.getAccount = async (accessToken) => {
     let profile;
     const options = {
         method: 'GET',
@@ -43,12 +43,12 @@ exports.kakaoProfile = async (accessToken) => {
         .then(res => {
             if(res.status == 200) {
                 profile = res.data.kakao_account; 
+                return profile;
             }
         })
         .catch(err => {
             logger.error(err);
         });
-    return profile;
 };
 
 /*
