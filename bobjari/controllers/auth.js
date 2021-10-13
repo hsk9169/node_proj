@@ -5,7 +5,7 @@ const authService = require('../services/auth');
 
 exports.authKakao = async (req, res, next) => {
     logger.info('POST /auths/kakao');
-    console.log(req.body);
+    console.log(req);
     await authService.authKakao(req.body)
         .then((profile) => {
             res.json(profile);
