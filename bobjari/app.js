@@ -17,7 +17,7 @@ const logger = require('./config/winston');
 
 // CORS 
 app.use(cors({
-    origin: 'https://bobjari.loca.lt',
+    origin: 'http://ec2-18-221-128-31.us-east-2.compute.amazonaws.com:3000',
     credentials: true,
 }));
 
