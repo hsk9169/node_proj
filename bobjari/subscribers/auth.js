@@ -22,13 +22,13 @@ exports.authKakao = async (authData) => {
     await axios(options)
         .then(res => {
             if(res.status == 200) {
-                accessToken = res.data.access_token;
-                return accessToken;
+                accessToken = res.data.access_token;  
             }
         })
         .catch(err => {
             logger.error(err);
         });
+    return accessToken;
 };
 
 exports.kakaoProfile = async (accessToken) => {
@@ -42,13 +42,13 @@ exports.kakaoProfile = async (accessToken) => {
     await axios(options)
         .then(res => {
             if(res.status == 200) {
-                profile = res.data.kakao_account;
-                return profile;
+                profile = res.data.kakao_account; 
             }
         })
         .catch(err => {
             logger.error(err);
         });
+    return profile;
 };
 
 /*
