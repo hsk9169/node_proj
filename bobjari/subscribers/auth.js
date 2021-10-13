@@ -23,13 +23,12 @@ exports.authKakao = async (authData) => {
         .then(res => {
             if(res.status == 200) {
                 accessToken = res.data.access_token;
+                return accessToken;
             }
         })
         .catch(err => {
             logger.error(err);
         });
-
-    return accessToken;
 };
 
 exports.kakaoProfile = async (accessToken) => {
@@ -44,13 +43,12 @@ exports.kakaoProfile = async (accessToken) => {
         .then(res => {
             if(res.status == 200) {
                 profile = res.data.kakao_account;
+                return profile;
             }
         })
         .catch(err => {
             logger.error(err);
         });
-    
-    return profile;
 };
 
 /*
