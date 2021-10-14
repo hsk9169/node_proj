@@ -5,7 +5,6 @@ const url = require('url');
 const logger = require('../config/winston');
 
 exports.getAccessToken = async (authData) => {
-    let accessToken;
     const options = {
         method: 'POST',
         headers: { 'content-type': 'application/x-www-form-urlencoded' },
@@ -23,18 +22,16 @@ exports.getAccessToken = async (authData) => {
     await axios(options)
         .then(res => {
             if(res.status == 200) {
-                accessToken = res.data.access_token; 
-                console.log('subscriber token',accessToken);
-                return accessToken;
+                return res.data.access_token; 
             }
         })
         .catch(err => {
-            console.log('get access token error');
             logger.error(err);
         });
 };
 
 exports.getAccount = async (accessToken) => {
+    console.log('subscriber', accessToken);
     let profile;
     const options = {
         method: 'GET',
