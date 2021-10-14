@@ -22,7 +22,8 @@ exports.getAccessToken = async (authData) => {
     await axios(options)
         .then(res => {
             if(res.status == 200) {
-                accessToken = res.data.access_token;  
+                accessToken = res.data.access_token; 
+                console.log('subscriber token',accessToken);
                 return accessToken;
             }
         })
