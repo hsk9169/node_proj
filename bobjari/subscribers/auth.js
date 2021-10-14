@@ -6,19 +6,21 @@ const logger = require('../config/winston');
 
 exports.getAccessToken = async (authData) => {
     let accessToken;
-    console.log('authData', authData);
-    await axios({
+    const options = {
         method: 'POST',
-        url: 'https://kauth.kakao.com/oauth/token',
         headers: { 'content-type': 'application/x-www-form-urlencoded' },
-        data: {
+        data: qs.stringify({
             grant_type: 'authorization_code',
             client_id: authData.client_id,
             redirect_uri: authData.redirect_uri,
             code: authData.access_code, 
             client_secret: authData.secret_key,
-        },
-    })
+        }),
+        url: 'https://kauth.kakao.com/oauth/token',
+    };
+
+    console.log('axios options', options);
+    await axios(options)
         .then(res => {
             if(res.status == 200) {
                 accessToken = res.data.access_token; 
