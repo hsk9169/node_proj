@@ -28,6 +28,7 @@ exports.getAccessToken = async (authData) => {
             }
         })
         .catch(err => {
+            console.log('get access token error');
             logger.error(err);
         });
 };
