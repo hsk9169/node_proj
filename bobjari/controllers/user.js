@@ -95,7 +95,8 @@ exports.getUserByUseremail = async (req, res, next) => {
         .then((user) => {
             if(!user) {
                 logger.info('no user account');
-                res.json(req.query);
+                console.log(req.query);
+                res.json(req.query.email);
             } else {
                 logger.info('user account exists');
                 res.redirect(url.format({
