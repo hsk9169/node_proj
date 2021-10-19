@@ -4,7 +4,7 @@ const { authMiddleware } = require('../middlewares/auth');
 const authService = require('../services/auth');
 
 exports.authKakao = async (req, res, next) => {
-    logger.info('POST /auths/kakao');
+    logger.info('POST /api/auths/kakao');
     await authService.authKakao(req.body)
         .then((profile) => {
             res.json(profile);
@@ -17,7 +17,7 @@ exports.authKakao = async (req, res, next) => {
 }
 
 exports.checkSession = async (req, res, next) => {
-    logger.info(`GET /auths/session`);
+    logger.info('GET /api/auths/session');
     res.json({
         success: true,
         info: req.decoded,

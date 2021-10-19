@@ -4,7 +4,6 @@ const kakaoAuth = require('../subscribers/auth');
 exports.authKakao = async (authData) => {
     const accessToken = await kakaoAuth.getAccessToken(authData);
     const account = await kakaoAuth.getAccount(accessToken);
-    console.log('account', account);
     const profile = {
         email: account.email,
         gender: account.gender,
