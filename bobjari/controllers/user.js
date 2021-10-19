@@ -1,4 +1,5 @@
 const logger = require('../config/winston');
+const url = require('url');
 const userService = require('../services/user');
 
 exports.postUser = async (req, res, next) => {
