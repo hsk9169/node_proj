@@ -91,7 +91,6 @@ exports.deleteUserByUserid = async (req, res, next) => {
 
 exports.getUserByUseremail = async (req, res, next) => {
     logger.info('GET /users/check');
-    console.log(req.query);
     await userService.getUserByUseremail(req.query.email)
         .then((user) => {
             if(!user) {

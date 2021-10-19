@@ -7,12 +7,12 @@ exports.authKakao = async (req, res, next) => {
     logger.info('POST /api/auths/kakao');
     await authService.authKakao(req.body)
         .then((profile) => {
-            const uri = url.format({
+            res.redirect(url.format({
                 pathname: '/api/users/check',
-                query: profile.email,
-            });
-            console.log(uri);
-            res.redirect('/api/users/check?email='+profile.email);
+                query: {
+                    email: profile.email,
+                }
+            }));
         })
         .catch(err => {
             logger.error('POST /auths/kakao');
