@@ -1,7 +1,6 @@
 const router = require('express').Router();
 const axios = require('axios');
 const qs = require('qs');
-const url = require('url');
 const logger = require('../config/winston');
 
 exports.getAccessToken = async (authData) => {

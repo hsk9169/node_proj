@@ -9,9 +9,7 @@ exports.authKakao = async (req, res, next) => {
         .then((profile) => {
             res.redirect(url.format({
                 pathname: '/api/users/check',
-                query: {
-                    email: profile.email,
-                }
+                query: profile,
             }));
         })
         .catch(err => {
