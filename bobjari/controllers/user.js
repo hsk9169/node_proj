@@ -2,9 +2,10 @@ const logger = require('../config/winston');
 const userService = require('../services/user');
 
 exports.postUser = async (req, res, next) => {
-    logger.info('POST /user');
+    logger.info('POST /users');
     await userService.postUser(req.body)
         .then((user) => {
+            console.log()
             res.json(user);
         })
         .catch(err => {
@@ -93,11 +94,22 @@ exports.getUserByUseremail = async (req, res, next) => {
         .then((user) => {
             if(!user) {
                 logger.info('no user account');
-                res.status(201).send('no user account');
+                res.redirect(url.format({
+                    pathname: 'api/users',
+                    query: {
+                        userid: 0,
+                        email: req.query.email,
+                        age: req.query.age,
+                        gender: req.query.gender,
+                        userId: 'hsk9169',
+                        userPwd: 'bugfree1212!',
+                        profileImg: req.query.profileImage,
+                    }
+                }));
             } else {
                 logger.info('user account exists');
                 res.redirect(url.format({
-                    pathname: '/api/auths/checkSession',
+                    pathname: '/api/auths/session',
                     query: user
                 }));
             }
