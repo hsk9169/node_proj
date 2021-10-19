@@ -95,7 +95,7 @@ exports.getUserByUseremail = async (req, res, next) => {
         .then((user) => {
             if(!user) {
                 logger.info('no user account');
-                res.redirect(url.format({
+                res.redirect(307, url.format({
                     pathname: 'api/users',
                     query: {
                         userid: 0,
