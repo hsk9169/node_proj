@@ -6,11 +6,11 @@ const crypto = require('crypto');
 
 exports.postUser = async (user) => {
     try {
-        let pwd = user.userPwd;
+        let pwd = user.password;
         pwd = crypto.createHmac('sha1', config.secret)
                       .update(pwd)
                       .digest('base64')
-        user.userPwd = pwd;
+        user.password = pwd;
         let data = await userModel.create(user);
         return data;
     } catch(err) { 
@@ -28,7 +28,7 @@ exports.getUsers = async () => {
         throw Error(err);
     }
 }
-
+/*
 exports.getUserByUserid = async(userId) => { 
     try {
         let data = await userModel.findOneByUserid(userId);
@@ -57,10 +57,20 @@ exports.deleteUserByUserid = async(userId) => {
         throw Error(err);
     }
 }
-
-exports.getUserByUseremail = async(email) => {
+*/
+exports.getUserByUserEmail = async(email) => {
     try {
         let ret = await userModel.findOneByUseremail(email);
+        return ret;
+    } catch(err) {
+        logger.error(err.stack);
+        throw Error(err);
+    }
+}
+
+exports.getUserByUserNickname = async(nickname) => {
+    try {
+        let ret = await userModel.findOneByUserNickname(nickname);
         return ret;
     } catch(err) {
         logger.error(err.stack);

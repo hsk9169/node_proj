@@ -36,8 +36,13 @@ userModel.statics.deleteByUserid = function (userid) {
 };
 
 // Find By user email
-userModel.statics.findOneByUseremail = function(email, cb) {
+userModel.statics.findOneByUserEmail = function(email, cb) {
     return this.findOne({ email: new RegExp(email, 'i') }, cb);
+};
+
+// Find By user nickname
+userModel.statics.findOneByUserNickname = function(nickname, cb) {
+    return this.findOne({ nickname: new RegExp(nickname, 'i') }, cb);
 };
 
 // Create Model & Export

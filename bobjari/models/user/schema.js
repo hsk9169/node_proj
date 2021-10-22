@@ -1,11 +1,11 @@
 
 // Define Scehmas
 const userSchema = {
-    userid: {
-        type: Number,
-        required: true,
-        unique: true ,
-    },
+    //userid: {
+    //    type: Number,
+    //    required: true,
+    //    unique: true,
+    //},
     updated: { 
         type: Date,
         required: true,
@@ -24,11 +24,12 @@ const userSchema = {
         type: String,
         required: true,
     },
-    userId: {
+    nickname: {
         type: String,
         required: true,
+        unique: true,
     },
-    userPwd: {
+    password: {
         type: String,
         required: true,
     },

@@ -36,7 +36,7 @@ exports.getUsers = async (req, res, next) => {
             res.status(500).send(err);
         });
 }
-
+/*
 exports.getUserByUserid = async (req, res, next) => {
     logger.info(`GET /userid/{req.params.userid}`);
     let userId = req.params.userid;
@@ -88,10 +88,10 @@ exports.deleteUserByUserid = async (req, res, next) => {
             res.status(500).send(err);
         });
 }
-
-exports.getUserByUseremail = async (req, res, next) => {
-    logger.info('GET /users/check');
-    await userService.getUserByUseremail(req.query.email)
+*/
+exports.getUserByUserEmail = async (req, res, next) => {
+    logger.info('GET /users/email');
+    await userService.getUserByUserEmail(req.query.email)
         .then((user) => {
             if(!user) {
                 logger.info('no user account');
@@ -106,6 +106,27 @@ exports.getUserByUseremail = async (req, res, next) => {
         })
         .catch(err => {
             logger.error('GET /users/check');
+            logger.error(err.stack);
+            res.status(500).send(err);
+        });
+}
+
+exports.getUserByUserNickname = async (req, res, next) => {
+    logger.info('GET /users/nickname');
+    console.log(req.query);
+    console.log(req.body);
+    await userService.getUserByUserNickname(req.query.nickname)
+        .then((user) => {
+            if(!user) {
+                logger.info('no duplicated nickname');
+                res.status(200).send('available');
+            } else {
+                logger.info('nickname duplicates');
+                res.status(200).send('duplicated')
+            }
+        })
+        .catch(err => {
+            logger.error('GET /users/nickname');
             logger.error(err.stack);
             res.status(500).send(err);
         });

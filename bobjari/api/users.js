@@ -6,7 +6,7 @@ router.post('/', userController.postUser);
 
 // Find All
 router.get('/', userController.getUsers);
-
+/*
 // Find One by userid
 router.get('/userid/:userid', userController.getUserByUserid);
 
@@ -15,8 +15,11 @@ router.put('/userid/:userid', userController.putUserByUserid);
 
 // Delete by userid
 router.delete('/userid/:userid', userController.deleteUserByUserid);
+*/
+// Find One by user email
+router.get('/email', userController.getUserByUserEmail);
 
-// Find One by useremail
-router.get('/check', userController.getUserByUseremail);
+// Find One by user nickname
+router.get('/nickname', userController.getUserByUserNickname);
 
 module.exports = router;

@@ -17,7 +17,10 @@ const logger = require('./config/winston');
 
 // CORS 
 app.use(cors({
-    origin: 'http://ec2-18-221-128-31.us-east-2.compute.amazonaws.com:3000',
+    origin: [
+        'http://ec2-18-221-128-31.us-east-2.compute.amazonaws.com:3000',
+        'http://localhost:3000'
+    ],
     credentials: true,
 }));
 
