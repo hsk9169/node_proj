@@ -4,6 +4,7 @@ const userService = require('../services/user');
 
 exports.postUser = async (req, res, next) => {
     logger.info('POST /users/create');
+    console.log(req.body);
     await userService.postUser(req.body) 
         .then((ret) => {
             res.json(ret);
