@@ -10,7 +10,7 @@ exports.postUser = async (data) => {
         pwd = crypto.createHmac('sha1', config.secret)
                     .update(pwd)
                     .digest('base64')
-        user.password = pwd;
+        data.password = pwd;
         const profile = await userModel.create(data.profile);
         const ret = {profile: profile, token: data.token};
         return ret;
