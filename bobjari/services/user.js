@@ -13,7 +13,7 @@ exports.postUser = async (data) => {
         data.password = pwd;
         const profile = await userModel.create(data);
         //const ret = {profile: profile, token: data.token};
-        return ret;
+        return profile;
     } catch(err) { 
         logger.error(err.stack);
         throw Error(err);
