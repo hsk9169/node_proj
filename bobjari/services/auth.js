@@ -19,6 +19,7 @@ exports.authKakao = async (authData) => {
 exports.authToken = async (profile) => {
     //const privateKey = fs.readFileSync('private_key.pem');
     //const refreshKey = fs.readFileSync('refresh_key.pem')
+    console.log('authToken service', profile);
     let token = {accessToken: '', refreshToken: ''};
     if (profile.email) {
         token.accessToken = jwt.sign({ email: profile.email }, 
