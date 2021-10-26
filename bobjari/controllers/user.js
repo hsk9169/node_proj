@@ -90,9 +90,11 @@ exports.deleteUserByUserid = async (req, res, next) => {
 */
 exports.getUserByEmail = async (req, res, next) => {
     logger.info('GET /users/email');
+    console.log(req.query.email);
     await userService.getUserByEmail(req.query.email)
         .then((user) => {
             if(user) {
+                console.log(user);
                 logger.info('user account exists, get token');
                 res.redirect(url.format({
                     pathname: '/api/auths/token',
