@@ -6,7 +6,7 @@ const crypto = require('crypto');
 
 exports.postUser = async (data) => {
     try {
-        const pwd = data.password;
+        let pwd = data.password;
         pwd = crypto.createHmac('sha1', config.secret)
                     .update(pwd)
                     .digest('base64')
