@@ -11,8 +11,8 @@ exports.postUser = async (data) => {
                     .update(pwd)
                     .digest('base64')
         data.password = pwd;
-        const profile = await userModel.create(data.profile);
-        const ret = {profile: profile, token: data.token};
+        const profile = await userModel.create(data);
+        //const ret = {profile: profile, token: data.token};
         return ret;
     } catch(err) { 
         logger.error(err.stack);

@@ -21,10 +21,10 @@ exports.authToken = async (profile) => {
     //const refreshKey = fs.readFileSync('refresh_key.pem')
     let token = {accessToken: '', refreshToken: ''};
     if (profile.email) {
-        token.accessToken = jwt.sign({ email: profile.email, password: profile.password }, 
+        token.accessToken = jwt.sign({ email: profile.email }, 
                 //privateKey, { algorithm: 'RS256', expiresIn: '1m'});
                 'shhhhh', { expiresIn: '1m'});
-        token.refreshToken = jwt.sign({ email: profile.email, password: profile.password }, 
+        token.refreshToken = jwt.sign({ email: profile.email }, 
                 //refreshKey, { algorithm: 'RS256', expiresIn: '7d'});
                 'shhhhh', { expiresIn: '10m'});
     } else if (profile.phone) {

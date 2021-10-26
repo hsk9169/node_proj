@@ -1,11 +1,6 @@
 
 // Define Scehmas
 const userSchema = {
-    //userid: {
-    //    type: Number,
-    //    required: true,
-    //    unique: true,
-    //},
     updated: { 
         type: Date,
         required: true,
