@@ -27,6 +27,7 @@ exports.authToken = async (profile) => {
         token.refreshToken = jwt.sign({ email: profile.email }, 
                 //refreshKey, { algorithm: 'RS256', expiresIn: '7d'});
                 'shhhhh', { expiresIn: '10m'});
+        console.log(token);
     } else if (profile.phone) {
         token.accessToken = jwt.sign({ phone: profile.phone, password: profile.password }, 
                 //privateKey, { algorithm: 'RS256', expiresIn: '1m'});
@@ -34,6 +35,7 @@ exports.authToken = async (profile) => {
         token.refreshToken = jwt.sign({ email: profile.email, password: profile.password }, 
                 //refreshKey, { algorithm: 'RS256', expiresIn: '7d'});
                 'shhhhh', { expiresIn: '10m'});
+        console.log(token);
     };
     return token;
 }
