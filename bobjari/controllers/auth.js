@@ -7,9 +7,10 @@ exports.authKakao = async (req, res, next) => {
     await authService.authKakao(req.body)
         .then((profile) => {
             logger.info('got profile, redirect to user to check if exists');
+            console.log(profile);
             res.redirect(url.format({
                 pathname: '/api/users/email',
-                query: profile.email,
+                query: profile,
             }))
         })
         .catch(err => {
