@@ -1,21 +1,23 @@
+const fs = require('fs');
 const jwt = require('jsonwebtoken');
 
-exports.checkJwt = (req, res, next) => {
+exports.check = (req, res, next) => {
     // read the token from header or url 
-    const token = req.headers['x-access-token'] || req.query.token;
+    const token = req.headers['x-access-token'];
 
     // token does not exist
     if(!token) {
         return res.status(403).json({
             success: false,
-            message: 'not logged in'
+            message: 'no token embedded'
         });
     };
 
     // create a promise that decodes the token
     const p = new Promise(
         (resolve, reject) => {
-            jwt.verify(token, req.app.get('jwt-secret'), (err, decoded) => {
+            const cert = fs.readFileSync('private_key.pem');
+            jwt.verify(token, cert, (err, decoded) => {
                 if(err) reject(err);
                 resolve(decoded);
             });
@@ -23,10 +25,10 @@ exports.checkJwt = (req, res, next) => {
     );
 
     // if it has failed to verify, it will return an error message
-    const onError = (error) => {
+    const onError = (err) => {
         res.status(403).json({
             success: false,
-            message: error.message
+            message: err.message
         });
     };
 

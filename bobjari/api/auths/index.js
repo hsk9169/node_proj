@@ -1,12 +1,9 @@
 const router = require('express').Router();
+const authChecker = require('../../middlewares/authChecker');
 const authController = require('../../controllers/auth');
-const authMiddleware = require('../../middlewares/auth');
 
 router.use('/kakao', require('./kakao/auths'));
 
-// Check Session by useremail
-router.get('/session', authController.checkSession);
-
-router.use('/jwt', authMiddleware.checkJwt);
+router.get('/token', authController.authToken);
 
 module.exports = router;

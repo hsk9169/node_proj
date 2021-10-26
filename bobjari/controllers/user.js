@@ -3,14 +3,13 @@ const url = require('url');
 const userService = require('../services/user');
 
 exports.postUser = async (req, res, next) => {
-    logger.info('POST /users');
-    await userService.postUser(req.body)
-        .then((user) => {
-            console.log()
-            res.json(user);
+    logger.info('POST /users/create');
+    await userService.postUser(req.body) 
+        .then((ret) => {
+            res.json(ret);
         })
         .catch(err => {
-            logger.error('POST /user');
+            logger.error('POST /user/create');
             logger.error(err);
             res.status(404).send(err);
         });
@@ -89,33 +88,55 @@ exports.deleteUserByUserid = async (req, res, next) => {
         });
 }
 */
-exports.getUserByUserEmail = async (req, res, next) => {
+exports.getUserByEmail = async (req, res, next) => {
     logger.info('GET /users/email');
-    await userService.getUserByUserEmail(req.query.email)
+    await userService.getUserByEmail(req.query.email)
         .then((user) => {
             if(!user) {
-                logger.info('no user account');
+                logger.info('no user account, return profile');
                 res.json(req.query);
             } else {
-                logger.info('user account exists');
+                logger.info('user account exists, get token');
                 res.redirect(url.format({
-                    pathname: '/api/auths/session',
-                    query: user
+                    pathname: '/api/auths/token',
+                    query: user,
                 }));
             }
         })
         .catch(err => {
-            logger.error('GET /users/check');
+            logger.error('GET /users/email');
             logger.error(err.stack);
             res.status(500).send(err);
         });
 }
 
-exports.getUserByUserNickname = async (req, res, next) => {
+exports.getUserByPhone = async (req, res, next) => {
+    logger.info('GET /users/phone');
+    await userService.getUserByPhone(req.query.phone)
+        .then((user) => {
+            if(!user) {
+                logger.info('no user account, return none');
+                res.status(200);
+            } else {
+                logger.info('user account exists');
+                res.redirect(url.format({
+                    pathname: '/api/auths/token',
+                    query: user,
+                }));
+            }
+        })
+        .catch(err => {
+            logger.error('GET /users/phone');
+            logger.error(err.stack);
+            res.status(500).send(err);
+        });
+}
+
+exports.getUserByNickname = async (req, res, next) => {
     logger.info('GET /users/nickname');
     console.log(req.query);
     console.log(req.body);
-    await userService.getUserByUserNickname(req.query.nickname)
+    await userService.getUserByNickname(req.query.nickname)
         .then((user) => {
             if(!user) {
                 logger.info('no duplicated nickname');

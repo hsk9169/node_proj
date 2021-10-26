@@ -4,15 +4,16 @@ const userModel = require('../models/user/handler');
 const config = require('../config/index');
 const crypto = require('crypto');
 
-exports.postUser = async (user) => {
+exports.postUser = async (data) => {
     try {
-        let pwd = user.password;
+        const pwd = data.password;
         pwd = crypto.createHmac('sha1', config.secret)
-                      .update(pwd)
-                      .digest('base64')
+                    .update(pwd)
+                    .digest('base64')
         user.password = pwd;
-        let data = await userModel.create(user);
-        return data;
+        const profile = await userModel.create(data.profile);
+        const ret = {profile: profile, token: data.token};
+        return ret;
     } catch(err) { 
         logger.error(err.stack);
         throw Error(err);
@@ -58,9 +59,9 @@ exports.deleteUserByUserid = async(userId) => {
     }
 }
 */
-exports.getUserByUserEmail = async(email) => {
+exports.getUserByEmail = async(email) => {
     try {
-        let ret = await userModel.findOneByUseremail(email);
+        let ret = await userModel.findOneByemail(email);
         return ret;
     } catch(err) {
         logger.error(err.stack);
@@ -68,9 +69,19 @@ exports.getUserByUserEmail = async(email) => {
     }
 }
 
-exports.getUserByUserNickname = async(nickname) => {
+exports.getUserByPhone = async(phone) => {
     try {
-        let ret = await userModel.findOneByUserNickname(nickname);
+        let ret = await userModel.findOneByPhone(phone);
+        return ret;
+    } catch(err) {
+        logger.error(err.stack);
+        throw Error(err);
+    }
+}
+
+exports.getUserByNickname = async(nickname) => {
+    try {
+        let ret = await userModel.findOneByNickname(nickname);
         return ret;
     } catch(err) {
         logger.error(err.stack);

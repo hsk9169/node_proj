@@ -25,7 +25,7 @@ app.use(cors({
 }));
 
 //  View HTMLs
-app.set('view engine','ejs'); // 1
+app.set('view engine','ejs');
 app.use(express.static(__dirname + '/public'));
 
 // Static File Services

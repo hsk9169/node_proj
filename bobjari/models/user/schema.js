@@ -11,28 +11,17 @@ const userSchema = {
         required: true,
         default: Date.now,
     },
-    email: { 
-        type: String,
-        required: true,
-    },
+    email: String,
     age: {
         type: Number,
-        required: true,
         max: 80,
     },
-    gender: {
-        type: String,
-        required: true,
-    },
+    gender: String,
     nickname: {
         type: String,
-        required: true,
         unique: true,
     },
-    password: {
-        type: String,
-        required: true,
-    },
+    password: String,
     profileImg: Buffer,
     // Type: URI, *.png, *.jpg ...
     profileImgType: String,
