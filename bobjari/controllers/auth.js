@@ -26,7 +26,7 @@ exports.authToken = async (req, res, next) => {
             res.json(token);
         })
         .catch(err => {
-            logger.error('POST /api/auths/signup');
+            logger.error('POST /api/auths/token');
             res.status(500).send(err);
         });
 }
