@@ -25,14 +25,13 @@ exports.authToken = async (profile) => {
     //const payload = JSON.stringify({ email: profile.email});
     if (profile.email) {
         console.log('enter tokening');
-        jwt.sign({ email: profile.email}, 'shhhhh', 
+        await jwt.sign({ email: profile.email}, 'shhhhh', 
                  { expiresIn: 60}, function (err, token) {
                     token.accessToken = token;
         });
-        jwt.sign({ email: profile.email}, 'shhhhh', 
+        await jwt.sign({ email: profile.email}, 'shhhhh', 
                  { expiresIn: 600}, function (err, token) {
                     token.refreshToken = token;
-                    return token;
         });
     };
     //else if (profile.phone) {
@@ -44,5 +43,6 @@ exports.authToken = async (profile) => {
     //            'secret', { expiresIn: '10m'});
     //    console.log(token);
     //};
-
+    console.log(token);
+    return token;
 }
