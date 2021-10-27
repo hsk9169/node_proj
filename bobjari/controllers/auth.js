@@ -21,12 +21,22 @@ exports.authKakao = async (req, res, next) => {
 
 exports.authToken = async (req, res, next) => {
     logger.info('POST /api/auths/token');
-    await authService.authToken(req.query)
-        .then((token) => {
-            res.json(token);
+    let token = {accessToken: '', refreshToken: ''};
+    await authService.authAccessToken(req.query)
+        .then((accessToken) => {
+            token.accessToken = accessToken;
         })
         .catch(err => {
             logger.error('POST /api/auths/token');
             res.status(500).send(err);
         });
+    await authService.authRefreshToken(req.query)
+    .then((refreshToken) => {
+        token.refreshToken = refreshToken;
+        res.json(token);
+    })
+    .catch(err => {
+        logger.error('POST /api/auths/token');
+        res.status(500).send(err);
+    });
 }
