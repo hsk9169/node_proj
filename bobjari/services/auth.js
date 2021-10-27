@@ -22,27 +22,26 @@ exports.authToken = async (profile) => {
     let token = {accessToken: '', refreshToken: ''};
     if (profile.email) {
         console.log('enter tokening');
-        jwt.sign({ email: profile.email }, 
-                //privateKey, { algorithm: 'RS256', expiresIn: '1m'});
-                'secret', { expiresIn: 60}, function (err, token) {
+        jwt.sign({ email: profile.email }, 'secret', 
+                 { expiresIn: 60}, function (err, token) {
                     token.accessToken = token;
                     console.log(token);
-                });
-        token.refreshToken = jwt.sign({ email: profile.email }, 
-                //refreshKey, { algorithm: 'RS256', expiresIn: '7d'});
-                'secret', { expiresIn: 600}, function (err, token) {
+        });
+        jwt.sign({ email: profile.email }, 'secret', 
+                 { expiresIn: 600}, function (err, token) {
                     token.refreshToken = token;
                     console.log(token);
-                });
-    } else if (profile.phone) {
-        token.accessToken = jwt.sign({ phone: profile.phone, password: profile.password }, 
-                //privateKey, { algorithm: 'RS256', expiresIn: '1m'});
-                'secret', { expiresIn: '1m'});
-        token.refreshToken = jwt.sign({ email: profile.email, password: profile.password }, 
-                //refreshKey, { algorithm: 'RS256', expiresIn: '7d'});
-                'secret', { expiresIn: '10m'});
-        console.log(token);
+        });
     };
+    //else if (profile.phone) {
+    //    token.accessToken = jwt.sign({ phone: profile.phone, password: profile.password }, 
+    //            //privateKey, { algorithm: 'RS256', expiresIn: '1m'});
+    //            'secret', { expiresIn: '1m'});
+    //    token.refreshToken = jwt.sign({ email: profile.email, password: profile.password }, 
+    //            //refreshKey, { algorithm: 'RS256', expiresIn: '7d'});
+    //            'secret', { expiresIn: '10m'});
+    //    console.log(token);
+    //};
     console.log(token);
     return token;
 }
