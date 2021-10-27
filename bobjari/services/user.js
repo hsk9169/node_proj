@@ -62,6 +62,7 @@ exports.deleteUserByUserid = async(userId) => {
 exports.getUserByEmail = async(email) => {
     try {
         let ret = await userModel.findOneByEmail(email);
+        console.log('service',ret);
         return ret;
     } catch(err) {
         logger.error(err.stack);
