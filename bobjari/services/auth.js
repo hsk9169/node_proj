@@ -25,11 +25,11 @@ exports.authToken = async (profile) => {
     //const payload = JSON.stringify({ email: profile.email});
     if (profile.email) {
         console.log('enter tokening');
-        await jwt.sign({ email: profile.email}, 'shhhhh', 
+        jwt.sign({ email: profile.email}, 'shhhhh', 
                  { expiresIn: 60}, function (err, token) {
                     token.accessToken = token;
         });
-        await jwt.sign({ email: profile.email}, 'shhhhh', 
+        jwt.sign({ email: profile.email}, 'shhhhh', 
                  { expiresIn: 600}, function (err, token) {
                     token.refreshToken = token;
         });
@@ -43,6 +43,6 @@ exports.authToken = async (profile) => {
     //            'secret', { expiresIn: '10m'});
     //    console.log(token);
     //};
-    console.log(token);
+    while(!token.accessToken || !token.refreshToken){};
     return token;
 }
