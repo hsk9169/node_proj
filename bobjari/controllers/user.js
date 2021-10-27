@@ -101,7 +101,7 @@ exports.getUserByEmail = async (req, res, next) => {
                 //        email: user.email,
                 //    }
                 //}));
-                res.redirect('/api/auths/token/?email'+user.email);
+                res.redirect('/api/auths/token/?email='+user.email);
             } else {
                 logger.info('no user account, return profile');
                 res.json(req.query);
