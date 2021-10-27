@@ -23,7 +23,7 @@ exports.authKakao = async (req, res, next) => {
 exports.authToken = async (req, res, next) => {
     logger.info('POST /api/auths/token');
     let token = {accessToken: '', refreshToken: ''};
-    token.accessToken = jwt.sign({ email: profile.email}, 'shhhhh', { expiresIn: 60});
-    token.refreshToken = jwt.sign({ email: profile.email}, 'shhhhh', { expiresIn: 600});
+    token.accessToken = jwt.sign({ email: req.query.email}, 'shhhhh', { expiresIn: 60});
+    token.refreshToken = jwt.sign({ email: req.query.email}, 'shhhhh', { expiresIn: 600});
     res.json(token);
 }
