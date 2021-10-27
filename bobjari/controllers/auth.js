@@ -25,5 +25,6 @@ exports.authToken = async (req, res, next) => {
     let token = {accessToken: '', refreshToken: ''};
     token.accessToken = jwt.sign({ email: req.query.email}, 'shhhhh', { expiresIn: 60});
     token.refreshToken = jwt.sign({ email: req.query.email}, 'shhhhh', { expiresIn: 600});
+    console.log(token);
     res.json(token);
 }
