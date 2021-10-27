@@ -21,7 +21,7 @@ exports.authKakao = async (req, res, next) => {
 
 exports.authToken = async (req, res, next) => {
     logger.info('POST /api/auths/token');
-    await authService.authToken(req.query.email)
+    await authService.authToken(req.query)
         .then((token) => {
             res.json(token);
         })

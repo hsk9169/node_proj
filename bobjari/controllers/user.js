@@ -97,9 +97,7 @@ exports.getUserByEmail = async (req, res, next) => {
                 logger.info('user account exists, get token');
                 res.redirect(url.format({
                     pathname: '/api/auths/token',
-                    query: {
-                        email: user.email,
-                    }
+                    query: user,
                 }));
             } else {
                 logger.info('no user account, return profile');

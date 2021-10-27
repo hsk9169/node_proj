@@ -19,25 +19,24 @@ exports.authKakao = async (authData) => {
 exports.authToken = async (profile) => {
     //const privateKey = fs.readFileSync('private_key.pem');
     //const refreshKey = fs.readFileSync('refresh_key.pem')
-    console.log('authToken service', profile);
     let token = {accessToken: '', refreshToken: ''};
-    //if (profile.email) {
-    //    token.accessToken = jwt.sign({ email: profile.email }, 
-    //            //privateKey, { algorithm: 'RS256', expiresIn: '1m'});
-    //            'shhhhh', { expiresIn: '1m'});
-    //    token.refreshToken = jwt.sign({ email: profile.email }, 
-    //            //refreshKey, { algorithm: 'RS256', expiresIn: '7d'});
-    //            'shhhhh', { expiresIn: '10m'});
-    //    console.log(token);
-    //} else if (profile.phone) {
-    //    token.accessToken = jwt.sign({ phone: profile.phone, password: profile.password }, 
-    //            //privateKey, { algorithm: 'RS256', expiresIn: '1m'});
-    //            'shhhhh', { expiresIn: '1m'});
-    //    token.refreshToken = jwt.sign({ email: profile.email, password: profile.password }, 
-    //            //refreshKey, { algorithm: 'RS256', expiresIn: '7d'});
-    //            'shhhhh', { expiresIn: '10m'});
-    //    console.log(token);
-    //};
+    if (profile.email) {
+        token.accessToken = jwt.sign({ email: profile.email }, 
+                //privateKey, { algorithm: 'RS256', expiresIn: '1m'});
+                'shhhhh', { expiresIn: '1m'});
+        token.refreshToken = jwt.sign({ email: profile.email }, 
+                //refreshKey, { algorithm: 'RS256', expiresIn: '7d'});
+                'shhhhh', { expiresIn: '10m'});
+        console.log(token);
+    } else if (profile.phone) {
+        token.accessToken = jwt.sign({ phone: profile.phone, password: profile.password }, 
+                //privateKey, { algorithm: 'RS256', expiresIn: '1m'});
+                'shhhhh', { expiresIn: '1m'});
+        token.refreshToken = jwt.sign({ email: profile.email, password: profile.password }, 
+                //refreshKey, { algorithm: 'RS256', expiresIn: '7d'});
+                'shhhhh', { expiresIn: '10m'});
+        console.log(token);
+    };
     token.accessToken = profile;
     token.refreshToken = profile;
     return token;
