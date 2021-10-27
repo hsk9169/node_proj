@@ -24,13 +24,13 @@ exports.authToken = async (profile) => {
         console.log('enter tokening');
         jwt.sign({ email: profile.email }, 
                 //privateKey, { algorithm: 'RS256', expiresIn: '1m'});
-                'secret', { expiresIn: '1m'}, function (err, token) {
+                'secret', { expiresIn: 60}, function (err, token) {
                     token.accessToken = token;
                     console.log(token);
                 });
         token.refreshToken = jwt.sign({ email: profile.email }, 
                 //refreshKey, { algorithm: 'RS256', expiresIn: '7d'});
-                'secret', { expiresIn: '10m'}, function (err, token) {
+                'secret', { expiresIn: 600}, function (err, token) {
                     token.refreshToken = token;
                     console.log(token);
                 });
