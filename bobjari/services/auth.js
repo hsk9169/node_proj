@@ -28,12 +28,11 @@ exports.authToken = async (profile) => {
         jwt.sign({ email: profile.email}, 'shhhhh', 
                  { expiresIn: 60}, function (err, token) {
                     token.accessToken = token;
-                    console.log(token);
         });
         jwt.sign({ email: profile.email}, 'shhhhh', 
                  { expiresIn: 600}, function (err, token) {
                     token.refreshToken = token;
-                    console.log(token);
+                    return token;
         });
     };
     //else if (profile.phone) {
@@ -45,6 +44,5 @@ exports.authToken = async (profile) => {
     //            'secret', { expiresIn: '10m'});
     //    console.log(token);
     //};
-    console.log(token);
-    return token;
+
 }
