@@ -1,6 +1,7 @@
 const url = require('url');
 const logger = require('../config/winston');
 const authService = require('../services/auth');
+const jwt = require('jsonwebtoken');
 
 exports.authKakao = async (req, res, next) => {
     logger.info('POST /api/auths/kakao');
@@ -22,23 +23,7 @@ exports.authKakao = async (req, res, next) => {
 exports.authToken = async (req, res, next) => {
     logger.info('POST /api/auths/token');
     let token = {accessToken: '', refreshToken: ''};
-    await authService.authAccessToken(req.query)
-        .then((accessToken) => {
-            console.log(accessToken);
-            token.accessToken = accessToken;
-        })
-        .catch(err => {
-            logger.error('POST /api/auths/token');
-            res.status(500).send(err);
-        });
-    await authService.authRefreshToken(req.query)
-    .then((refreshToken) => {
-        console.log(refreshToken);
-        token.refreshToken = refreshToken;
-        res.json(token);
-    })
-    .catch(err => {
-        logger.error('POST /api/auths/token');
-        res.status(500).send(err);
-    });
+    token.accessToken = jwt.sign({ email: profile.email}, 'shhhhh', { expiresIn: 60});
+    token.refreshToken = jwt.sign({ email: profile.email}, 'shhhhh', { expiresIn: 600});
+    res.json(token);
 }
