@@ -1,5 +1,7 @@
+const jwt = require('jsonwebtoken');
 const logger = require('../config/winston');
 const kakaoAuth = require('../subscribers/auth');
+
 
 exports.authKakao = async (authData) => {
     const accessToken = await kakaoAuth.getAccessToken(authData);
@@ -20,14 +22,15 @@ exports.authToken = async (profile) => {
     //const privateKey = fs.readFileSync('private_key.pem');
     //const refreshKey = fs.readFileSync('refresh_key.pem')
     let token = {accessToken: '', refreshToken: ''};
+    //const payload = JSON.stringify({ email: profile.email});
     if (profile.email) {
         console.log('enter tokening');
-        jwt.sign({ email: profile.email }, 'secret', 
+        jwt.sign({ email: profile.email}, 'shhhhh', 
                  { expiresIn: 60}, function (err, token) {
                     token.accessToken = token;
                     console.log(token);
         });
-        jwt.sign({ email: profile.email }, 'secret', 
+        jwt.sign({ email: profile.email}, 'shhhhh', 
                  { expiresIn: 600}, function (err, token) {
                     token.refreshToken = token;
                     console.log(token);
