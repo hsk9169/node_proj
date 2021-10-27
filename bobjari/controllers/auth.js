@@ -24,6 +24,7 @@ exports.authToken = async (req, res, next) => {
     let token = {accessToken: '', refreshToken: ''};
     await authService.authAccessToken(req.query)
         .then((accessToken) => {
+            console.log(accessToken);
             token.accessToken = accessToken;
         })
         .catch(err => {
@@ -32,6 +33,7 @@ exports.authToken = async (req, res, next) => {
         });
     await authService.authRefreshToken(req.query)
     .then((refreshToken) => {
+        console.log(refreshToken);
         token.refreshToken = refreshToken;
         res.json(token);
     })
