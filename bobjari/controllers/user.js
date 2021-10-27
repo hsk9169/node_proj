@@ -98,7 +98,7 @@ exports.getUserByEmail = async (req, res, next) => {
                 res.redirect(url.format({
                     pathname: '/api/auths/token',
                     query: {
-                        email: user.nickname,
+                        email: user.password,
                     }
                 }));
                 //res.redirect('/api/auths/token/?email='+user.email);
