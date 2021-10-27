@@ -94,12 +94,14 @@ exports.getUserByEmail = async (req, res, next) => {
     await userService.getUserByEmail(req.query.email)
         .then((user) => {
             if(user) {
-                console.log('controller',user);
                 logger.info('user account exists, get token', user.email);
                 const option = url.format({
                     pathname: '/api/auths/token',
-                    query: user.email,
+                    query: {
+                        email: user.email,
+                    }
                 });
+                console.log
                 res.redirect(option);
             } else {
                 logger.info('no user account, return profile');
