@@ -20,6 +20,7 @@ exports.authToken = async (profile) => {
     //const privateKey = fs.readFileSync('private_key.pem');
     //const refreshKey = fs.readFileSync('refresh_key.pem')
     let token = {accessToken: '', refreshToken: ''};
+    console.log(profile);
     if (profile.email) {
         token.accessToken = jwt.sign({ email: profile.email }, 
                 //privateKey, { algorithm: 'RS256', expiresIn: '1m'});
