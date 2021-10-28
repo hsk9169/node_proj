@@ -82,6 +82,7 @@ exports.getUserByPhone = async(phone) => {
 exports.getUserByNickname = async(nickname) => {
     try {
         let ret = await userModel.findOneByNickname(nickname);
+        console.log(ret);
         return ret;
     } catch(err) {
         logger.error(err.stack);

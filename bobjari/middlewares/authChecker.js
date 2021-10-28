@@ -16,8 +16,8 @@ exports.check = (req, res, next) => {
     // create a promise that decodes the token
     const p = new Promise(
         (resolve, reject) => {
-            const cert = fs.readFileSync('private_key.pem');
-            jwt.verify(token, cert, (err, decoded) => {
+            //const cert = fs.readFileSync('private_key.pem');
+            jwt.verify(token, 'shhhhh', (err, decoded) => {
                 if(err) reject(err);
                 resolve(decoded);
             });
