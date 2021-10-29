@@ -6,13 +6,14 @@ const crypto = require('crypto');
 
 exports.postUser = async (data) => {
     try {
-        let pwd = data.password;
-        pwd = crypto.createHmac('sha1', config.secret)
-                    .update(pwd)
-                    .digest('base64')
-        data.password = pwd;
+        try {
+            let pwd = data.password;
+            pwd = crypto.createHmac('sha1', config.secret)
+                        .update(pwd)
+                        .digest('base64')
+            data.password = pwd;
+        } catch {};
         const profile = await userModel.create(data);
-        //const ret = {profile: profile, token: data.token};
         return profile;
     } catch(err) { 
         logger.error(err.stack);

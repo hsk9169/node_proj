@@ -4,6 +4,6 @@ router.use('/users', require('./users'));
 
 router.use('/auths', require('./auths/index'));
 
-router.use('/signs', require('./signs'));
+router.use('/sign', require('./sign'));
 
 module.exports = router;
