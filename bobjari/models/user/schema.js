@@ -20,7 +20,8 @@ const userSchema = {
     profileImg: Buffer,
     // Type: URI, *.png, *.jpg ...
     profileImgType: String,
-    mbti: String,
+    role: String,
+    interests: [String],
 };
 
 module.exports = userSchema;

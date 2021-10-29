@@ -35,3 +35,16 @@ exports.signInBob = async (req, res, next) => {
             res.status(404).send(err);
         });
 }
+
+exports.signUp = async (req, res, next) => {
+    logger.info('POST /sign/up');
+    await userService.postUser(req.body)
+        .then((profile) => {
+            res.json(profile);
+        })
+        .catch(err => {
+            logger.error('POST /sign/up');
+            logger.error(err);
+            res.status(404).send(err);
+        })
+}
