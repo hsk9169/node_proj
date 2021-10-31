@@ -22,7 +22,6 @@ exports.authKakao = async (req, res, next) => {
 
 exports.authEmail = async (req, res, next) => {
     logger.info('POST /api/auths/email');
-    console.log(req);
     await authService.authEmail(req.body.email)
         .then((authNum) => {
             logger.info('got auth number, response to client');
