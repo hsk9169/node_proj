@@ -20,11 +20,35 @@ exports.authKakao = async (req, res, next) => {
         });
 }
 
+exports.authEmail = async (req, res, next) => {
+    logger.info('POST /api/auths/email');
+    console.log(req);
+    await authService.authEmail(req.body.email)
+        .then((authNum) => {
+            logger.info('got auth number, response to client');
+            res.json(authNum);
+        })
+        .catch(err => {
+            logger.error('POST /api/auths/email');
+            logger.error(err.stack);
+            res.status(500).send(err);
+        });
+}
+
 exports.authToken = async (req, res, next) => {
     logger.info('POST /api/auths/token');
     let token = {accessToken: '', refreshToken: ''};
-    token.accessToken = jwt.sign({ email: req.query.email}, 'shhhhh', { expiresIn: 60});
-    token.refreshToken = jwt.sign({ email: req.query.email}, 'shhhhh', { expiresIn: 600});
+    if (req.email) {
+        token.accessToken = jwt.sign({ email: req.query.email}, 
+            'shhhhh', { expiresIn: 60});
+        token.refreshToken = jwt.sign({ email: req.query.email}, 
+            'shhhhh', { expiresIn: 600});
+    } else {
+        token.accessToken = jwt.sign({ phone: req.query.phone, password: req.query.password}, 
+            'shhhhh', { expiresIn: 60});
+        token.refreshToken = jwt.sign({ phone: req.query.phone, password: req.query.password}, 
+            'shhhhh', { expiresIn: 600});
+    }
     console.log(token);
     res.json({
         token: token

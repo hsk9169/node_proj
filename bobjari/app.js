@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const fs = require('fs');
 const app = express();
+const path = require('path');
 
 // App Configurations
 const config = require('./config/index');

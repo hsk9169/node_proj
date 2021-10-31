@@ -1,7 +1,16 @@
 const jwt = require('jsonwebtoken');
 const logger = require('../config/winston');
 const kakaoAuth = require('../subscribers/auth');
+const nodemailer = require('nodemailer');
+const ejs = require('ejs');
+const path = require('path');
 
+const appDir = path.dirname(require.main.filename);
+
+const makeAuthNum = () => {
+    const authNum = Math.random().toString().substr(2,6);
+    return authNum;
+};
 
 exports.authKakao = async (authData) => {
     const accessToken = await kakaoAuth.getAccessToken(authData);
@@ -18,10 +27,49 @@ exports.authKakao = async (authData) => {
     return profile;
 }
 
+exports.authEmail = async (email) => {
+    const authNum = makeAuthNum();
+    let emailTemplate;
+    ejs.renderFile(appDir + '/templates/authMail.ejs',
+                    {authCode: authNum}, (err, data) => {
+                        if(err){console.log(err)}
+                        emailTemplate = data;
+                    });
+
+    const transporter = nodemailer.createTransport({
+        service: 'Naver',
+        //host: 'smtp.naver.com',
+        //port: 587,
+        auth: {
+            user: 'bobjari_team@naver.com',
+            pass: 'bugfree1212!'
+        },
+        tls: {
+            rejectUnauthorized: false
+        }
+    });
+
+    const mailOptions = await transporter.sendMail({
+        from: 'bobjari_team@naver.com',
+        to: email,
+        subject: '밥자리 서비스 로그인을 위한 인증번호를 입력해주세요.',
+        html: emailTemplate,
+    });
+
+    transporter.sendMail(mailOptions, (err, info) => {
+        if (err) {
+            console.log(err);
+        }
+        console.log('Sending Email Success!');
+        transporter.close();
+    })
+
+    return authNum;
+}
+
 exports.authAccessToken = async (profile) => {
     //const privateKey = fs.readFileSync('private_key.pem');
     //const refreshKey = fs.readFileSync('refresh_key.pem')
-    //const payload = JSON.stringify({ email: profile.email});
     if (profile.email) {
         console.log('enter tokening');
         jwt.sign({ email: profile.email}, 'shhhhh', 
@@ -43,7 +91,6 @@ exports.authAccessToken = async (profile) => {
 exports.authRefreshToken = async (profile) => {
     //const privateKey = fs.readFileSync('private_key.pem');
     //const refreshKey = fs.readFileSync('refresh_key.pem')
-    //const payload = JSON.stringify({ email: profile.email});
     if (profile.email) {
         console.log('enter tokening');
         jwt.sign({ email: profile.email}, 'shhhhh', 
