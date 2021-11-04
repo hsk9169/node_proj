@@ -62,6 +62,6 @@ exports.signInTest = async(req, res, next) => {
     logger.info('POST /sign/in/test');
     res.redirect(url.format({
         pathname: '/api/users/email',
-        query: req.query.email,
+        query: req.body,
     }))
 }

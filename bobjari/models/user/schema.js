@@ -1,4 +1,4 @@
-
+ 
 // Define Scehmas
 const userSchema = {
     updated: { 
@@ -6,22 +6,24 @@ const userSchema = {
         required: true,
         default: Date.now,
     },
-    email: String,
-    age: {
-        type: Number,
-        max: 80,
+    userInfo: {
+        email: String,
+        age: {
+            type: Number,
+            max: 80,
+        },
+        gender: String,
+        nickname: {
+            type: String,
+            unique: true,
+        },
+        role: String,
+        interests: [String],
     },
-    gender: String,
-    nickname: {
-        type: String,
-        unique: true,
+    profileImg: {
+        data: Buffer,
+        contentType: String,
     },
-    password: String,
-    profileImg: Buffer,
-    // Type: URI, *.png, *.jpg ...
-    profileImgType: String,
-    role: String,
-    interests: [String],
 };
 
 module.exports = userSchema;

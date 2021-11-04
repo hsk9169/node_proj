@@ -13,6 +13,8 @@ const config = require('./config/index');
 // Swagger API
 const { swaggerUi, specs } = require('./config/swagger');
 
+const parser = bodyParser.urlencoded({extended: false});
+
 // Log Plugin
 const logger = require('./config/winston');
 
