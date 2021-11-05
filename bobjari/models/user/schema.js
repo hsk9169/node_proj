@@ -1,3 +1,5 @@
+const { Schema } = require("mongoose");
+
  
 // Define Scehmas
 const userSchema = {
@@ -7,7 +9,10 @@ const userSchema = {
         default: Date.now,
     },
     userInfo: {
-        email: String,
+        email: {
+            type: String,
+            unique: true,
+        },
         age: {
             type: Number,
             max: 80,
@@ -21,7 +26,7 @@ const userSchema = {
         interests: [String],
     },
     profileImg: {
-        data: Buffer,
+        data: Schema.Types.Mixed,
         contentType: String,
     },
 };

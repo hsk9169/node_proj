@@ -7,23 +7,47 @@ const multer = require('multer');
 exports.postUser = async (req, res) => {
     logger.info('POST /users/create');
     imgLoader.uploadImage(req, res, (err) => {
-        console.log(req);
         if (err instanceof multer.MulterError) {
             console.log('max image size exceeded');
             console.log(err);
             res.status(400).send('max image file size 50MB exceeded');
         } else if (err) {
             console.log('only image file is allowed');
-            console.log(req.file);
             res.status(400).send('only image file is allowed');
         } else if (!req.file) {
             console.log('no file found');
-            res.status(400).send('no file found');
+            userService.postUser({
+                userInfo: {
+                    email: req.body.email,
+                    age: req.body.age,
+                    gender: req.body.gender,
+                    nickname: req.body.nickname,
+                    role: req.body.role,
+                    interest: req.body.interests,
+                },
+                profileImg: req.body.profileImg,
+            }) 
+            .then((user) => {
+                if(user) {
+                    logger.info('user account added, get token');
+                    res.redirect(url.format({
+                        pathname: '/api/auths/token',
+                        query: {
+                            email: user.userInfo.email,
+                        },
+                    }));
+                } else {
+                    logger.info('no user account, return profile');
+                    res.json(req.query);
+                }
+            })
+            .catch(err => {
+                logger.error('GET /users/email');
+                logger.error(err.stack);
+                res.status(500).send(err);
+            });
         } else {
             console.log('file uploaded successfully');
-            console.log(req.file.originalname);
-            console.log(req.file.mimetype);
-            console.log(req.file.buffer);
             userService.postUser({
                 userInfo: req.body,
                 profileImg: {
@@ -31,15 +55,26 @@ exports.postUser = async (req, res) => {
                     contentType: req.file.mimetype,
                 },
             }) 
-                .then((ret) => {
-                    res.json(ret);
-                })
-                .catch(err => {
-                    logger.error('POST /user/image/create');
-                    logger.error(err);
-                    res.status(400).send('file uploading failed');
-                });
-        };
+            .then((user) => {
+                if(user) {
+                    logger.info('user account exists, get token');
+                    res.redirect(url.format({
+                        pathname: '/api/auths/token',
+                        query: {
+                            email: user.userInfo.email,
+                        },
+                    }));
+                } else {
+                    logger.info('no user account, return profile');
+                    res.json(req.query);
+                }
+            })
+            .catch(err => {
+                logger.error('GET /users/email');
+                logger.error(err.stack);
+                res.status(500).send(err);
+            });
+        }
     });
 }
 
@@ -126,7 +161,7 @@ exports.getUserByEmail = async (req, res, next) => {
                 res.redirect(url.format({
                     pathname: '/api/auths/token',
                     query: {
-                        email: user.email,
+                        email: user.userInfo.email,
                     },
                 }));
             } else {
@@ -148,7 +183,7 @@ exports.postUserByPhone = async (req, res, next) => {
         .then((user) => {
             if(!user) {
                 logger.info('no user account, return none');
-                res.status(200);
+                res.status(404);
             } else {
                 logger.info('user account exists');
                 res.redirect(url.format({
@@ -166,7 +201,6 @@ exports.postUserByPhone = async (req, res, next) => {
 
 exports.postUserByNickname = async (req, res, next) => {
     logger.info('POST /users/nickname');
-    console.log(req.body);
     await userService.getUserByNickname(req.body.nickname)
         .then((user) => {
             if(!user) {

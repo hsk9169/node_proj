@@ -9,8 +9,6 @@ router.get('/', userController.getUsers);
 
 router.post('/create', userController.postUser);
 
-router.post('/image/create', userController.postUserImage);
-
 // Find One by user email
 router.get('/email', userController.getUserByEmail);
 

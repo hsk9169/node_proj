@@ -1,5 +1,4 @@
 const router = require('express').Router();
-const authChecker = require('../../middlewares/authChecker');
 const authController = require('../../controllers/auth');
 
 router.post('/kakao', authController.authKakao);

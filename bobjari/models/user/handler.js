@@ -39,19 +39,19 @@ userModel.statics.deleteByUserid = function (userid) {
 // Find By user email
 userModel.statics.findOneByEmail = function(target, cb) {
     const query = new RegExp('^'+target+'$', 'i');
-    return this.findOne({ email: query }).exec();
+    return this.findOne( { 'userInfo.email': query } ).exec();
 };
 
 // Find By user phone number
 userModel.statics.findOneByPhone = function(target, cb) {
     const query = new RegExp('^'+target+'$', 'i');
-    return this.findOne({ phone: query }).exec();
+    return this.findOne( { 'userInfo.phone': query } ).exec();
 };
 
 // Find By user nickname
 userModel.statics.findOneByNickname = function (target) {
     const query = new RegExp('^'+target+'$', 'i');
-    return this.findOne({ nickname: query }).exec();
+    return this.findOne( { 'userInfo.nickname': query } ).exec();
 };
 
 // Create Model & Export

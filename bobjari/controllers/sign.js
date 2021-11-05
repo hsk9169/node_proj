@@ -3,6 +3,7 @@ const url = require('url');
 const authService = require('../services/auth');
 const userService = require('../services/user');
 const config = require('../config/index');
+const { restart } = require('pm2');
 
 exports.signInKakao = async (req, res, next) => {
     logger.info('POST /sign/in/kakao');
@@ -30,7 +31,7 @@ exports.signInBob = async (req, res, next) => {
                 res.redirect(url.format({
                     pathname: '/api/auths/token',
                     query: {
-                        email: profile.email,
+                        email: profile.userInfo.email,
                     }
                 }));
             } else {
@@ -45,23 +46,23 @@ exports.signInBob = async (req, res, next) => {
         });
 }
 
-exports.signUp = async (req, res, next) => {
-    logger.info('POST /sign/up');
-    await userService.postUser(req.body)
-        .then((profile) => {
-            res.json(profile);
-        })
-        .catch(err => {
-            logger.error('POST /sign/up');
-            logger.error(err);
-            res.status(500).send(err);
-        })
-}
-
 exports.signInTest = async(req, res, next) => {
-    logger.info('POST /sign/in/test');
-    res.redirect(url.format({
-        pathname: '/api/users/email',
-        query: req.body,
-    }))
+    logger.info('POST /test/jwt');
+    console.log(req.decoded);
+    console.log(req.body);
+
+    await userService.getUserByEmail(req.body.email)
+        .then( (user) => {
+            if (user) {
+                console.log('user found');
+                res.json(user);
+            } else {
+                console.log('user not found');
+                res.status(404);
+            }
+        })
+        .catch( err => {
+            logger.error('POST /test/jwt');
+            restart.status(500).send(err);
+        });
 }

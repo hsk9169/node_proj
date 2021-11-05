@@ -3,8 +3,10 @@ const jwt = require('jsonwebtoken');
 
 exports.check = (req, res, next) => {
     // read the token from header or url 
-    const token = req.headers['x-access-token'];
-
+    const auth = req.headers.authorization;
+    const authArray = auth.split(' ');
+    const token = authArray[1];
+    
     // token does not exist
     if(!token) {
         return res.status(403).json({
@@ -28,7 +30,7 @@ exports.check = (req, res, next) => {
     const onError = (err) => {
         res.status(403).json({
             success: false,
-            message: err.message
+            message: 'access token might be expired or unauthorized',
         });
     };
 

@@ -5,8 +5,6 @@ router.post('/in/kakao', signController.signInKakao);
 
 router.post('/in/bob', signController.signInBob);
 
-router.post('/up', signController.signUp);
-
 router.post('/in/test', signController.signInTest);
 
 module.exports = router;

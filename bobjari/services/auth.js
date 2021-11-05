@@ -73,7 +73,7 @@ exports.authAccessToken = async (profile) => {
     if (profile.email) {
         console.log('enter tokening');
         jwt.sign({ email: profile.email}, 'shhhhh', 
-                 { expiresIn: 60}, function (err, token) {
+                 { expiresIn: 600}, function (err, token) {
                     return token;
         });
     };
@@ -94,7 +94,7 @@ exports.authRefreshToken = async (profile) => {
     if (profile.email) {
         console.log('enter tokening');
         jwt.sign({ email: profile.email}, 'shhhhh', 
-                 { expiresIn: 600}, function (err, token) {
+                 { expiresIn: 6000}, function (err, token) {
                     return token;
         });
     };
