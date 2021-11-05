@@ -5,6 +5,6 @@ router.post('/kakao', authController.authKakao);
 
 router.post('/email', authController.authEmail);
 
-router.get('/token', authController.authToken);
+router.post('/token', authController.authToken);
 
 module.exports = router;
