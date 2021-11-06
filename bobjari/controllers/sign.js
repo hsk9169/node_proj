@@ -47,9 +47,8 @@ exports.signInBob = async (req, res, next) => {
 }
 
 exports.signInTest = async(req, res, next) => {
-    logger.info('POST /test/jwt');
+    logger.info('GET /test/jwt');
     console.log(req.decoded);
-    console.log(req.body);
 
     await userService.getUserByEmail(req.decoded.email)
         .then( (user) => {
@@ -62,7 +61,7 @@ exports.signInTest = async(req, res, next) => {
             }
         })
         .catch( err => {
-            logger.error('POST /test/jwt');
+            logger.error('GET /test/jwt');
             restart.status(500).send(err);
         });
 }

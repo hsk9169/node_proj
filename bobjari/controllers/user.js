@@ -16,6 +16,7 @@ exports.postUser = async (req, res) => {
             res.status(400).send('only image file is allowed');
         } else if (!req.file) {
             console.log('no file found');
+            console.log(req.body);
             userService.postUser({
                 userInfo: {
                     email: req.body.email,
@@ -23,9 +24,12 @@ exports.postUser = async (req, res) => {
                     gender: req.body.gender,
                     nickname: req.body.nickname,
                     role: req.body.role,
-                    interest: req.body.interests,
+                    interests: req.body.interests,
                 },
-                profileImg: req.body.profileImg,
+                profileImg: {
+                    data: req.body.img,
+                    contentType: 'url',
+                },
             }) 
             .then((user) => {
                 if(user) {

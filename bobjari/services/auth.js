@@ -71,9 +71,9 @@ exports.authAccessToken = async (profile) => {
     //const privateKey = fs.readFileSync('private_key.pem');
     //const refreshKey = fs.readFileSync('refresh_key.pem')
     if (profile.email) {
-        console.log('enter tokening');
+        // Expires in 1 min
         jwt.sign({ email: profile.email}, 'shhhhh', 
-                 { expiresIn: 600}, function (err, token) {
+                 { expiresIn: 6000}, function (err, token) {
                     return token;
         });
     };
@@ -92,9 +92,9 @@ exports.authRefreshToken = async (profile) => {
     //const privateKey = fs.readFileSync('private_key.pem');
     //const refreshKey = fs.readFileSync('refresh_key.pem')
     if (profile.email) {
-        console.log('enter tokening');
+        // Expires in 1 hour
         jwt.sign({ email: profile.email}, 'shhhhh', 
-                 { expiresIn: 6000}, function (err, token) {
+                 { expiresIn: 36000}, function (err, token) {
                     return token;
         });
     };

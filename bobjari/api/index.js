@@ -9,6 +9,6 @@ router.use('/auths', require('./auths/index'));
 
 router.use('/sign', require('./sign'));
 
-router.post('/test/jwt', authChecker.check, signController.signInTest);
+router.get('/test/jwt', authChecker.check, signController.signInTest);
 
 module.exports = router;
