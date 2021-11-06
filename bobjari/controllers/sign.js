@@ -51,7 +51,7 @@ exports.signInTest = async(req, res, next) => {
     console.log(req.decoded);
     console.log(req.body);
 
-    await userService.getUserByEmail(req.body.email)
+    await userService.getUserByEmail(req.decoded.email)
         .then( (user) => {
             if (user) {
                 console.log('user found');
