@@ -1,11 +1,10 @@
 const router = require('express').Router();
 const userController = require('../controllers/user');
-const imgLoader = require('../middlewares/imgLoader');
-const multer = require('multer');
+const authChecker = require('../middlewares/authChecker');
 
 
 // Find All
-router.get('/', userController.getUsers);
+router.get('/', authChecker.check, userController.getUsers);
 
 router.post('/create', userController.postUser);
 

@@ -16,7 +16,7 @@ exports.postUser = async (req, res) => {
             res.status(400).send('only image file is allowed');
         } else if (!req.file) {
             console.log('no file found');
-            console.log(req.body);
+            console.log(req);
             userService.postUser({
                 userInfo: {
                     email: req.body.email,
@@ -84,6 +84,8 @@ exports.postUser = async (req, res) => {
 
 exports.getUsers = async (req, res, next) => {
     logger.info('GET /users');
+    console.log(req.decoded);
+    
     await userService.getUsers()
         .then((users) => {
             if(!users.length) {
