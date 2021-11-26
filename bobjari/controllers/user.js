@@ -20,7 +20,7 @@ exports.getUserByEmail = async (req, res, next) => {
                 .then((mentor) => {
                     if(mentor) {
                         logger.info('mentor account found');
-                        res.json = 'mentor';
+                        mentor.role = 'mentor';
                         res.json(mentor);
                     } else {
                         logger.info('no mentor account found');
