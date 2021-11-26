@@ -7,7 +7,7 @@ const env = process.argv[2];
 if(env == 'ec2') {
     url = 'http://ec2-3-17-139-14.us-east-2.compute.amazonaws.com:8000';
 } else {
-    url = 'https://bobjari.loca.lt';
+    url = 'http://localhost:8000';
 }
 
 const swaggerDefinition = {
@@ -39,6 +39,7 @@ const options = {
     apis: [
         './swagger/users/*.yaml',
         './swagger/auths/*.yaml',
+        './swagger/sign/*.yaml',
     ], 
 };
 

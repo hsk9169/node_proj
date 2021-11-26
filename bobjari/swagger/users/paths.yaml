@@ -3,94 +3,78 @@ tags:
     description: user API
 
 paths:
-    /api/users:
+    /api/users/email:
         get:
-            summary: get all user data
+            summary: get user data by email
             tags:
                 - users
             parameters:
-                - in: query
-                  name: content
+                - in: path
+                  name: email
                   schema:
                       type: string
-                - in: query
-                  name: completed
-                  schema:
-                      type: string
+                  required: true
+                  description: email address
             responses:
                 200:
-                    description: get user data success
+                    description: get user data by email success
                     content:
                         application/json:
-                            $ref: '#/components/schemas/User'
+                            oneOf:
+                                - $ref: '#/components/schemas/Mentee'
+                                - $ref: '#/components/schemas/Mentor'
+    /api/users/nickname:
         post:
-            summary: post user data
+            summary: check if nickname duplicates
             tags:
                 - users
             requestBody:
-                required: true
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/User'
-            responses:
-                200:
-                    description: post user data success
-                    content:
-                        application/json:
-                            $ref: '#/components/schemas/User'
-    /api/users/userid/{userid}:
-        get:
-            summary: get user data by {userid}
+                            type: object
+                            properties:
+                                nickname:
+                                    type: string
+    /api/users/mentee/create:
+        post:
+            summary: create mentee account
             tags:
                 - users
-            parameters:
-                - in: path
-                  name: userid
-                  schema:
-                      type: integer
-                  required: true
-                  description: userid
-            responses:
-                200:
-                    description: get user data by {userid} success
-                    content:
-                        application/json:
-                            $ref: '#/components/schemas/User'
-        put:
-            summary: put user data by {userid}
-            tags:
-                - users
-            parameters:
-                - in: path
-                  name: userid
-                  schema:
-                      type: integer
-                  required: true
-                  description: userid
             requestBody:
-                required: true
                 content:
-                    application/json:
+                    multipart/form-data:
                         schema:
-                            $ref: '#/components/schemas/User'
+                            '#/components/schemas/Mentee'
             responses:
                 200:
-                    description: put user data by {userid} success
+                    description: posted account success, return email 
                     content:
                         application/json:
-                            $ref: '#/components/schemas/User'
-        delete:
-            summary: delete user data by {userid}
+                            schema:
+                                type: string
+                204:
+                    description: no existing account
+    /api/users/mentor/create:
+        post:
+            summary: create mentor account
             tags:
                 - users
-            parameters:
-                - in: path
-                  name: userid
-                  schema:
-                      type: integer
-                  required: true
-                  description: userid
+            requestBody:
+                content:
+                    multipart/form-data:
+                        schema:
+                            '#/components/schemas/Mentor'
             responses:
                 200:
-                    description: delete user data by {userid} success
+                    description: posted account success, return email 
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    0:
+                                        type: string
+                                        description: email address
+                204:
+                    description: no existing account
