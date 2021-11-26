@@ -13,18 +13,17 @@ exports.getUserByEmail = async (req, res, next) => {
             if(mentee) {
                 logger.info('mentee account found');
                 mentee.role = 'mentee';
-                res.status(204);
+                res.json(mentee);
             } else {
                 logger.info('no mentee account found');
                 userService.getMentorByEmail(req.query.email)
                 .then((mentor) => {
                     if(mentor) {
-                        logger.info('mentor account exists, get token');
+                        logger.info('mentor account found');
                         res.json = 'mentor';
                         res.json(mentor);
                     } else {
-                        logger.info('no mentor account');
-                        // No existing user, return profile to front server
+                        logger.info('no mentor account found');
                         res.status(204);
                     }
                 })
@@ -38,7 +37,7 @@ exports.getUserByEmail = async (req, res, next) => {
         .catch(err => {
             logger.error('GET /users/email');
             logger.error(err.stack);
-            res.status(500).send(err);
+            res.status(400).send(err);
         });    
 }
 
