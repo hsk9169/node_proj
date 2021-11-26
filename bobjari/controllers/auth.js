@@ -3,6 +3,19 @@ const logger = require('../config/winston');
 const authService = require('../services/auth');
 const jwt = require('jsonwebtoken');
 
+exports.authKakao = async (req, res, next) => {
+    logger.info('POST /api/auths/kakao');
+    await authService.authKakao(req.body)
+        .then((profile) => {
+            logger.info('got kakao profile');
+            res.json(profile);
+        })
+        .catch(err => {
+            logger.error('POST /api/auths/kakao');
+            logger.error(err.stack);
+            res.status(500).send(err);
+        });
+}
 
 exports.authEmail = async (req, res, next) => {
     logger.info('POST /api/auths/email');

@@ -6,21 +6,12 @@ const config = require('../config/index');
 
 exports.signInKakao = async (req, res, next) => {
     logger.info('POST /sign/in/kakao');
-    await authService.authKakao(req.body) 
-        .then((profile) => {
-            logger.info('got profile, redirect to user controller');
-            res.redirect(url.format({
-                pathname: '/api/users/email',
-                query: {
-                    email: profile.email,
-                }
-            }))
-        })
-        .catch(err => {
-            logger.error('POST /sign/in/kakao');
-            logger.error(err);
-            res.status(500).send(err);
-        });
+    res.redirect(url.format({
+        pathname: '/api/users/email',
+        query: {
+            email: profile.email,
+        }
+    }))
 }
 
 exports.signInBob = async (req, res, next) => {
