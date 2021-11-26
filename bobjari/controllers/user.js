@@ -24,7 +24,7 @@ exports.getUserByEmail = async (req, res, next) => {
                         res.json(mentor);
                     } else {
                         logger.info('no mentor account found');
-                        res.status(204);
+                        res.status(204).send('no account found');
                     }
                 })
                 .catch(err => {
