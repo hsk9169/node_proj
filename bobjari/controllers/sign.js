@@ -6,10 +6,11 @@ const config = require('../config/index');
 
 exports.signInKakao = async (req, res, next) => {
     logger.info('POST /sign/in/kakao');
+
     res.redirect(url.format({
         pathname: '/api/users/email',
         query: {
-            email: profile.email,
+            email: req.body.email,
         }
     }))
 }
