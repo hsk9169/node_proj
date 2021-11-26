@@ -3,7 +3,7 @@ const authChecker = require('../middlewares/authChecker');
 const signController = require('../controllers/sign');
 
 
-router.use('/users', require('./users'));
+router.use('/users', require('./users/index'));
 
 router.use('/auths', require('./auths/index'));
 

@@ -38,8 +38,6 @@ exports.authEmail = async (email) => {
 
     const transporter = nodemailer.createTransport({
         service: 'Naver',
-        //host: 'smtp.naver.com',
-        //port: 587,
         auth: {
             user: 'bobjari_team@naver.com',
             pass: 'bugfree1212!'

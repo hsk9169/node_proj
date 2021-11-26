@@ -2,7 +2,7 @@ const { Schema } = require("mongoose");
 
  
 // Define Scehmas
-const userSchema = {
+const menteeSchema = {
     updated: { 
         type: Date,
         required: true,
@@ -22,13 +22,13 @@ const userSchema = {
             type: String,
             unique: true,
         },
-        role: String,
-        interests: [String],
     },
+    role: Boolean,
+    interests: [String],
     profileImg: {
         data: Schema.Types.Mixed,
         contentType: String,
     },
 };
 
-module.exports = userSchema;
+module.exports = menteeSchema;

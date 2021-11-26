@@ -1,12 +1,14 @@
 const { data } = require('../config/winston');
 const logger = require('../config/winston');
-const userModel = require('../models/user/handler');
+const menteeModel = require('../models/user/mentee/handler');
+const mentorModel = require('../models/user/mentor/handler');
 const config = require('../config/index');
 const crypto = require('crypto');
 
-exports.postUser = async (data) => {
+// Mentee
+exports.postMentee = async (data) => {
     try {
-        const profile = await userModel.create(data);
+        const profile = await menteeModel.create(data);
         return profile;
     } catch(err) { 
         logger.error(err.stack);
@@ -14,19 +16,9 @@ exports.postUser = async (data) => {
     }
 }
 
-exports.getUsers = async () => {
+exports.getMentees = async () => {
     try {
-        let data = await userModel.findAll();
-        return data;
-    } catch(err) {
-        logger.error(err.stack);
-        throw Error(err);
-    }
-}
-/*
-exports.getUserByUserid = async(userId) => { 
-    try {
-        let data = await userModel.findOneByUserid(userId);
+        let data = await menteeModel.findAll();
         return data;
     } catch(err) {
         logger.error(err.stack);
@@ -34,28 +26,9 @@ exports.getUserByUserid = async(userId) => {
     }
 }
 
-exports.putUserByUserid = async(userId, user) => {
+exports.getMenteeByEmail = async(email) => {
     try {
-        let data = await userModel.updateByUserid(userId, user);
-        return data;
-    } catch(err) {
-        logger.error(err.stack);
-        throw Error(err);
-    }
-}
-
-exports.deleteUserByUserid = async(userId) => {
-    try {
-        await userModel.deleteByUserid(userId);
-    } catch(err) {
-        logger.error(err.stack);
-        throw Error(err);
-    }
-}
-*/
-exports.getUserByEmail = async(email) => {
-    try {
-        let ret = await userModel.findOneByEmail(email);
+        let ret = await menteeModel.findOneByEmail(email);
         return ret;
     } catch(err) {
         logger.error(err.stack);
@@ -63,9 +36,9 @@ exports.getUserByEmail = async(email) => {
     }
 }
 
-exports.getUserByPhone = async(phone) => {
+exports.getMenteeByPhone = async(phone) => {
     try {
-        let ret = await userModel.findOneByPhone(phone);
+        let ret = await menteeModel.findOneByPhone(phone);
         return ret;
     } catch(err) {
         logger.error(err.stack);
@@ -73,9 +46,60 @@ exports.getUserByPhone = async(phone) => {
     }
 }
 
-exports.getUserByNickname = async (nickname) => {
+exports.getMenteeByNickname = async (nickname) => {
     try {
-        let ret = await userModel.findOneByNickname(nickname);
+        let ret = await menteeModel.findOneByNickname(nickname);
+        return ret;
+    } catch(err) {
+        logger.error(err.stack);
+        throw Error(err);
+    }
+}
+
+// Mentor
+exports.postMentor = async (data) => {
+    try {
+        const profile = await mentorModel.create(data);
+        return profile;
+    } catch(err) { 
+        logger.error(err.stack);
+        throw Error(err);
+    }
+}
+
+exports.getMentors = async () => {
+    try {
+        let data = await mentorModel.findAll();
+        return data;
+    } catch(err) {
+        logger.error(err.stack);
+        throw Error(err);
+    }
+}
+
+exports.getMentorByEmail = async(email) => {
+    try {
+        let ret = await mentorModel.findOneByEmail(email);
+        return ret;
+    } catch(err) {
+        logger.error(err.stack);
+        throw Error(err);
+    }
+}
+
+exports.getMentorByPhone = async(phone) => {
+    try {
+        let ret = await mentorModel.findOneByPhone(phone);
+        return ret;
+    } catch(err) {
+        logger.error(err.stack);
+        throw Error(err);
+    }
+}
+
+exports.getMentorByNickname = async (nickname) => {
+    try {
+        let ret = await mentorModel.findOneByNickname(nickname);
         return ret;
     } catch(err) {
         logger.error(err.stack);

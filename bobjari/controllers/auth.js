@@ -3,22 +3,6 @@ const logger = require('../config/winston');
 const authService = require('../services/auth');
 const jwt = require('jsonwebtoken');
 
-exports.authKakao = async (req, res, next) => {
-    logger.info('POST /api/auths/kakao');
-    await authService.authKakao(req.body)
-        .then((profile) => {
-            logger.info('got profile, redirect to user to check if exists');
-            res.redirect(url.format({
-                pathname: '/api/users/email',
-                query: profile,
-            }))
-        })
-        .catch(err => {
-            logger.error('POST /api/auths/kakao');
-            logger.error(err.stack);
-            res.status(500).send(err);
-        });
-}
 
 exports.authEmail = async (req, res, next) => {
     logger.info('POST /api/auths/email');
@@ -35,7 +19,8 @@ exports.authEmail = async (req, res, next) => {
 }
 
 exports.authToken = async (req, res, next) => {
-    logger.info('POST /api/auths/token');
+    logger.info('GET /api/auths/token');
+
     let token = {accessToken: '', refreshToken: ''};
     if (req.query.email) {
         token.accessToken = jwt.sign({ email: req.query.email}, 
@@ -48,7 +33,6 @@ exports.authToken = async (req, res, next) => {
         token.refreshToken = jwt.sign({ phone: req.query.phone, password: req.query.password}, 
             'shhhhh', { expiresIn: 600});
     }
-    console.log(token);
     res.json({
         token: token
     });

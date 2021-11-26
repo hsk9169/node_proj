@@ -3,7 +3,6 @@ const url = require('url');
 const authService = require('../services/auth');
 const userService = require('../services/user');
 const config = require('../config/index');
-const { restart } = require('pm2');
 
 exports.signInKakao = async (req, res, next) => {
     logger.info('POST /sign/in/kakao');
@@ -12,8 +11,10 @@ exports.signInKakao = async (req, res, next) => {
             logger.info('got profile, redirect to user controller');
             res.redirect(url.format({
                 pathname: '/api/users/email',
-                query: profile.email,
-            }));
+                query: {
+                    email: profile.email,
+                }
+            }))
         })
         .catch(err => {
             logger.error('POST /sign/in/kakao');
@@ -24,44 +25,23 @@ exports.signInKakao = async (req, res, next) => {
 
 exports.signInBob = async (req, res, next) => {
     logger.info('POST /sign/in/bob');
-    await userService.getUserByEmail(req.body.email) 
-        .then((profile) => {
-            if(profile) {
-                logger.info('got profile, get token');
-                res.redirect(url.format({
-                    pathname: '/api/auths/token',
-                    query: {
-                        email: profile.userInfo.email,
-                    }
-                }));
-            } else {
-                logger.info('no user account, return profile');
-                res.json(req.query);
-            }
-        })
-        .catch(err => {
-            logger.error('POST /sign/in/bob');
-            logger.error(err);
-            res.status(500).send(err);
-        });
+    res.redirect(url.format({
+        pathname: '/api/users/email',
+        query: {
+            email: req.body.email,
+        }
+    }));
 }
 
 exports.signInTest = async(req, res, next) => {
     logger.info('GET /test/jwt');
     console.log(req.decoded);
 
-    await userService.getUserByEmail(req.decoded.email)
-        .then( (user) => {
-            if (user) {
-                console.log('user found');
-                res.json(user);
-            } else {
-                console.log('user not found');
-                res.status(404);
-            }
-        })
-        .catch( err => {
-            logger.error('GET /test/jwt');
-            restart.status(500).send(err);
-        });
+    // determine if Email / Phone sign in
+    res.redirect(url.format({
+        pathname: '/api/users/email',
+        query: {
+            email: req.decoded.email,
+        }
+    }));
 }
