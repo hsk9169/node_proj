@@ -252,7 +252,7 @@ exports.postMentor = async (req, res) => {
             });
         } else {
             console.log('file uploaded successfully');
-            const jsonData = JSON.parse(res.body.data);
+            const jsonData = JSON.parse(req.body.data);
             console.log(jsonData);
             userService.postMentor({
                 userInfo: {
