@@ -61,18 +61,27 @@ exports.postUserByPhone = async (req, res, next) => {
             logger.error(err.stack);
             res.status(500).send(err);
         });
-}
+}        
 
 exports.postUserByNickname = async (req, res, next) => {
     logger.info('POST /users/nickname');
     await userService.getMenteeByNickname(req.body.nickname)
         .then((mentee) => {
             if(!mentee) {
-                logger.info('no duplicated nickname');
+                logger.info('no duplicated mentee nickname');
                 res.status(200).send('available');
             } else {
-                logger.info('nickname duplicates');
-                res.status(200).send('duplicated')
+                logger.info('mentee nickname duplicates');
+                userService.getMentorByNickname(req.body.nickname)
+                    .then((mentor) => {
+                        if(!mentor) {
+                            logger.info('no duplicated mentor nickname');
+                            res.status(200).send('available');
+                        } else {
+                            logger.info('mentor nickname duplicates');
+                            res.status(200).send('duplicated');
+                        }
+                    })            
             }
         })
         .catch(err => {
