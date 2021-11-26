@@ -3,4 +3,4 @@ export NVM_DIR=$HOME/.nvm
 source $NVM_DIR/nvm.sh
 
 nvm use 16.7.0
-node app.js ${1}
+nohup node app.js ${1} &
