@@ -8,6 +8,10 @@ const config = {
             clientID: process.env.CLIENT_ID,
             clientSecret: process.env.CLIENT_SECRET,
             callbackURI: process.env.CALLBACK_URI,
+        },
+        mail: {
+            mailID: process.env.NAVER_ID,
+            mailPWD: process.env.NAVER_PWD,
         }
     },
     secret: "ThIsIsSeCrEtKeYfOrEnCrYpT",

@@ -6,6 +6,7 @@ const ejs = require('ejs');
 const path = require('path');
 
 const appDir = path.dirname(require.main.filename);
+const config = require('../config/index');
 
 const makeAuthNum = () => {
     const authNum = Math.random().toString().substr(2,6);
@@ -39,8 +40,8 @@ exports.authEmail = async (email) => {
     const transporter = nodemailer.createTransport({
         service: 'Naver',
         auth: {
-            user: 'bobjari_team@naver.com',
-            pass: 'bugfree1212!'
+            user: config.auth.mail.mailID,
+            pass: config.auth.mail.mailPWD
         },
         tls: {
             rejectUnauthorized: false
@@ -48,7 +49,7 @@ exports.authEmail = async (email) => {
     });
 
     const mailOptions = await transporter.sendMail({
-        from: 'bobjari_team@naver.com',
+        from: config.mailID,
         to: email,
         subject: '밥자리 서비스 로그인을 위한 인증번호를 입력해주세요.',
         html: emailTemplate,
