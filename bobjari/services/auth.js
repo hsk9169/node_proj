@@ -1,37 +1,108 @@
+const jwt = require('jsonwebtoken');
 const logger = require('../config/winston');
-const  kakaoLogin = require('../subscribers/auth');
-require('dotenv').config();
+const kakaoAuth = require('../subscribers/auth');
+const nodemailer = require('nodemailer');
+const ejs = require('ejs');
+const path = require('path');
 
-const { CLIENT_ID, CLIENT_SECRET, CALLBACK_URI } = process.env;
-const config = {
-    clientID: CLIENT_ID,
-    clientSecret: CLIENT_SECRET,
-    callbackURI: CALLBACK_URI,
+const appDir = path.dirname(require.main.filename);
+
+const makeAuthNum = () => {
+    const authNum = Math.random().toString().substr(2,6);
+    return authNum;
 };
 
-let kakao = new kakaoLogin(config);
-
-exports.loginKakao = async () => {
-    const uri = kakao.getAuthUri();
-    return uri;
-}
-
-exports.loginKakaoCallback = async (accessCode) => {
-    await kakao.getAccessToken(accessCode);
-    const getProfileUri = `${kakao.callbackURI}/profile`;
-    return getProfileUri;
-}
-
-exports.loginKakaoGetProfile = async() => {
-    await kakao.getAccount();
+exports.authKakao = async (authData) => {
+    const accessToken = await kakaoAuth.getAccessToken(authData);
+    const account = await kakaoAuth.getAccount(accessToken);
     const profile = {
-        email: kakao.account.email,
-        gender: kakao.account.gender,
-        age: kakao.account.age_range,
-        profileImage: kakao.account.profile.profile_image_url,
+        email: account.email,
+        gender: account.gender,
+        age: account.age_range,
+        profileImage: account.profile.profile_image_url,
     }
     const ageRange = profile.age.split("~");
     const age = Math.round((Number(ageRange[0]) + Number(ageRange[1])) / 2);
     profile.age = age;
     return profile;
+}
+
+exports.authEmail = async (email) => {
+    const authNum = makeAuthNum();
+    let emailTemplate;
+    ejs.renderFile(appDir + '/templates/authMail.ejs',
+                    {authCode: authNum}, (err, data) => {
+                        if(err){console.log(err)}
+                        emailTemplate = data;
+                    });
+
+    const transporter = nodemailer.createTransport({
+        service: 'Naver',
+        auth: {
+            user: 'bobjari_team@naver.com',
+            pass: 'bugfree1212!'
+        },
+        tls: {
+            rejectUnauthorized: false
+        }
+    });
+
+    const mailOptions = await transporter.sendMail({
+        from: 'bobjari_team@naver.com',
+        to: email,
+        subject: '밥자리 서비스 로그인을 위한 인증번호를 입력해주세요.',
+        html: emailTemplate,
+    });
+
+    transporter.sendMail(mailOptions, (err, info) => {
+        if (err) {
+            console.log(err);
+        }
+        console.log('Sending Email Success!');
+        transporter.close();
+    })
+
+    return authNum;
+}
+
+exports.authAccessToken = async (profile) => {
+    //const privateKey = fs.readFileSync('private_key.pem');
+    //const refreshKey = fs.readFileSync('refresh_key.pem')
+    if (profile.email) {
+        // Expires in 1 min
+        jwt.sign({ email: profile.email}, 'shhhhh', 
+                 { expiresIn: 6000}, function (err, token) {
+                    return token;
+        });
+    };
+    //else if (profile.phone) {
+    //    token.accessToken = jwt.sign({ phone: profile.phone, password: profile.password }, 
+    //            //privateKey, { algorithm: 'RS256', expiresIn: '1m'});
+    //            'secret', { expiresIn: '1m'});
+    //    token.refreshToken = jwt.sign({ email: profile.email, password: profile.password }, 
+    //            //refreshKey, { algorithm: 'RS256', expiresIn: '7d'});
+    //            'secret', { expiresIn: '10m'});
+    //    console.log(token);
+    //};
+}
+
+exports.authRefreshToken = async (profile) => {
+    //const privateKey = fs.readFileSync('private_key.pem');
+    //const refreshKey = fs.readFileSync('refresh_key.pem')
+    if (profile.email) {
+        // Expires in 1 hour
+        jwt.sign({ email: profile.email}, 'shhhhh', 
+                 { expiresIn: 36000}, function (err, token) {
+                    return token;
+        });
+    };
+    //else if (profile.phone) {
+    //    token.accessToken = jwt.sign({ phone: profile.phone, password: profile.password }, 
+    //            //privateKey, { algorithm: 'RS256', expiresIn: '1m'});
+    //            'secret', { expiresIn: '1m'});
+    //    token.refreshToken = jwt.sign({ email: profile.email, password: profile.password }, 
+    //            //refreshKey, { algorithm: 'RS256', expiresIn: '7d'});
+    //            'secret', { expiresIn: '10m'});
+    //    console.log(token);
+    //};
 }

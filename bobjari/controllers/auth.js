@@ -1,46 +1,52 @@
 const url = require('url');
 const logger = require('../config/winston');
 const authService = require('../services/auth');
+const jwt = require('jsonwebtoken');
 
-exports.getAuthKakao = async (req, res, next) => {
-    logger.info('GET /auth/kakao');
-    await authService.loginKakao()
-        .then((loginPage) => {
-            res.redirect(loginPage);
-        })
-        .catch(err => {
-            logger.error('GET /auth/kakao');
-            logger.error(err.stack);
-            res.status(500).send(err);
-        });
-}
-
-exports.getKakaoCallback = async (req, res, next) => {
-    logger.info('GET /auth/kakao/callback');
-    const accessCode = req.query.code;
-    await authService.loginKakaoCallback(accessCode)
-        .then((accessRoute) => {
-            res.redirect(accessRoute);
-        })
-        .catch(err => {
-            logger.error('GET /auth/kakao/callback');
-            logger.error(err.stack);
-            res.status(500).send(err);
-        });
-}
-
-exports.getKakaoProfile = async (req, res, next) => {
-    logger.info('GET /auth/kakao/profile');
-    await authService.loginKakaoGetProfile()
+exports.authKakao = async (req, res, next) => {
+    logger.info('POST /api/auths/kakao');
+    await authService.authKakao(req.body)
         .then((profile) => {
-            res.redirect(url.format({
-                pathname: '/profile',
-                query: profile
-            }));
+            logger.info('got kakao profile');
+            res.json(profile);
         })
         .catch(err => {
-            logger.error('GET /auth/kakao/profile');
+            logger.error('POST /api/auths/kakao');
             logger.error(err.stack);
             res.status(500).send(err);
+        });
+}
+
+exports.authEmail = async (req, res, next) => {
+    logger.info('POST /api/auths/email');
+    await authService.authEmail(req.body.email)
+        .then((authNum) => {
+            logger.info('got auth number, response to client');
+            res.json(authNum);
         })
+        .catch(err => {
+            logger.error('POST /api/auths/email');
+            logger.error(err.stack);
+            res.status(500).send(err);
+        });
+}
+
+exports.authToken = async (req, res, next) => {
+    logger.info('GET /api/auths/token');
+
+    let token = {accessToken: '', refreshToken: ''};
+    if (req.query.email) {
+        token.accessToken = jwt.sign({ email: req.query.email}, 
+            'shhhhh', { expiresIn: 60});
+        token.refreshToken = jwt.sign({ email: req.query.email}, 
+            'shhhhh', { expiresIn: 600});
+    } else {
+        token.accessToken = jwt.sign({ phone: req.query.phone, password: req.query.password}, 
+            'shhhhh', { expiresIn: 60});
+        token.refreshToken = jwt.sign({ phone: req.query.phone, password: req.query.password}, 
+            'shhhhh', { expiresIn: 600});
+    }
+    res.json({
+        token: token
+    });
 }

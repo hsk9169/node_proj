@@ -1,0 +1,20 @@
+components:
+    schemas:
+        kakaoProfile:
+            type: object
+            properties:
+                email:
+                    type: string
+                    description: user email
+                    exmaple: example@google.com
+                age:
+                    type: integer
+                    description: user age
+                    example: 30
+                gender:
+                    type: string
+                    description: user gender
+                    example: male
+                profileImg: 
+                    type: string
+                    description: user profile image uri

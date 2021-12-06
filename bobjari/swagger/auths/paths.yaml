@@ -1,0 +1,76 @@
+tags:
+    name: auths
+    description: auths API
+
+paths:
+    /api/auths/kakao:
+        post:
+            summary: start login with kakao
+            tags:
+                - auths
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                client_id:
+                                    type: string
+                                redirect_uri:
+                                    type: string
+                                access_code:
+                                    type: string
+                                secret_key:
+                                    type: string
+            responses:
+                200:
+                    description: kakao login success, return kakao profile
+                    content:
+                        application/json:
+                            $ref: '#/components/schemas/kakaoProfile'
+    /api/auths/email:
+        post:
+            summary: post email for user authorization
+            tags:
+                - auths
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                email:
+                                    type: string
+            responses:
+                200:
+                    description: mailing service success, return auth number
+                    content:
+                        application/json:
+                            schema:
+                                type: string
+
+    /api/auths/token:
+        get:
+            summary: get bobjari service token
+            tags:
+                - auths
+            parameters:
+                - in: query
+                  name: email
+                  schema:
+                    type: string
+            responses:
+                200:
+                    description: return access, refresh token
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    token:
+                                        type: object
+                                        properties:
+                                            accessToken:
+                                                type: string
+                                            refreshToken:
+                                                type: string

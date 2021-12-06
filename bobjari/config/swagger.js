@@ -5,9 +5,9 @@ let url;
 const env = process.argv[2];
 
 if(env == 'ec2') {
-    url = 'http://ec2-3-16-107-134.us-east-2.compute.amazonaws.com:8000';
+    url = 'http://ec2-3-17-139-14.us-east-2.compute.amazonaws.com:8000';
 } else {
-    url = 'localhost:8000';
+    url = 'http://localhost:8000';
 }
 
 const swaggerDefinition = {
@@ -36,7 +36,11 @@ const swaggerDefinition = {
 const options = { 
     customCss: '.swagger-ui .topbar { background-color: blue }',
     swaggerDefinition, 
-    apis: ['./swagger/users/*.yaml',], 
+    apis: [
+        './swagger/users/*.yaml',
+        './swagger/auths/*.yaml',
+        './swagger/sign/*.yaml',
+    ], 
 };
 
 const specs = swaggereJsdoc(options);
