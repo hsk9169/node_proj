@@ -2,6 +2,9 @@ const { Schema } = require("mongoose");
 
  
 // Define Scehmas
+// To Add:
+// appointment ID array
+
 const menteeSchema = {
     updated: { 
         type: Date,

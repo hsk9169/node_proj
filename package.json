@@ -29,12 +29,15 @@
     "winston-daily-rotate-file": "^4.5.5"
   },
   "scripts": {
-    "build": "react-scripts build && mv build ../back_package",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "pkg . --out-path bin"
+  },
+  "pkg": {
+    "scripts": "js"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "pkg": "^5.4.1",
     "swagger-jsdoc": "^6.1.0",
     "swagger-ui-express": "^4.1.6"
   },
@@ -46,5 +49,8 @@
     "url": "https://github.com/hsk9169/node_proj/issues"
   },
   "homepage": "https://github.com/hsk9169/node_proj#readme",
-  "description": ""
+  "description": "",
+  "bin": {
+      "app": "./bobjari/app.js"
+  }
 }

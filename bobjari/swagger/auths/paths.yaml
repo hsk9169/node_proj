@@ -3,7 +3,7 @@ tags:
     description: auths API
 
 paths:
-    /auths/kakao:
+    /api/auths/kakao:
         post:
             summary: start login with kakao
             tags:
@@ -28,7 +28,7 @@ paths:
                     content:
                         application/json:
                             $ref: '#/components/schemas/kakaoProfile'
-    /auths/email:
+    /api/auths/email:
         post:
             summary: post email for user authorization
             tags:
@@ -49,7 +49,7 @@ paths:
                             schema:
                                 type: string
 
-    /auths/token:
+    /api/auths/token:
         get:
             summary: get bobjari service token
             tags:

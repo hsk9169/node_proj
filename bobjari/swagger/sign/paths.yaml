@@ -3,7 +3,7 @@ tags:
     description: sign API
 
 paths:
-    /sign/in/kakao:
+    /api/sign/in/kakao:
         post:
             summary: try sign in with kakao profile
             tags:
@@ -19,7 +19,7 @@ paths:
                                     - $ref: '#/components/schemas/Mentor'
                 204:
                     description: no existing account
-    /sign/in/bob:
+    /api/sign/in/bob:
         post:
             summary: try sign in with kakao profile
             tags:
