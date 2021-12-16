@@ -31,25 +31,26 @@ exports.authKakao = async (authData) => {
 exports.authEmail = async (email) => {
     const authNum = makeAuthNum();
     let emailTemplate;
+    /*
     ejs.renderFile(appDir + '/templates/authMail.ejs',
                     {authCode: authNum}, (err, data) => {
                         if(err){console.log(err)}
                         emailTemplate = data;
                     });
-
+    console.log(config.auth.mail)
     const transporter = nodemailer.createTransport({
-        service: 'Naver',
+        service: 'gmail',
+        host: 'smtp.gmail.com',
+        port: 587,
+        secure: false,
         auth: {
             user: config.auth.mail.mailID,
             pass: config.auth.mail.mailPWD
         },
-        tls: {
-            rejectUnauthorized: false
-        }
     });
 
     const mailOptions = await transporter.sendMail({
-        from: config.mailID,
+        from: config.auth.mail.mailID,
         to: email,
         subject: '밥자리 서비스 로그인을 위한 인증번호를 입력해주세요.',
         html: emailTemplate,
@@ -62,6 +63,7 @@ exports.authEmail = async (email) => {
         console.log('Sending Email Success!');
         transporter.close();
     })
+    */
 
     return authNum;
 }
