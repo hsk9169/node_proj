@@ -42,8 +42,11 @@ const mentorSchema = {
         company: String,
         topics: [String],
         auth: {
-            method: Number,
-            data: Schema.Types.Mixed,
+            method: String,
+            file: {
+                data: Schema.Types.Mixed,
+                contentType: String,
+            },
         },
         introduce: {
             type: String,

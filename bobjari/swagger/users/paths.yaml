@@ -36,6 +36,14 @@ paths:
                             properties:
                                 nickname:
                                     type: string
+            profileImg:
+                    type: object
+                    properties:
+                        data:
+                            oneOf:
+                                - type: string
+                                - type: string
+                                  format: binary
     /api/users/mentee/create:
         post:
             summary: create mentee account
@@ -45,7 +53,22 @@ paths:
                 content:
                     multipart/form-data:
                         schema:
-                            '#/components/schemas/Mentee'
+                            type: object
+                            properties:
+                                email:
+                                    type: string
+                                age:
+                                    type: integer
+                                gender:
+                                    type: string
+                                nickname:
+                                    type: string
+                                interests: 
+                                    type: array
+                                    items:
+                                        type: string
+                                img:
+                                    type: binary
             responses:
                 200:
                     description: posted account success, return email 

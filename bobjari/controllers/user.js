@@ -67,19 +67,19 @@ exports.postUserByNickname = async (req, res, next) => {
     logger.info('POST /users/nickname');
     await userService.getMenteeByNickname(req.body.nickname)
         .then((mentee) => {
-            if(!mentee) {
-                logger.info('no duplicated mentee nickname');
-                res.status(200).send('available');
-            } else {
+            if(mentee) {
                 logger.info('mentee nickname duplicates');
+                res.status(200).send('duplicated');
+            } else {                
+                logger.info('no duplicated mentee nickname');
                 userService.getMentorByNickname(req.body.nickname)
                     .then((mentor) => {
-                        if(!mentor) {
-                            logger.info('no duplicated mentor nickname');
-                            res.status(200).send('available');
-                        } else {
+                        if(mentor) {
                             logger.info('mentor nickname duplicates');
                             res.status(200).send('duplicated');
+                        } else {
+                            logger.info('no duplicated mentor nickname');
+                            res.status(200).send('available');
                         }
                     })            
             }
@@ -190,11 +190,11 @@ exports.getMentees = async (req, res, next) => {
 }
 
 
-
 // Mentor
 exports.postMentor = async (req, res) => {
     logger.info('POST /users/mentor/create');
-    imgLoader.uploadImage(req, res, (err) => {
+    imgLoader.uploadFiles(req, res, (err) => {
+        console.log(req)
         if (err instanceof multer.MulterError) {
             console.log('max image size exceeded');
             console.log(err);
@@ -202,34 +202,31 @@ exports.postMentor = async (req, res) => {
         } else if (err) {
             console.log('only image file is allowed');
             res.status(400).send('only image file is allowed');
-        } else if (!req.file) {
+        } else if (!req.files) {
             console.log('no file found');
-            console.log(req)
-            const jsonData = JSON.parse(req.body.data);
-            console.log(jsonData); 
             userService.postMentor({
                 userInfo: {
-                    email: jsonData.email,
-                    age: jsonData.age,
-                    gender: jsonData.gender,
-                    nickname: jsonData.nickname,
+                    email: req.body.email,
+                    age: req.body.age,
+                    gender: req.body.gender,
+                    nickname: req.body.nickname,
                 },
                 role: true,
                 careerInfo: {
-                    job: jsonData.job,
-                    company: jsonData.company,
-                    topics: jsonData.topics,
+                    job: req.body.job,
+                    company: req.body.company,
+                    topics: req.body.topics,
                     auth: {
-                        method: jsonData.auth,
+                        method: req.body.auth,
                         data: '',
                     },
-                    introduce: jsonData.introduce,
+                    introduce: req.body.introduce,
                     hashtags: null,
                 },
                 appointment: {
-                    schedules: jsonData.schedules,
-                    locations: jsonData.cafes,
-                    fee: jsonData.fee,
+                    schedules: req.body.schedules,
+                    locations: req.body.cafes,
+                    fee: req.body.fee,
                 },
                 profileImg: {
                     data: req.body.img,
@@ -251,36 +248,39 @@ exports.postMentor = async (req, res) => {
                 res.status(500).send(err);
             });
         } else {
-            console.log('file uploaded successfully');
-            const jsonData = JSON.parse(req.body.data);
-            console.log(jsonData);
+            console.log('files exist');
+            const jsonData = JSON.stringify(req.body);
+            console.log(jsonData)
             userService.postMentor({
                 userInfo: {
-                    email: jsonData.email,
-                    age: jsonData.age,
-                    gender: jsonData.gender,
-                    nickname: jsonData.nickname,
+                    email: req.body.email,
+                    age: req.body.age,
+                    gender: req.body.gender,
+                    nickname: req.body.nickname,
                 },
                 role: true,
                 careerInfo: {
-                    job: jsonData.job,
-                    company: jsonData.company,
-                    topics: jsonData.topics,
+                    job: req.body.job,
+                    company: req.body.company,
+                    topics: req.body.topics,
                     auth: {
-                        method: jsonData.auth,
-                        data: '',
+                        method: req.body.authSelect,
+                        file: {
+                            data: req.files[1].buffer,
+                            contentType: req.files[1].mimetype,
+                        },
                     },
-                    introduce: jsonData.introduce,
+                    introduce: req.body.introduce,
                     hashtags: null,
                 },
                 appointment: {
-                    schedules: jsonData.schedules,
-                    locations: jsonData.cafes,
-                    fee: jsonData.fee,
+                    schedules: req.body.schedules,
+                    locations: req.body.cafes,
+                    fee: req.body.fee,
                 },
                 profileImg: {
-                    data: req.file.buffer,
-                    contentType: req.file.mimetype,
+                    data: req.files[0].buffer,
+                    contentType: req.files[0].mimetype,
                 },
             }) 
             .then((mentor) => {

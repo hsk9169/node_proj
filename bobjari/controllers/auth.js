@@ -50,3 +50,8 @@ exports.authToken = async (req, res, next) => {
         token: token
     });
 }
+
+exports.verifyToken = async (req, res, next) => {
+    logger.info('GET /api/auth/verify');
+    res.status(200).send('valid');
+}
