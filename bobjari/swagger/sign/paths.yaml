@@ -25,13 +25,13 @@ paths:
             tags:
                 - sign
             requestBody:
-            content:
-                application/json:
-                    schema:
-                        type: object
-                        properties:
-                            email:
-                                type: string
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                email:
+                                    type: string
             responses:
                 200:
                     description: posted account exists, return profile 
