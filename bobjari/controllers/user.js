@@ -95,58 +95,42 @@ exports.postUserByNickname = async (req, res, next) => {
 // Mentee
 exports.postMentee = async (req, res) => {
     logger.info('POST /users/mentee/create');
-    imgLoader.uploadImage(req, res, (err) => {
+    imgLoader.uploadFiles(req, res, (err) => {
+        let imgFile = null;
         if (err instanceof multer.MulterError) {
-            console.log('max image size exceeded');
-            console.log(err);
+            logger.error(err);
             res.status(400).send('max image file size 50MB exceeded');
         } else if (err) {
-            console.log('only image file is allowed');
+            logger.error('only image file is allowed');
+            logger.error(err)
             res.status(400).send('only image file is allowed');
-        } else if (!req.file) {
-            console.log('no file found');
-            userService.postMentee({
-                userInfo: {
-                    email: req.body.email,
-                    age: req.body.age,
-                    gender: req.body.gender,
-                    nickname: req.body.nickname,
-                },
-                role: true,
-                interests: req.body.interests,
-                profileImg: {
-                    data: req.body.img,
-                    contentType: 'url',
-                },
-            }) 
-            .then((mentee) => {
-                if(mentee) {
-                    logger.info('mentee account added');
-                    res.json(mentee.userInfo.email);
-                } else {
-                    logger.info('failed adding mentee account');
-                    res.status(400).send('failed adding mentee');
-                }
-            })
-            .catch(err => {
-                logger.error('GET /users/mentee/email');
-                logger.error(err.stack);
-                res.status(500).send(err);
-            });
         } else {
-            console.log('file uploaded successfully');
+            let data = {};
+            if (req.files) {
+                req.files.map(el => {
+                    if (el.fieldname === 'img') {
+                        imgFile = el;
+                    }
+                })
+                logger.info('img file found')
+            }
+            Object.keys(req.body).forEach(key => {
+                data[key] = JSON.parse(req.body[key])
+            })
+            logger.info('profile data')
+            logger.info(JSON.stringify(data, null, 2))
             userService.postMentee({
                 userInfo: {
-                    email: req.body.email,
-                    age: req.body.age,
-                    gender: req.body.gender,
-                    nickname: req.body.nickname,
+                    email: data.email,
+                    age: data.age,
+                    gender: data.gender,
+                    nickname: data.nickname,
                 },
                 role: true,
-                interests: req.body.interests,
+                interests: data.interests,
                 profileImg: {
-                    data: req.file.buffer,
-                    contentType: req.file.mimetype,
+                    data: (imgFile!==null ? imgFile.buffer : data.img),
+                    contentType: (imgFile!==null ? imgFile.mimetype : 'url'),
                 },
             }) 
             .then((mentee) => {
@@ -163,7 +147,8 @@ exports.postMentee = async (req, res) => {
                 logger.error(err.stack);
                 res.status(500).send(err);
             });
-        }
+        } 
+        
     });
 }
 
@@ -194,93 +179,63 @@ exports.getMentees = async (req, res, next) => {
 exports.postMentor = async (req, res) => {
     logger.info('POST /users/mentor/create');
     imgLoader.uploadFiles(req, res, (err) => {
-        console.log(req)
+        let imgFile = null, authFile = null;
         if (err instanceof multer.MulterError) {
-            console.log('max image size exceeded');
-            console.log(err);
+            logger.error(err);
             res.status(400).send('max image file size 50MB exceeded');
         } else if (err) {
-            console.log('only image file is allowed');
+            logger.error('only image file is allowed');
+            logger.error(err)
             res.status(400).send('only image file is allowed');
-        } else if (!req.files) {
-            console.log('no file found');
-            userService.postMentor({
-                userInfo: {
-                    email: req.body.email,
-                    age: req.body.age,
-                    gender: req.body.gender,
-                    nickname: req.body.nickname,
-                },
-                role: true,
-                careerInfo: {
-                    job: req.body.job,
-                    company: req.body.company,
-                    topics: req.body.topics,
-                    auth: {
-                        method: req.body.auth,
-                        data: '',
-                    },
-                    introduce: req.body.introduce,
-                    hashtags: null,
-                },
-                appointment: {
-                    schedules: req.body.schedules,
-                    locations: req.body.cafes,
-                    fee: req.body.fee,
-                },
-                profileImg: {
-                    data: req.body.img,
-                    contentType: 'url',
-                },
-            }) 
-            .then((mentor) => {
-                if(mentor) {
-                    logger.info('mentor account added');
-                    res.json(mentor.userInfo.email);
-                } else {
-                    logger.info('failed adding mentor account');
-                    res.status(400).send('failed adding mentor');
-                }
-            })
-            .catch(err => {
-                logger.error('GET /users/mentor/email');
-                logger.error(err.stack);
-                res.status(500).send(err);
-            });
         } else {
-            console.log('files exist');
-            const jsonData = JSON.stringify(req.body);
-            console.log(jsonData)
+            logger.info('files found');
+            let data = {};
+            if (req.files) {
+                req.files.map(el => {
+                    if (el.fieldname === 'img') {
+                        imgFile = el;
+                        logger.info('img file found')
+                    } else if (el.fieldname === 'auth') {
+                        authFile = el;
+                        logger.info('auth file found')
+                    }
+                })
+            }
+            Object.keys(req.body).forEach(key => {
+                data[key] = JSON.parse(req.body[key])
+            })
+            logger.info('profile data')
+            logger.info(JSON.stringify(data, null, 2))
             userService.postMentor({
                 userInfo: {
-                    email: req.body.email,
-                    age: req.body.age,
-                    gender: req.body.gender,
-                    nickname: req.body.nickname,
+                    email: data.email,
+                    age: data.age,
+                    gender: data.gender,
+                    nickname: data.nickname,
                 },
                 role: true,
                 careerInfo: {
-                    job: req.body.job,
-                    company: req.body.company,
-                    topics: req.body.topics,
+                    job: data.job,
+                    company: data.company,
+                    topics: data.topics,
                     auth: {
-                        method: req.body.authSelect,
+                        method: data.authSelect,
                         file: {
-                            data: req.files[1].buffer,
-                            contentType: req.files[1].mimetype,
-                        },
+                            data: (authFile!==null ? authFile.buffer : null),
+                            contentType: (authFile!==null ? authFile.mimetype : ''),
+                        }
                     },
-                    introduce: req.body.introduce,
+                    introduce: data.introduce,
                     hashtags: null,
                 },
                 appointment: {
-                    schedules: req.body.schedules,
-                    locations: req.body.cafes,
-                    fee: req.body.fee,
+                    schedules: data.schedules,
+                    locations: data.cafes,
+                    fee: data.fee,
                 },
                 profileImg: {
-                    data: req.files[0].buffer,
-                    contentType: req.files[0].mimetype,
+                    data: (imgFile!==null ? imgFile.buffer : data.img),
+                    contentType: (imgFile!==null ? imgFile.mimetype : 'url'),
                 },
             }) 
             .then((mentor) => {

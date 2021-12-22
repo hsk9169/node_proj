@@ -28,4 +28,4 @@ exports.uploadFiles = multer({
         cb(null, true);
     },
     limits: { fileSize: 500 * 1024 * 1024 }
-}).array('files',2);
+}).any();

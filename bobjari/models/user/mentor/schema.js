@@ -38,8 +38,8 @@ const mentorSchema = {
     },
     role: Boolean,
     careerInfo: {
-        job: String,
-        company: String,
+        job: [String],
+        company: [String],
         topics: [String],
         auth: {
             method: String,
