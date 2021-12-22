@@ -80,7 +80,7 @@ const mentorSchema = {
         ],
         fee: {
             select: Number,
-            value: Number,
+            value: String,
         },
     },
     profileImg: {
