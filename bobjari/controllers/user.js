@@ -231,7 +231,10 @@ exports.postMentor = async (req, res) => {
                 appointment: {
                     schedules: data.schedules,
                     locations: data.cafes,
-                    fee: data.fee,
+                    fee: {
+                        select: data.feeSelect,
+                        value: data.fee,
+                    },
                 },
                 profileImg: {
                     data: (imgFile!==null ? imgFile.buffer : data.img),

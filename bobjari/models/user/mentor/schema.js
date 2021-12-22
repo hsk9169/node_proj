@@ -79,7 +79,7 @@ const mentorSchema = {
             }
         ],
         fee: {
-            select: Boolean,
+            select: Number,
             value: Number,
         },
     },
