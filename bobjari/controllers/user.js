@@ -202,7 +202,9 @@ exports.postMentor = async (req, res) => {
                 })
             }
             Object.keys(req.body).forEach(key => {
-                data[key] = JSON.parse(req.body[key])
+                if (key !== 'auth') {
+                    data[key] = JSON.parse(req.body[key])
+                }
             })
             logger.info('profile data')
             logger.info(JSON.stringify(data, null, 2))
