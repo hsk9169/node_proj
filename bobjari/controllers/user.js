@@ -9,36 +9,47 @@ const { read } = require('../config/winston');
 exports.getUserByEmail = async (req, res, next) => {
     logger.info('GET /users/email');
     await userService.getMenteeByEmail(req.query.email)
-        .then((mentee) => {
-            if(mentee) {
+        .then(mentee => {
+            if (mentee) {
                 logger.info('mentee account found');
-                mentee.role = 'mentee';
-                res.json(mentee);
+                if (mentee.role) {
+                    mentee.role = 'mentee'
+                    res.json(mentee);
+                } else {
+                    logger.info('inactivated as mentee');
+                }
             } else {
                 logger.info('no mentee account found');
-                userService.getMentorByEmail(req.query.email)
-                .then((mentor) => {
-                    if(mentor) {
-                        logger.info('mentor account found');
-                        mentor.role = 'mentor';
-                        res.json(mentor);
-                    } else {
-                        logger.info('no mentor account found');
-                        res.status(204).send('no account found');
-                    }
-                })
-                .catch(err => {
-                    logger.error('GET /users/email');
-                    logger.error(err.stack);
-                    res.status(400).send(err);
-                });
             }
         })
         .catch(err => {
             logger.error('GET /users/email');
             logger.error(err.stack);
             res.status(400).send(err);
-        });    
+        });
+    await userService.getMentorByEmail(req.query.email)
+        .then(mentor => {
+            if (mentor) {
+                logger.info('mentor account found');
+                if (mentor.role) {
+                    console.log(mentor.userInfo)
+                    mentor.role = 'mentor'
+                    console.log(mentor.role)
+                    res.json(mentor)
+                } else {
+                    logger.info('inactivated as mentor');
+                }
+            } else {
+                logger.info('no mentor account found');
+                logger.info('no user account found');
+                res.status(204).send('no account found'); 
+            }
+        })
+        .catch(err => {
+            logger.error('GET /users/email');
+            logger.error(err.stack);
+            res.status(400).send(err);
+        });
 }
 
 exports.postUserByPhone = async (req, res, next) => {
@@ -126,7 +137,7 @@ exports.postMentee = async (req, res) => {
                     gender: data.gender,
                     nickname: data.nickname,
                 },
-                role: true,
+                role: 'mentee',
                 interests: data.interests,
                 profileImg: {
                     data: (imgFile!==null ? imgFile.buffer : data.img),
@@ -136,7 +147,7 @@ exports.postMentee = async (req, res) => {
             .then((mentee) => {
                 if(mentee) {
                     logger.info('mentee account added');
-                    res.json(mentee.userInfo.email);
+                    res.json(mentee);
                 } else {
                     logger.info('failed adding mentee account');
                     res.status(400).send('failed adding mentee');
@@ -215,7 +226,7 @@ exports.postMentor = async (req, res) => {
                     gender: data.gender,
                     nickname: data.nickname,
                 },
-                role: true,
+                role: 'mentor',
                 careerInfo: {
                     job: data.job,
                     company: data.company,
@@ -246,7 +257,7 @@ exports.postMentor = async (req, res) => {
             .then((mentor) => {
                 if(mentor) {
                     logger.info('mentor account added');
-                    res.json(mentor.userInfo.email);
+                    res.json(mentor);
                 } else {
                     logger.info('failed adding mentor account');
                     res.status(400).send('failed adding mentor');

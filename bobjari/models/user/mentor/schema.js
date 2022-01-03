@@ -36,7 +36,7 @@ const mentorSchema = {
             unique: true,
         },
     },
-    role: Boolean,
+    role: String,
     careerInfo: {
         job: [String],
         company: [String],

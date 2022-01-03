@@ -25,8 +25,9 @@ components:
                             description: user nickname
                             unique: true
                 role: 
-                    type: boolean
+                    type: string
                     description: user selected mode
+                    example: mentee
                 interests:
                     type: array
                     items: 
@@ -68,8 +69,9 @@ components:
                             description: user nickname
                             unique: true
                 role: 
-                    type: boolean
+                    type: string
                     description: user selected mode
+                    example: mentor
                 careerInfo:
                     type: object
                     properties:

@@ -75,7 +75,7 @@ paths:
                     content:
                         application/json:
                             schema:
-                                type: string
+                                $ref: '#/components/schemas/Mentee'
                 204:
                     description: no existing account
     /api/users/mentor/create:
@@ -94,10 +94,6 @@ paths:
                     content:
                         application/json:
                             schema:
-                                type: object
-                                properties:
-                                    0:
-                                        type: string
-                                        description: email address
+                                $ref: '#/components/schemas/Mentor'
                 204:
                     description: no existing account
