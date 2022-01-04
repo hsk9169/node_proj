@@ -8,6 +8,7 @@ const { read } = require('../config/winston');
 // Common
 exports.getUserByEmail = async (req, res, next) => {
     logger.info('GET /users/email');
+    let found = false;
     await userService.getMenteeByEmail(req.query.email)
         .then(mentee => {
             if (mentee) {
@@ -15,6 +16,7 @@ exports.getUserByEmail = async (req, res, next) => {
                 if (mentee.role) {
                     mentee.role = 'mentee'
                     res.json(mentee);
+                    found = true;
                 } else {
                     logger.info('inactivated as mentee');
                 }
@@ -27,29 +29,31 @@ exports.getUserByEmail = async (req, res, next) => {
             logger.error(err.stack);
             res.status(400).send(err);
         });
-    await userService.getMentorByEmail(req.query.email)
-        .then(mentor => {
-            if (mentor) {
-                logger.info('mentor account found');
-                if (mentor.role) {
-                    console.log(mentor.userInfo)
-                    mentor.role = 'mentor'
-                    console.log(mentor.role)
-                    res.json(mentor)
+    if (!found) {
+        await userService.getMentorByEmail(req.query.email)
+            .then(mentor => {
+                if (mentor) {
+                    logger.info('mentor account found');
+                    if (mentor.role) {
+                        console.log(mentor.userInfo)
+                        mentor.role = 'mentor'
+                        console.log(mentor.role)
+                        res.json(mentor)
+                    } else {
+                        logger.info('inactivated as mentor');
+                    }
                 } else {
-                    logger.info('inactivated as mentor');
+                    logger.info('no mentor account found');
+                    logger.info('no user account found');
+                    res.status(204).send('no account found'); 
                 }
-            } else {
-                logger.info('no mentor account found');
-                logger.info('no user account found');
-                res.status(204).send('no account found'); 
-            }
-        })
-        .catch(err => {
-            logger.error('GET /users/email');
-            logger.error(err.stack);
-            res.status(400).send(err);
-        });
+            })
+            .catch(err => {
+                logger.error('GET /users/email');
+                logger.error(err.stack);
+                res.status(400).send(err);
+            });
+    }
 }
 
 exports.postUserByPhone = async (req, res, next) => {
