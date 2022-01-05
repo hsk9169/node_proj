@@ -194,6 +194,7 @@ exports.getMentees = async (req, res, next) => {
 exports.postMentor = async (req, res) => {
     logger.info('POST /users/mentor/create');
     imgLoader.uploadFiles(req, res, (err) => {
+        console.log(req)
         let imgFile = null, authFile = null;
         if (err instanceof multer.MulterError) {
             logger.error(err);

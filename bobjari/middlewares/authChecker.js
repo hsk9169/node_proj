@@ -4,10 +4,13 @@ const logger = require('../config/winston');
 
 exports.check = (req, res, next) => {
     // read the token from header or url 
-    const auth = req.headers.authorization;
-    const authArray = auth.split(' ');
-    const token = authArray[1];
-    
+    let auth = null, authArray = null, token = null;
+    try {
+        auth = req.headers.authorization;
+        authArray = auth.split(' ');
+        token = authArray[1];
+    } catch {}
+
     // token does not exist
     if(!token) {
         logger.error('request has no token embedded in headers')
