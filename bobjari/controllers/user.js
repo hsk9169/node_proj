@@ -115,10 +115,6 @@ exports.postMentee = async (req, res) => {
         if (err instanceof multer.MulterError) {
             logger.error(err);
             res.status(400).send('max image file size 50MB exceeded');
-        } else if (err) {
-            logger.error('only image file is allowed');
-            logger.error(err)
-            res.status(400).send('only image file is allowed');
         } else {
             let data = {};
             if (req.files) {
@@ -199,12 +195,8 @@ exports.postMentor = async (req, res) => {
         if (err instanceof multer.MulterError) {
             logger.error(err);
             res.status(400).send('max image file size 50MB exceeded');
-        } else if (err) {
-            logger.error('only image file is allowed');
-            logger.error(err)
-            res.status(400).send('only image file is allowed');
         } else {
-            logger.info('files found');
+            logger.info('body found');
             let data = {};
             if (req.files) {
                 req.files.map(el => {
@@ -238,6 +230,7 @@ exports.postMentor = async (req, res) => {
                     topics: data.topics,
                     auth: {
                         method: data.authSelect,
+                        isAuth: data.isAuth,
                         file: {
                             data: (authFile!==null ? authFile.buffer : null),
                             contentType: (authFile!==null ? authFile.mimetype : ''),

@@ -43,6 +43,7 @@ const mentorSchema = {
         topics: [String],
         auth: {
             method: String,
+            isAuth: Boolean,
             file: {
                 data: Schema.Types.Mixed,
                 contentType: String,
