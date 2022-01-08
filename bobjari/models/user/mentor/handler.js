@@ -17,9 +17,10 @@ mentorModel.statics.create = function (payload) {
 };
 
 // Find All
-mentorModel.statics.findAll = function () {
+mentorModel.statics.findAll = function (keyword) {
     // return promise
-    return this.find({});
+    const query = new RegExp(keyword, 'i');
+    return this.find( { 'careerInfo.company': query } ).exec();
 };
 
 // Find One by mentorid

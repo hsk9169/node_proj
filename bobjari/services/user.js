@@ -6,7 +6,7 @@ const config = require('../config/index');
 const crypto = require('crypto');
 
 // Mentee
-exports.postMentee = async (data) => {
+exports.createMentee = async (data) => {
     try {
         const profile = await menteeModel.create(data);
         return profile;
@@ -57,7 +57,7 @@ exports.getMenteeByNickname = async (nickname) => {
 }
 
 // Mentor
-exports.postMentor = async (data) => {
+exports.createMentor = async (data) => {
     try {
         const profile = await mentorModel.create(data);
         return profile;
@@ -67,9 +67,9 @@ exports.postMentor = async (data) => {
     }
 }
 
-exports.getMentors = async () => {
+exports.getMentors = async (keyword) => {
     try {
-        let data = await mentorModel.findAll();
+        let data = await mentorModel.findAll(keyword);
         return data;
     } catch(err) {
         logger.error(err.stack);

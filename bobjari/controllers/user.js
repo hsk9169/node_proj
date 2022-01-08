@@ -130,7 +130,7 @@ exports.postMentee = async (req, res) => {
             })
             logger.info('profile data')
             logger.info(JSON.stringify(data, null, 2))
-            userService.postMentee({
+            userService.createMentee({
                 userInfo: {
                     email: data.email,
                     age: data.age,
@@ -190,7 +190,6 @@ exports.getMentees = async (req, res, next) => {
 exports.postMentor = async (req, res) => {
     logger.info('POST /users/mentor/create');
     imgLoader.uploadFiles(req, res, (err) => {
-        console.log(req)
         let imgFile = null, authFile = null;
         if (err instanceof multer.MulterError) {
             logger.error(err);
@@ -216,7 +215,7 @@ exports.postMentor = async (req, res) => {
             })
             logger.info('profile data')
             logger.info(JSON.stringify(data, null, 2))
-            userService.postMentor({
+            userService.createMentor({
                 userInfo: {
                     email: data.email,
                     age: data.age,
@@ -272,8 +271,8 @@ exports.postMentor = async (req, res) => {
 
 exports.getMentors = async (req, res, next) => {
     logger.info('GET /users/mentor');
-    
-    await userService.getMentors()
+    console.log(req.query.keyword)
+    await userService.getMentors(req.query.keyword)
         .then((mentors) => {
             if(!mentors.length) {
                 logger.error('no data to GET');
