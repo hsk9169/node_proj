@@ -275,10 +275,8 @@ exports.getMentors = async (req, res, next) => {
     await userService.getMentors(req.query.keyword)
         .then((mentors) => {
             if(!mentors.length) {
-                logger.error('no data to GET');
-                return res.status(404).send(
-                    { err: 'data not found' }
-                );
+                logger.info('no data to GET');
+                return res.status(204).send('no user account found');
             } else {
                 logger.info('success GET');
                 res.json(mentors);
