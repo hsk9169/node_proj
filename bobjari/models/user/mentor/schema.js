@@ -10,16 +10,16 @@ const { Schema } = require("mongoose");
  *  - hash tags
  */
 
-
-// Define Scehmas
-// To Add:
-// appointment ID array
-
 const mentorSchema = {
     updated: { 
         type: Date,
         required: true,
         default: Date.now,
+    },
+    mentorId: {
+        type: Number,
+        unique: true,
+        required: true,
     },
     userInfo: {
         email: {
@@ -40,6 +40,7 @@ const mentorSchema = {
     careerInfo: {
         job: [String],
         company: [String],
+        years: String,
         topics: [String],
         auth: {
             method: String,
@@ -48,6 +49,10 @@ const mentorSchema = {
                 data: Schema.Types.Mixed,
                 contentType: String,
             },
+        },
+        title: {
+            type: String,
+            maxLength: 30,
         },
         introduce: {
             type: String,

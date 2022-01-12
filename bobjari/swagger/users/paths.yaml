@@ -97,3 +97,23 @@ paths:
                                 $ref: '#/components/schemas/Mentor'
                 204:
                     description: no existing account
+    /api/users/mentor:
+        get:
+            summary: get mentors by keyword of company name
+            tags:
+                - users
+            parameters:
+                - in: query
+                  name: keyword
+                  schema:
+                    type: string
+                  description: partial keyword of company name
+            responses:
+                200:
+                    description: mentors array result
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Mentor'
+                204:
+                    description: no existing account

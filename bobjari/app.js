@@ -49,6 +49,7 @@ mongoose.Promise = global.Promise;
 const options = {
     useNewUrlParser: true,
     useUnifiedTopology: true,
+    autoIndex: false,
 };
 
 // Connect to MongoDB

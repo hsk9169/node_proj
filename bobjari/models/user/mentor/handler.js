@@ -7,6 +7,13 @@ const mentorModel = new mongoose.Schema(
                             collection: 'mentorinfos',
                         });
 
+// Set arrangement of schema's elements
+// 1  : ascending
+// -1 : descending
+mentorModel.index({
+    mentorId: 1,
+})
+
 //------------ Static Properties ------------//
 // Create new mentor document
 mentorModel.statics.create = function (payload) {
@@ -17,10 +24,14 @@ mentorModel.statics.create = function (payload) {
 };
 
 // Find All
-mentorModel.statics.findAll = function (keyword) {
+mentorModel.statics.findAll = function (keyword, startIdx, num) {
     // return promise
     const query = new RegExp(keyword, 'i');
-    return this.find( { 'careerInfo.company': query } ).exec();
+    return this.find( { 'careerInfo.company': query } )
+               .where('mentorId')
+               .gte(startIdx)
+               .lt(startIdx + num)
+               .exec()
 };
 
 // Find One by mentorid

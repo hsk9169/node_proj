@@ -213,8 +213,15 @@ exports.postMentor = async (req, res) => {
                     data[key] = JSON.parse(req.body[key])
                 }
             })
-            logger.info('profile data')
-            logger.info(JSON.stringify(data, null, 2))
+            let newId;
+            userService.getMentorLength()
+                .then(length => {
+                    newId = length
+                    console.log('newId: ', newId)
+                })
+                .catch(err => {
+                    console.log(err)
+                })
             userService.createMentor({
                 userInfo: {
                     email: data.email,
@@ -226,6 +233,7 @@ exports.postMentor = async (req, res) => {
                 careerInfo: {
                     job: data.job,
                     company: data.company,
+                    years: data.years,
                     topics: data.topics,
                     auth: {
                         method: data.authSelect,
@@ -236,6 +244,7 @@ exports.postMentor = async (req, res) => {
                         }
                     },
                     introduce: data.introduce,
+                    title: data.title,
                     hashtags: null,
                 },
                 appointment: {
@@ -271,7 +280,42 @@ exports.postMentor = async (req, res) => {
 
 exports.getMentors = async (req, res, next) => {
     logger.info('GET /users/mentor');
-    console.log(req.query.keyword)
+    let keyword = null, startIdx = null, num = null;
+    try {keyword = req.query.keyword} catch{} 
+    try {startIdx = req.query.startIdx} catch{} 
+    try {num = req.query.num} catch{}
+    if (keyword === null) keyword = '';
+    if (startIdx === null) startIdx = 0;
+    if (num === null) {
+        userService.getMentorLength()
+            .then(length => {
+                newId = length
+                console.log('newId: ', newId)
+            })
+            .catch(err => {
+                console.log(err)
+            })
+    }
+    console.log('keyword:', keyword, 'startIdx: ', startIdx, 'num: ', num)
+    await userService.getMentors(keyword, startIdx, num)
+        .then((mentors) => {
+            if(!mentors.length) {
+                logger.info('no data to GET');
+                return res.status(204).send('no user account found');
+            } else {
+                logger.info('success GET');
+                res.json(mentors);
+            }
+        })
+        .catch(err => {
+            logger.error('GET /users/mentor');
+            logger.error(err.stack);
+            res.status(500).send(err);
+        });
+}
+
+exports.getMentorsBurst = async(req, res, next) => {
+    logger.info('GET /users/mentor');
     await userService.getMentors(req.query.keyword)
         .then((mentors) => {
             if(!mentors.length) {

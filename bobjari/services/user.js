@@ -59,7 +59,9 @@ exports.getMenteeByNickname = async (nickname) => {
 // Mentor
 exports.createMentor = async (data) => {
     try {
-        const profile = await mentorModel.create(data);
+        const newId = await mentorModel.count();
+        const schema = {mentorId: newId, ...data}
+        const profile = await mentorModel.create(schema);
         return profile;
     } catch(err) { 
         logger.error(err.stack);
@@ -67,9 +69,9 @@ exports.createMentor = async (data) => {
     }
 }
 
-exports.getMentors = async (keyword) => {
+exports.getMentors = async (keyword, startIdx, num) => {
     try {
-        let data = await mentorModel.findAll(keyword);
+        let data = await mentorModel.findAll(keyword, startIdx, num);
         return data;
     } catch(err) {
         logger.error(err.stack);
@@ -104,5 +106,15 @@ exports.getMentorByNickname = async (nickname) => {
     } catch(err) {
         logger.error(err.stack);
         throw Error(err);
+    }
+}
+
+exports.getMentorLength = async () => {
+    try {
+        let ret = await mentorModel.count();
+        return ret
+    } catch(err) {
+        logger.error(err.stack);
+        throw Error(err)
     }
 }
