@@ -11,7 +11,7 @@ const mentorModel = new mongoose.Schema(
 // 1  : ascending
 // -1 : descending
 mentorModel.index({
-    mentorId: 1,
+    updated: 1,
 })
 
 //------------ Static Properties ------------//
@@ -28,27 +28,9 @@ mentorModel.statics.findAll = function (keyword, startIdx, num) {
     // return promise
     const query = new RegExp(keyword, 'i');
     return this.find( { 'careerInfo.company': query } )
-               .where('mentorId')
-               .gte(startIdx)
-               .lt(startIdx + num)
+               .skip(Number(startIdx))
+               .limit(Number(startIdx)+Number(num))
                .exec()
-};
-
-// Find One by mentorid
-mentorModel.statics.findOneByMentorid = function (mentorid) {
-    return this.findOne({ mentorid });
-};
-
-// Update by mentorid
-mentorModel.statics.updateByMentorid = function (mentorid, payload) {
-    // {new: true }: return the modified document 
-    // rather than the original. defaults to false
-    return this.findOneAndUpdate({ mentorid }, payload, { new: true });
-};
-
-// Delete by mentorid
-mentorModel.statics.deleteByMentorid = function (mentorid) {
-    return this.deleteOne({ mentorid });
 };
 
 // Find By mentor email

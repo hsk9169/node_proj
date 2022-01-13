@@ -59,9 +59,7 @@ exports.getMenteeByNickname = async (nickname) => {
 // Mentor
 exports.createMentor = async (data) => {
     try {
-        const newId = await mentorModel.count();
-        const schema = {mentorId: newId, ...data}
-        const profile = await mentorModel.create(schema);
+        const profile = await mentorModel.create(data);
         return profile;
     } catch(err) { 
         logger.error(err.stack);

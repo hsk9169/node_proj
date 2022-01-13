@@ -213,15 +213,6 @@ exports.postMentor = async (req, res) => {
                     data[key] = JSON.parse(req.body[key])
                 }
             })
-            let newId;
-            userService.getMentorLength()
-                .then(length => {
-                    newId = length
-                    console.log('newId: ', newId)
-                })
-                .catch(err => {
-                    console.log(err)
-                })
             userService.createMentor({
                 userInfo: {
                     email: data.email,
@@ -281,22 +272,22 @@ exports.postMentor = async (req, res) => {
 exports.getMentors = async (req, res, next) => {
     logger.info('GET /users/mentor');
     let keyword = null, startIdx = null, num = null;
+    console.log(req.query)
     try {keyword = req.query.keyword} catch{} 
     try {startIdx = req.query.startIdx} catch{} 
     try {num = req.query.num} catch{}
     if (keyword === null) keyword = '';
     if (startIdx === null) startIdx = 0;
     if (num === null) {
-        userService.getMentorLength()
+        await userService.getMentorLength()
             .then(length => {
-                newId = length
-                console.log('newId: ', newId)
+                num = length - startIdx
             })
             .catch(err => {
                 console.log(err)
             })
     }
-    console.log('keyword:', keyword, 'startIdx: ', startIdx, 'num: ', num)
+    console.log('keyword :', keyword, 'startIdx :', startIdx, 'num :', num)
     await userService.getMentors(keyword, startIdx, num)
         .then((mentors) => {
             if(!mentors.length) {
