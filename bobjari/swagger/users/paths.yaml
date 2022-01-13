@@ -99,7 +99,7 @@ paths:
                     description: no existing account
     /api/users/mentor:
         get:
-            summary: get mentors by keyword of company name
+            summary: get exact number of mentors by keyword
             tags:
                 - users
             parameters:
@@ -108,6 +108,16 @@ paths:
                   schema:
                     type: string
                   description: partial keyword of company name
+                - in: query
+                  name: startIdx
+                  schema:
+                    type: string
+                  description: start index number of mentor schema to get
+                - in: query
+                  name: num
+                  schema:
+                    type: string
+                  description: the number of mentors to get
             responses:
                 200:
                     description: mentors array result
