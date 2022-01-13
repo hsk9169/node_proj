@@ -9,4 +9,6 @@ router.get('/', authChecker.check, userController.getMentors);
 
 router.post('/create', userController.postMentor);
 
+router.post('/update', userController.updateMentor);
+
 module.exports = router;

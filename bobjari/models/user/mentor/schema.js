@@ -16,11 +16,6 @@ const mentorSchema = {
         required: true,
         default: Date.now,
     },
-    mentorId: {
-        type: Number,
-        unique: true,
-        required: true,
-    },
     userInfo: {
         email: {
             type: String,

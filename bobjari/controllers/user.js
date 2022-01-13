@@ -305,21 +305,7 @@ exports.getMentors = async (req, res, next) => {
         });
 }
 
-exports.getMentorsBurst = async(req, res, next) => {
-    logger.info('GET /users/mentor');
-    await userService.getMentors(req.query.keyword)
-        .then((mentors) => {
-            if(!mentors.length) {
-                logger.info('no data to GET');
-                return res.status(204).send('no user account found');
-            } else {
-                logger.info('success GET');
-                res.json(mentors);
-            }
-        })
-        .catch(err => {
-            logger.error('GET /users/mentor');
-            logger.error(err.stack);
-            res.status(500).send(err);
-        });
+exports.updateMentor = async (req, res, next) => {
+    logger.info('POST /user/mentor/update');
+    
 }
