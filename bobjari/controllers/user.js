@@ -147,6 +147,7 @@ exports.postMentee = async (req, res) => {
             .then((mentee) => {
                 if(mentee) {
                     logger.info('mentee account added');
+                    logger.info(mentee)
                     res.json(mentee);
                 } else {
                     logger.info('failed adding mentee account');
@@ -213,6 +214,8 @@ exports.postMentor = async (req, res) => {
                     data[key] = JSON.parse(req.body[key])
                 }
             })
+            logger.info('profile data')
+            logger.info(JSON.stringify(data, null, 2))
             userService.createMentor({
                 userInfo: {
                     email: data.email,
@@ -254,6 +257,7 @@ exports.postMentor = async (req, res) => {
             .then((mentor) => {
                 if(mentor) {
                     logger.info('mentor account added');
+                    logger.info(mentor);
                     res.json(mentor);
                 } else {
                     logger.info('failed adding mentor account');
@@ -295,6 +299,7 @@ exports.getMentors = async (req, res, next) => {
                 return res.status(204).send('no user account found');
             } else {
                 logger.info('success GET');
+                console.log(mentors)
                 res.json(mentors);
             }
         })
