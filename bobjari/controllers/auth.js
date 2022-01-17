@@ -37,12 +37,12 @@ exports.authToken = async (req, res, next) => {
     let token = {accessToken: '', refreshToken: ''};
     if (req.query.email) {
         token.accessToken = jwt.sign({ email: req.query.email}, 
-            'shhhhh', { expiresIn: 10});
+            'shhhhh', { expiresIn: 3600});
         token.refreshToken = jwt.sign({ email: req.query.email}, 
             'shhhhh', { expiresIn: 3600});
     } else {
         token.accessToken = jwt.sign({ phone: req.query.phone, password: req.query.password}, 
-            'shhhhh', { expiresIn: 10});
+            'shhhhh', { expiresIn: 3600});
         token.refreshToken = jwt.sign({ phone: req.query.phone, password: req.query.password}, 
             'shhhhh', { expiresIn: 3600});
     }
