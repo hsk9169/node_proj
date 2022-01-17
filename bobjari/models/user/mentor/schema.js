@@ -31,7 +31,14 @@ const mentorSchema = {
             unique: true,
         },
     },
-    role: String,
+    roleInfo: {
+        role: String,
+        isActivated: Boolean,
+    },
+    searchAllow: {
+        type: Boolean,
+        required: true,
+    },
     careerInfo: {
         job: [String],
         company: [String],

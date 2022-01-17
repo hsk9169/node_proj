@@ -36,6 +36,17 @@ exports.getMenteeByEmail = async(email) => {
     }
 }
 
+exports.updateMenteeRole = async (email, curState) => {
+    try {
+        // Update role by swapping
+        let ret = await menteeModel.findOneByEmailAndUpdateRole(email, curState);
+        return ret;
+    } catch(err) {
+        logger.error(err.stack);
+        throw Error(err);
+    }
+}
+
 exports.getMenteeByPhone = async(phone) => {
     try {
         let ret = await menteeModel.findOneByPhone(phone);
@@ -87,7 +98,18 @@ exports.getMentorByEmail = async(email) => {
     }
 }
 
-exports.getMentorByPhone = async(phone) => {
+exports.updateMentorRole = async (email, curState) => {
+    try {
+        // Update role by swapping
+        let ret = await mentorModel.findOneByEmailAndUpdateRole(email, curState);
+        return ret;
+    } catch(err) {
+        logger.error(err.stack);
+        throw Error(err);
+    }
+}
+
+exports.getMentorByPhone = async (phone) => {
     try {
         let ret = await mentorModel.findOneByPhone(phone);
         return ret;
@@ -100,6 +122,17 @@ exports.getMentorByPhone = async(phone) => {
 exports.getMentorByNickname = async (nickname) => {
     try {
         let ret = await mentorModel.findOneByNickname(nickname);
+        return ret;
+    } catch(err) {
+        logger.error(err.stack);
+        throw Error(err);
+    }
+}
+
+exports.updateMentorAllowSearch = async (email, curState) => {
+    try {
+        let ret = await mentorModel.findOneByEmailAndToggleAllowSearch(email, curState)
+        console.log(ret.searchAllow)
         return ret;
     } catch(err) {
         logger.error(err.stack);
