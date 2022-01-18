@@ -21,6 +21,7 @@ exports.uploadImage = multer({
 
 exports.uploadFiles = multer({
     fileFilter: function (req, file, cb) {
+        logger.info('file', file)
         const ext = path.extname(file.originalname);
         if (ext !== '.png' && ext !== '.jpg' && ext !== '.gif' && ext !== '.jpeg') {
             cb(new Error('Only images are allowed'), false);
