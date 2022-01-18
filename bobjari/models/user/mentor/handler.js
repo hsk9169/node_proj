@@ -31,7 +31,7 @@ mentorModel.statics.findAll = function (keyword, startIdx, num) {
                              { 'userInfo.nickname': query }]})
                .where('searchAllow').equals(true)
                .skip(Number(startIdx))
-               .limit(Number(startIdx)+Number(num))
+               .limit(Number(num))
                .exec()
 };
 

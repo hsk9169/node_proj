@@ -42,7 +42,7 @@ const mentorSchema = {
     careerInfo: {
         job: [String],
         company: [String],
-        years: String,
+        years: Number,
         topics: [String],
         auth: {
             method: String,
