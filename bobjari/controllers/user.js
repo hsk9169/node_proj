@@ -420,41 +420,36 @@ exports.getMentors = async (req, res, next) => {
     try {keyword = req.query.keyword} catch{} 
     try {startIdx = req.query.startIdx} catch{} 
     try {num = req.query.num} catch{}
-    if (keyword === null) keyword = '';
-    if (startIdx === null) startIdx = 0;
-    if (num === null) {
-        await userService.getMentorLength()
-            .then(length => {
-                num = length - startIdx
+    if (keyword === undefined ||
+        startIdx === undefined ||
+        num === undefined) {
+        logger.info('invalid query parameter')
+        return res.status(204).send('invalid query parameter');
+    } else {
+        logger.info('keyword: ' + keyword + ' , startIdx: ' + startIdx + ' , num: ' + num)
+        await userService.getMentors(keyword, startIdx, num)
+            .then((mentors) => {
+                if(!mentors.length) {
+                    logger.info('no data to GET');
+                    return res.status(204).send('no user account found');
+                } else {
+                    logger.info('success GET');
+                    logger.info(mentors.length + ' mentors found')
+                    res.json(mentors);
+                }
             })
             .catch(err => {
-                console.log(err)
-            })
+                logger.error('GET /users/mentor');
+                logger.error(err.stack);
+                res.status(500).send(err);
+            });
     }
-    logger.info('keyword: ' + keyword + ' , startIdx: ' + startIdx + ' , num: ' + num)
-    await userService.getMentors(keyword, startIdx, num)
-        .then((mentors) => {
-            if(!mentors.length) {
-                logger.info('no data to GET');
-                return res.status(204).send('no user account found');
-            } else {
-                logger.info('success GET');
-                logger.info(mentors.length + ' mentors found')
-                res.json(mentors);
-            }
-        })
-        .catch(err => {
-            logger.error('GET /users/mentor');
-            logger.error(err.stack);
-            res.status(500).send(err);
-        });
 }
 
 exports.updateMentorAllowSearch = async (req, res, next) => {
     logger.info('GET /users/mentor/searchAllow')
     const email = req.query.email;
     const curState = (req.query.curState === 'true' ? true : false);
-    console.log('current ', curState)
     await userService.updateMentorAllowSearch(email, curState)
         .then(mentor => {
             logger.info('toggle mentor search allow')
