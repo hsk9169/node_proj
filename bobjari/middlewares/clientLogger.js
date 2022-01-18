@@ -2,7 +2,14 @@ const logger = require('../config/winston');
 const config = require('../config/index')
 
 exports.getHostname = (req, res, next) => {
-    console.log(req)
+    const forwardedIpStr = 
+        req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+    let IP = null;
+    console.log(forwardedIpStr)
+    if (forwardedIpStr) {
+        IP = forwardedIpStr.split(',')[0];
+        console.log('IP address: ', IP)
+    }
     const headers = req.rawHeaders;
     // create a promise that decodes the token
     const p = new Promise(
