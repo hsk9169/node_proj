@@ -416,6 +416,7 @@ exports.postMentor = async (req, res) => {
 
 exports.getMentors = async (req, res, next) => {
     logger.info('GET /users/mentor');
+    console.log('request', req.rawHeaders)
     let keyword = null, startIdx = null, num = null;
     try {keyword = req.query.keyword} catch{} 
     try {startIdx = req.query.startIdx} catch{} 
