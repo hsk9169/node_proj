@@ -2,6 +2,7 @@ const logger = require('../config/winston');
 const config = require('../config/index')
 
 exports.getHostname = (req, res, next) => {
+    console.log(req)
     const headers = req.rawHeaders;
     // create a promise that decodes the token
     const p = new Promise(
