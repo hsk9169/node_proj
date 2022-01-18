@@ -173,6 +173,7 @@ exports.postMentee = async (req, res) => {
                 logger.info('img file found')
                 logger.info(imgFile)
             }
+            console.log(req.body)
             Object.keys(req.body).forEach(key => {
                 data[key] = JSON.parse(req.body[key])
             })
