@@ -1,14 +1,17 @@
 const router = require('express').Router();
 const authController = require('../../controllers/auth');
 const authChecker = require('../../middlewares/authChecker');
+const clientLogger = require('../../middlewares/clientLogger');
 
 
 router.post('/kakao', authController.authKakao);
 
-router.post('/email', authController.authEmail);
+router.post('/email', clientLogger.getHostname, authController.authEmail);
 
-router.get('/token', authController.authToken);
+router.get('/token', clientLogger.getHostname, authController.authToken);
 
-router.get('/verify', authChecker.check, authController.verifyToken);
+router.get('/verify', [clientLogger.getHostname, authChecker.check], 
+            authController.verifyToken);
+
 
 module.exports = router;

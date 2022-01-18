@@ -14,6 +14,10 @@ const config = {
             mailPWD: process.env.NAVER_PWD,
         }
     },
+    client_server: {
+        dev:  process.env.DEV_CLIENT_HOSTNAME,
+        real: process.env.REAL_CLIENT_HOSTNAME,
+    },
     secret: "ThIsIsSeCrEtKeYfOrEnCrYpT",
 }
 

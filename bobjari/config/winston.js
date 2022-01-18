@@ -26,7 +26,16 @@ const logger = winston.createLogger({
             level: 'info',
             datePattern: 'YYYY-MM-DD',
             dirname: logDir,
-            filename: `%DATE%.log`,
+            filename: `%DATE%.info.log`,
+            maxFiles: 30, // for 30 days
+            zippedArchive: true,
+        }),
+        // set file for saving warn level
+        new winstonDaily({
+            level: 'warn',
+            datePattern: 'YYYY-MM-DD',
+            dirname: logDir,
+            filename: `%DATE%.warn.log`,
             maxFiles: 30, // for 30 days
             zippedArchive: true,
         }),

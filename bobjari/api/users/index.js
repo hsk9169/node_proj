@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const authChecker = require('../../middlewares/authChecker');
-const signController = require('../../controllers/sign');
 const userController = require('../../controllers/user');
+const clientLogger = require('../../middlewares/clientLogger');
 
 
 router.use('/mentee', require('./mentee.js'));
@@ -9,15 +9,16 @@ router.use('/mentee', require('./mentee.js'));
 router.use('/mentor', require('./mentor.js'));
 
 // Find user by mentee email
-router.get('/email', userController.getUserByEmail);
+router.get('/email', clientLogger.getHostname, userController.getUserByEmail);
 
 // Change Role between mentor & mentee
-router.get('/change', authChecker.check, userController.changeUserRole)
+router.get('/change', [clientLogger.getHostname, authChecker.check], 
+            userController.changeUserRole)
 
 // Find user by mentee phone
-router.post('/phone', userController.postUserByPhone);
+router.post('/phone', clientLogger.getHostname, userController.postUserByPhone);
 
 // Find user by mentee nickname
-router.post('/nickname', userController.postUserByNickname);
+router.post('/nickname', clientLogger.getHostname, userController.postUserByNickname);
 
 module.exports = router;

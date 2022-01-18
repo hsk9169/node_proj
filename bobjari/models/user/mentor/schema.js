@@ -43,7 +43,7 @@ const mentorSchema = {
         job: [String],
         company: [String],
         years: Number,
-        topics: [String],
+        topics: [Number],
         auth: {
             method: String,
             isAuth: Boolean,
