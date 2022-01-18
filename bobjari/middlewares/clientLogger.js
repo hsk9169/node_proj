@@ -4,11 +4,10 @@ const config = require('../config/index')
 exports.getHostname = (req, res, next) => {
     const forwardedIpStr = 
         req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-    let IP = null;
-    console.log(forwardedIpStr)
+    let ipAddress = null;
+    const userAgent = req.headers['user-agent']
     if (forwardedIpStr) {
-        IP = forwardedIpStr.split(',')[0];
-        console.log('IP address: ', IP)
+        ipAddress = forwardedIpStr.split(',')[0];
     }
     const headers = req.rawHeaders;
     // create a promise that decodes the token
@@ -39,7 +38,8 @@ exports.getHostname = (req, res, next) => {
     p.then((isMine) => {
         if (!isMine) {
             logger.warn('not my front-end client server');
-            logger.warn(headers);
+            logger.warn('IP address: ' + ipAddress);
+            logger.warn('User agent: ' + userAgent);
         } else {
             logger.info('received from my front-end client server')
         }
