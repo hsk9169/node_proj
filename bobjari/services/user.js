@@ -6,7 +6,7 @@ const config = require('../config/index');
 const crypto = require('crypto');
 
 // Mentee
-exports.postMentee = async (data) => {
+exports.createMentee = async (data) => {
     try {
         const profile = await menteeModel.create(data);
         return profile;
@@ -36,6 +36,17 @@ exports.getMenteeByEmail = async(email) => {
     }
 }
 
+exports.updateMenteeRole = async (email, curState) => {
+    try {
+        // Update role by swapping
+        let ret = await menteeModel.findOneByEmailAndUpdateRole(email, curState);
+        return ret;
+    } catch(err) {
+        logger.error(err.stack);
+        throw Error(err);
+    }
+}
+
 exports.getMenteeByPhone = async(phone) => {
     try {
         let ret = await menteeModel.findOneByPhone(phone);
@@ -57,7 +68,7 @@ exports.getMenteeByNickname = async (nickname) => {
 }
 
 // Mentor
-exports.postMentor = async (data) => {
+exports.createMentor = async (data) => {
     try {
         const profile = await mentorModel.create(data);
         return profile;
@@ -67,9 +78,9 @@ exports.postMentor = async (data) => {
     }
 }
 
-exports.getMentors = async () => {
+exports.getMentors = async (keyword, startIdx, num) => {
     try {
-        let data = await mentorModel.findAll();
+        let data = await mentorModel.findAll(keyword, startIdx, num);
         return data;
     } catch(err) {
         logger.error(err.stack);
@@ -87,7 +98,18 @@ exports.getMentorByEmail = async(email) => {
     }
 }
 
-exports.getMentorByPhone = async(phone) => {
+exports.updateMentorRole = async (email, curState) => {
+    try {
+        // Update role by swapping
+        let ret = await mentorModel.findOneByEmailAndUpdateRole(email, curState);
+        return ret;
+    } catch(err) {
+        logger.error(err.stack);
+        throw Error(err);
+    }
+}
+
+exports.getMentorByPhone = async (phone) => {
     try {
         let ret = await mentorModel.findOneByPhone(phone);
         return ret;
@@ -104,5 +126,26 @@ exports.getMentorByNickname = async (nickname) => {
     } catch(err) {
         logger.error(err.stack);
         throw Error(err);
+    }
+}
+
+exports.updateMentorAllowSearch = async (email, curState) => {
+    try {
+        let ret = await mentorModel.findOneByEmailAndToggleAllowSearch(email, curState)
+        console.log(ret.searchAllow)
+        return ret;
+    } catch(err) {
+        logger.error(err.stack);
+        throw Error(err);
+    }
+}
+
+exports.getMentorLength = async () => {
+    try {
+        let ret = await mentorModel.count();
+        return ret
+    } catch(err) {
+        logger.error(err.stack);
+        throw Error(err)
     }
 }

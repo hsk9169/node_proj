@@ -1,14 +1,19 @@
 const fs = require('fs');
 const jwt = require('jsonwebtoken');
+const logger = require('../config/winston');
 
 exports.check = (req, res, next) => {
     // read the token from header or url 
-    const auth = req.headers.authorization;
-    const authArray = auth.split(' ');
-    const token = authArray[1];
-    
+    let auth = null, authArray = null, token = null;
+    try {
+        auth = req.headers.authorization;
+        authArray = auth.split(' ');
+        token = authArray[1];
+    } catch {}
+
     // token does not exist
     if(!token) {
+        logger.error('request has no token embedded in headers')
         return res.status(403).json({
             success: false,
             message: 'no token embedded'
@@ -28,10 +33,8 @@ exports.check = (req, res, next) => {
 
     // if it has failed to verify, it will return an error message
     const onError = (err) => {
-        res.status(403).json({
-            success: false,
-            message: 'access token might be expired or unauthorized',
-        });
+        logger.info('invalid token accessed, return invalid message')
+        res.status(200).send('invalid')
     };
 
     // process the promise

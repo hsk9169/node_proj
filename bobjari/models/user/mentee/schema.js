@@ -26,7 +26,10 @@ const menteeSchema = {
             unique: true,
         },
     },
-    role: Boolean,
+    roleInfo: {
+        role: String,
+        isActivated: Boolean,
+    },
     interests: [String],
     profileImg: {
         data: Schema.Types.Mixed,

@@ -4,8 +4,11 @@ const authChecker = require('../../middlewares/authChecker');
 
 
 // Find All
-router.get('/', authChecker.check, userController.getMentors);
+
+router.get('/', userController.getMentors);
 
 router.post('/create', userController.postMentor);
+
+router.get('/searchAllow', authChecker.check, userController.updateMentorAllowSearch);
 
 module.exports = router;

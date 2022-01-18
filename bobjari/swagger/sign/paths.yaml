@@ -21,9 +21,17 @@ paths:
                     description: no existing account
     /api/sign/in/bob:
         post:
-            summary: try sign in with kakao profile
+            summary: try sign in with bobjari profile
             tags:
                 - sign
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                email:
+                                    type: string
             responses:
                 200:
                     description: posted account exists, return profile 

@@ -37,16 +37,21 @@ exports.authToken = async (req, res, next) => {
     let token = {accessToken: '', refreshToken: ''};
     if (req.query.email) {
         token.accessToken = jwt.sign({ email: req.query.email}, 
-            'shhhhh', { expiresIn: 60});
+            'shhhhh', { expiresIn: 3600});
         token.refreshToken = jwt.sign({ email: req.query.email}, 
-            'shhhhh', { expiresIn: 600});
+            'shhhhh', { expiresIn: 3600});
     } else {
         token.accessToken = jwt.sign({ phone: req.query.phone, password: req.query.password}, 
-            'shhhhh', { expiresIn: 60});
+            'shhhhh', { expiresIn: 3600});
         token.refreshToken = jwt.sign({ phone: req.query.phone, password: req.query.password}, 
-            'shhhhh', { expiresIn: 600});
+            'shhhhh', { expiresIn: 3600});
     }
     res.json({
         token: token
     });
+}
+
+exports.verifyToken = async (req, res, next) => {
+    logger.info('GET /api/auth/verify');
+    res.status(200).send('valid');
 }

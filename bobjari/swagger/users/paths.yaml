@@ -36,6 +36,14 @@ paths:
                             properties:
                                 nickname:
                                     type: string
+            profileImg:
+                    type: object
+                    properties:
+                        data:
+                            oneOf:
+                                - type: string
+                                - type: string
+                                  format: binary
     /api/users/mentee/create:
         post:
             summary: create mentee account
@@ -45,14 +53,29 @@ paths:
                 content:
                     multipart/form-data:
                         schema:
-                            '#/components/schemas/Mentee'
+                            type: object
+                            properties:
+                                email:
+                                    type: string
+                                age:
+                                    type: integer
+                                gender:
+                                    type: string
+                                nickname:
+                                    type: string
+                                interests: 
+                                    type: array
+                                    items:
+                                        type: string
+                                img:
+                                    type: binary
             responses:
                 200:
                     description: posted account success, return email 
                     content:
                         application/json:
                             schema:
-                                type: string
+                                $ref: '#/components/schemas/Mentee'
                 204:
                     description: no existing account
     /api/users/mentor/create:
@@ -71,10 +94,36 @@ paths:
                     content:
                         application/json:
                             schema:
-                                type: object
-                                properties:
-                                    0:
-                                        type: string
-                                        description: email address
+                                $ref: '#/components/schemas/Mentor'
+                204:
+                    description: no existing account
+    /api/users/mentor:
+        get:
+            summary: get exact number of mentors by keyword
+            tags:
+                - users
+            parameters:
+                - in: query
+                  name: keyword
+                  schema:
+                    type: string
+                  description: partial keyword of company name
+                - in: query
+                  name: startIdx
+                  schema:
+                    type: string
+                  description: start index number of mentor schema to get
+                - in: query
+                  name: num
+                  schema:
+                    type: string
+                  description: the number of mentors to get
+            responses:
+                200:
+                    description: mentors array result
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Mentor'
                 204:
                     description: no existing account
