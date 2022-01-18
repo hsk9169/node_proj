@@ -1,5 +1,6 @@
 const multer = require('multer');
 const path = require('path');
+const logger = require('../config/winston')
 
 const storage = multer.diskStorage({ 
     destination: '../uploads/',
