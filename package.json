@@ -51,6 +51,6 @@
   "homepage": "https://github.com/hsk9169/node_proj#readme",
   "description": "",
   "bin": {
-      "app": "./bobjari/app.js"
+    "app": "./bobjari/app.js"
   }
 }
