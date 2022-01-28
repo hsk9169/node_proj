@@ -45,12 +45,6 @@ menteeModel.statics.findOneByEmail = function(target, cb) {
     return this.findOne( { 'userInfo.email': query } ).exec();
 };
 
-// Update mentor role by swapping
-menteeModel.statics.findOneByEmailAndUpdateRole = function(target, curState) {
-    const query = new RegExp('^'+target+'$', 'i');
-    return this.findOneAndUpdate( { 'userInfo.email': query }, {'roleInfo.isActivated': !curState} ).exec();
-}
-
 // Find By mentee phone number
 menteeModel.statics.findOneByPhone = function(target, cb) {
     const query = new RegExp('^'+target+'$', 'i');
@@ -64,4 +58,4 @@ menteeModel.statics.findOneByNickname = function (target) {
 };
 
 // Create Model & Export
-module.exports = mongoose.model('Mentee', menteeModel);
+module.exports = mongoose.admin_conn.model('Mentee', menteeModel);

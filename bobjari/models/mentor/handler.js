@@ -1,22 +1,17 @@
-const mongoose = require('mongoose');
-const mentorSchema = require('./schema');
-const assert = require('assert')
+let mongoose = require('mongoose');
+let mentorSchema = require('./schema');
+let preferenceSchema = require('../preference/schema')
 
-const mentorModel = new mongoose.Schema(
-                        mentorSchema, {
-                            collection: 'mentorinfos',
-                        });
-
-// Set arrangement of schema's elements
-// 1  : ascending
-// -1 : descending
-mentorModel.index({
-    updated: 1,
+preferenceSchema.pre('validate', function(next) {
+    console.log('schedule', this.schedule)
+    console.log('location', this.location)
+    console.log('fee', this.fee)
+    next();
 })
 
 //------------ Static Properties ------------//
 // Create new mentor document
-mentorModel.statics.create = function (payload) {
+mentorSchema.statics.create = function (payload) {
     // this === Model
     const mentor = new this(payload);
     // return Promise
@@ -24,7 +19,7 @@ mentorModel.statics.create = function (payload) {
 };
 
 // Find All
-mentorModel.statics.findAll = function (keyword, startIdx, num) {
+mentorSchema.statics.findAll = function (keyword, startIdx, num) {
     // return promise
     const query = new RegExp(keyword, 'i');
     return this.find( {$or: [{ 'careerInfo.company': query },
@@ -36,13 +31,13 @@ mentorModel.statics.findAll = function (keyword, startIdx, num) {
 };
 
 // Find By mentor email
-mentorModel.statics.findOneByEmail = function(target, cb) {
+mentorSchema.statics.findOneByEmail = function(target, cb) {
     const query = new RegExp('^'+target+'$', 'i');
     return this.findOne( { 'userInfo.email': query } ).exec();
 };
 
 // Update mentor role by swapping
-mentorModel.statics.findOneByEmailAndUpdateRole = function(target, curState) {
+mentorSchema.statics.findOneByEmailAndUpdateRole = function(target, curState) {
     const query = new RegExp('^'+target+'$', 'i');
     return this.findOneAndUpdate( 
         {'userInfo.email': query }, 
@@ -51,19 +46,19 @@ mentorModel.statics.findOneByEmailAndUpdateRole = function(target, curState) {
 }
 
 // Find By mentor phone number
-mentorModel.statics.findOneByPhone = function(target, cb) {
+mentorSchema.statics.findOneByPhone = function(target, cb) {
     const query = new RegExp('^'+target+'$', 'i');
     return this.findOne( { 'userInfo.phone': query } ).exec();
 };
 
 // Find By mentor nickname
-mentorModel.statics.findOneByNickname = function (target) {
+mentorSchema.statics.findOneByNickname = function (target) {
     const query = new RegExp('^'+target+'$', 'i');
     return this.findOne( { 'userInfo.nickname': query } ).exec();
 };
 
 // Toggle mentor search allow flag
-mentorModel.statics.findOneByEmailAndToggleAllowSearch = async function(target, curState) {
+mentorSchema.statics.findOneByEmailAndToggleAllowSearch = async function(target, curState) {
     const query = new RegExp('^'+target+'$', 'i');
     return await this.findOneAndUpdate( 
         {'userInfo.email': query},
@@ -72,4 +67,5 @@ mentorModel.statics.findOneByEmailAndToggleAllowSearch = async function(target, 
 }
 
 // Create Model & Export
-module.exports = mongoose.model('Mentor', mentorModel);
+module.exports = 
+    mongoose.config_conn.model('Mentor', mentorSchema);
