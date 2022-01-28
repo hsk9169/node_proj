@@ -1,5 +1,13 @@
 let mongoose = require('mongoose');
 let mentorSchema = require('./schema');
+let preferenceSchema = require('../preference/schema')
+
+preferenceSchema.pre('validate', function(next) {
+    console.log('schedule', this.schedule)
+    console.log('location', this.location)
+    console.log('fee', this.fee)
+    next();
+})
 
 //------------ Static Properties ------------//
 // Create new mentor document
