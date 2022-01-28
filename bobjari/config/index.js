@@ -2,7 +2,8 @@ require('dotenv').config();
 
 const config = {
     port: process.env.PORT,
-    mongo_uri: process.env.MONGO_URI,
+    mongo_uri_admin: process.env.MONGO_URI_ADMIN,
+    mongo_uri_config: process.env.MONGO_URI_CONFIG,
     auth: {
         kakao: {
             clientID: process.env.CLIENT_ID,

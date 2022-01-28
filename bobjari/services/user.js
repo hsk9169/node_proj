@@ -1,9 +1,62 @@
 const { data } = require('../config/winston');
 const logger = require('../config/winston');
-const menteeModel = require('../models/user/mentee/handler');
-const mentorModel = require('../models/user/mentor/handler');
+const menteeModel = require('../models/mentee/handler');
+const mentorModel = require('../models/mentor/handler');
+const User = require('../models/userCommon/handler');
 const config = require('../config/index');
 const crypto = require('crypto');
+
+// User
+exports.createUser = async (data) => {
+    try {
+        const mentor = await mentorModel.create({
+            preference: {
+                fee: {
+                    select: 1,
+                    value: '10000'
+                }
+            }
+        });
+        const mentee = await menteeModel.create({
+            interests: ['백엔드 개발', '대용량 트래픽 서비스 개발']
+        });
+        const userData = {
+            profile: {
+                email: data.email,
+                age: data.age,
+                gender: data.gender,
+                nickname: data.nickname,
+            },
+            role: data.role,
+            searchAllow: true,
+            menteeInfo: mentee._id,
+            mentorInfo: mentor._id,
+        };
+        const user = await User.create(userData);
+        return user;
+    } catch(err) {
+        logger.error(err.stack);
+        throw Error(err);
+    }
+}
+
+exports.findUserByNickname = async (nickname) => {
+    try {
+        return await User.findByNickname(nickname)
+    } catch(err) {
+        logger.error(err.stack);
+        throw Error(err);
+    }
+}
+
+exports.findUserByEmailWithMenteeInfo = async (email) => {
+    try {
+        return await User.findByEmailWithMenteeInfo(email)
+    } catch (err) {
+        logger.error(err.stack);
+        throw Error(err);
+    }
+}
 
 // Mentee
 exports.createMentee = async (data) => {

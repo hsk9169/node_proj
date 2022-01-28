@@ -18,7 +18,13 @@ router.get('/change', [clientLogger.getHostname, authChecker.check],
 // Find user by mentee phone
 router.post('/phone', clientLogger.getHostname, userController.postUserByPhone);
 
+// Test DB
+router.get('/nickname', clientLogger.getHostname, userController.getUserByNickname);
+router.get('/menteeinfo', clientLogger.getHostname, userController.getUserByEmailWithMenteeInfo);
+
 // Find user by mentee nickname
-router.post('/nickname', clientLogger.getHostname, userController.postUserByNickname);
+//router.post('/nickname', clientLogger.getHostname, userController.postUserByNickname);
+
+router.post('/', clientLogger.getHostname, userController.postUser);
 
 module.exports = router;

@@ -5,7 +5,70 @@ const imgLoader = require('../middlewares/imgLoader');
 const multer = require('multer');
 const { read } = require('../config/winston');
 
-// Common
+// DB test
+exports.postUser = async (req, res) => {
+    logger.info('POST /users')
+    await userService.createUser(req.body)
+        .then(user => {
+            if (user) {
+                logger.info('user account created')
+                logger.info(user)
+                res.json(user)
+            } else {
+                logger.info('failed adding user account');
+                res.status(400).send('failed adding user');
+            }
+        })
+        .catch(err => {
+            logger.error('POST /users');
+            logger.error(err.stack);
+            res.status(500).send(err);
+        })
+}
+
+exports.getUserByNickname = async (req, res, next) => {
+    logger.info('GET /users/nickname')
+    console.log(req.body.nickname)
+    await userService.findUserByNickname(req.body.nickname)
+        .then(user => {
+            if (user) {
+                logger.info('user account found')
+                logger.info(user)
+                res.json(user)
+            } else {
+                logger.info('failed adding user account');
+                res.status(400).send('failed adding user');
+            }
+        })
+        .catch(err => {
+            logger.error('GET /users/nickname');
+            logger.error(err.stack);
+            res.status(500).send(err);
+        })
+}
+
+exports.getUserByEmailWithMenteeInfo = async (req, res, next) => {
+    logger.info('GET /users/menteeinfo')
+    await userService.findUserByEmailWithMenteeInfo(req.body.email)
+        .then(user => {
+            console.log(user)
+            if (user) {
+                logger.info('user account found')
+                logger.info(user)
+                res.json(user)
+            } else {
+                logger.info('failed adding user account');
+                res.status(400).send('failed adding user');
+            }
+        })
+        .catch(err => {
+            logger.error('GET /users/menteeinfo');
+            logger.error(err.stack);
+            res.status(500).send(err);
+        })
+}
+
+// Original
 exports.getUserByEmail = async (req, res, next) => {
     logger.info('GET /users/email');
     let found = false;
