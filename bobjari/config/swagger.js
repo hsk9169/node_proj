@@ -5,7 +5,7 @@ let url;
 const env = process.argv[2];
 
 if(env == 'ec2') {
-    url = 'http://ec2-3-17-139-14.us-east-2.compute.amazonaws.com:8000';
+    url = 'http://ec2-3-138-140-195.us-east-2.compute.amazonaws.com:8000';
 } else {
     url = 'http://localhost:8000';
 }
@@ -14,7 +14,7 @@ const swaggerDefinition = {
     openapi: '3.0.0',
     info: {
         title: '밥자리 API', 
-        version: '1.0.0',
+        version: '1.0.1',
         description: '밥자리 API with Express',
         license: {
             name: 'Licensed Under MIT',

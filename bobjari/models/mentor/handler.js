@@ -68,4 +68,4 @@ mentorSchema.statics.findOneByEmailAndToggleAllowSearch = async function(target,
 
 // Create Model & Export
 module.exports = 
-    mongoose.config_conn.model('Mentor', mentorSchema);
+    mongoose.admin_conn.model('Mentor', mentorSchema);

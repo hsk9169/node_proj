@@ -20,4 +20,4 @@ userSchema.statics.findByEmailWithMenteeInfo = function (email) {
 }
 
 module.exports = 
-    mongoose.config_conn.model('User', userSchema);
+    mongoose.admin_conn.model('User', userSchema);

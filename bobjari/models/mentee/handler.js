@@ -59,4 +59,4 @@ menteeSchema.statics.findOneByNickname = function (target) {
 };
 
 module.exports = 
-    mongoose.config_conn.model('Mentee', menteeSchema);
+    mongoose.admin_conn.model('Mentee', menteeSchema);

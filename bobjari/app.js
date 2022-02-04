@@ -60,12 +60,12 @@ try {
     logger.error(err.stack)
 }
 
-try {
-    mongoose.config_conn = mongoose.createConnection(config.mongo_uri_config, options)
-    logger.info('config DB connected successfully!')
-} catch(err) {
-    logger.error(err.stack)
-}
+//try {
+//    mongoose.config_conn = mongoose.createConnection(config.mongo_uri_config, options)
+//    logger.info('config DB connected successfully!')
+//} catch(err) {
+//    logger.error(err.stack)
+//}
 
 
 // Routers

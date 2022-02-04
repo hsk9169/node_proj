@@ -6,6 +6,10 @@ let menteeSchema = {
         required: true,
         default: Date.now,
     },
+    lastVisited: {
+        type: Date,
+        required: true,
+    },
     interests: [String],
 };
 

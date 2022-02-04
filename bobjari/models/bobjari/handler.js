@@ -58,4 +58,5 @@ menteeModel.statics.findOneByNickname = function (target) {
 };
 
 // Create Model & Export
-module.exports = mongoose.admin_conn.model('Mentee', menteeModel);
+module.exports = 
+    mongoose.admin_conn.model('Mentee', menteeModel);

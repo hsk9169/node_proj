@@ -2,7 +2,7 @@ const { data } = require('../config/winston');
 const logger = require('../config/winston');
 const menteeModel = require('../models/mentee/handler');
 const mentorModel = require('../models/mentor/handler');
-const User = require('../models/userCommon/handler');
+const userModel = require('../models/userCommon/handler');
 const config = require('../config/index');
 const crypto = require('crypto');
 
@@ -32,7 +32,7 @@ exports.createUser = async (data) => {
             menteeInfo: mentee._id,
             mentorInfo: mentor._id,
         };
-        const user = await User.create(userData);
+        const user = await userModel.create(userData);
         return user;
     } catch(err) {
         logger.error(err.stack);
@@ -42,7 +42,7 @@ exports.createUser = async (data) => {
 
 exports.findUserByNickname = async (nickname) => {
     try {
-        return await User.findByNickname(nickname)
+        return await userModel.findByNickname(nickname)
     } catch(err) {
         logger.error(err.stack);
         throw Error(err);
@@ -51,7 +51,7 @@ exports.findUserByNickname = async (nickname) => {
 
 exports.findUserByEmailWithMenteeInfo = async (email) => {
     try {
-        return await User.findByEmailWithMenteeInfo(email)
+        return await userModel.findByEmailWithMenteeInfo(email)
     } catch (err) {
         logger.error(err.stack);
         throw Error(err);
