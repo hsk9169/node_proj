@@ -8,8 +8,6 @@ const clientLogger = require('../../middlewares/clientLogger');
 
 router.get('/', clientLogger.getHostname, userController.getMentors);
 
-router.post('/create', clientLogger.getHostname, userController.postMentor);
-
 router.get('/searchAllow', [clientLogger.getHostname, authChecker.check], 
             userController.updateMentorAllowSearch);
 

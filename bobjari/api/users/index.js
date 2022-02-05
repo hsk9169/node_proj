@@ -4,27 +4,36 @@ const userController = require('../../controllers/user');
 const clientLogger = require('../../middlewares/clientLogger');
 
 
-router.use('/mentee', require('./mentee.js'));
+router.use('/mentee', 
+            require('./mentee'));
+router.use('/mentor', 
+            require('./mentor'));
 
-router.use('/mentor', require('./mentor.js'));
+// Create User
+router.post('/', 
+            clientLogger.getHostname, 
+            userController.postUser);
 
-// Find user by mentee email
-router.get('/email', clientLogger.getHostname, userController.getUserByEmail);
+// Check Dupliation of Nickname
+router.get('/nickname', 
+            clientLogger.getHostname, 
+            userController.getUserByNickname);
+
+// Find user by email
+router.get('/email', 
+            clientLogger.getHostname, 
+            userController.getUserByEmailWithDetails);
 
 // Change Role between mentor & mentee
-router.get('/change', [clientLogger.getHostname, authChecker.check], 
+router.get('/change', 
+            [clientLogger.getHostname, authChecker.check], 
             userController.changeUserRole)
 
 // Find user by mentee phone
-router.post('/phone', clientLogger.getHostname, userController.postUserByPhone);
+router.post('/phone', 
+            clientLogger.getHostname, 
+            userController.postUserByPhone);
 
-// Test DB
-router.get('/nickname', clientLogger.getHostname, userController.getUserByNickname);
-router.get('/menteeinfo', clientLogger.getHostname, userController.getUserByEmailWithMenteeInfo);
 
-// Find user by mentee nickname
-//router.post('/nickname', clientLogger.getHostname, userController.postUserByNickname);
-
-router.post('/', clientLogger.getHostname, userController.postUser);
 
 module.exports = router;

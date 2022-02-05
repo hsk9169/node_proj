@@ -2,35 +2,86 @@ const { data } = require('../config/winston');
 const logger = require('../config/winston');
 const menteeModel = require('../models/mentee/handler');
 const mentorModel = require('../models/mentor/handler');
+const profileImageModel = require('../models/profileImage/handler')
+const authImageModel = require('../models/authImage/handler')
 const userModel = require('../models/userCommon/handler');
 const config = require('../config/index');
 const crypto = require('crypto');
 
 // User
-exports.createUser = async (data) => {
+exports.createUser = async (data, files) => {
     try {
-        const mentor = await mentorModel.create({
-            preference: {
-                fee: {
-                    select: 1,
-                    value: '10000'
+        let authImage, mentee, mentor, profileImage
+        try {
+            authImage = await authImageModel.create({
+                data: (files.auth!==null ?
+                    files.auth.buffer : null),
+                contentType: (files.auth!==null ?
+                    files.auth.mimetype : ''),
+            })
+        } catch {
+            authImage = await authImageModel.create()
+        }
+
+        try {
+            mentor = await mentorModel.create({
+                career: {
+                    job:        data.job,
+                    company:    data.company,
+                    years:      data.years,
+                    topics:     data.topics,
+                    auth: {
+                        method: data.authSelect,
+                        isAuth: data.isAuth,
+                        file: authImage._id,
+                    },
+                    title:      data.title,
+                    introduce:  data.introduce,
+                    hashtags: [],
+                },
+                preference: {
+                    schedule:   data.schedules,
+                    location:   data.cafes,
+                    fee: {
+                        select: data.feeSelect,
+                        value:  data.fee,
+                    }
                 }
-            }
-        });
-        const mentee = await menteeModel.create({
-            interests: ['백엔드 개발', '대용량 트래픽 서비스 개발']
-        });
+            });
+        } catch {
+            mentor = await mentorModel.create()
+        }
+
+        try {
+            mentee = await menteeModel.create({
+                interests: data.interests,
+            });
+        } catch {
+            mentee = await menteeModel.create()
+        }
+
+        try {
+            profileImage = await profileImageModel.create({
+                data: (files.img!==null ?
+                    files.img.buffer : data.img),
+                contentType: (files.img!==null ?
+                    files.img.mimetype : 'url'),
+            })
+        } catch {
+            profileImage = await profileImageModel.create()
+        }
+
         const userData = {
             profile: {
-                email: data.email,
-                age: data.age,
-                gender: data.gender,
-                nickname: data.nickname,
+                email:      data.email,
+                age:        data.age,
+                gender:     data.gender,
+                nickname:   data.nickname,
             },
             role: data.role,
-            searchAllow: true,
-            menteeInfo: mentee._id,
-            mentorInfo: mentor._id,
+            mentee: mentee._id,
+            mentor: mentor._id,
+            profileImage: profileImage._id,
         };
         const user = await userModel.create(userData);
         return user;
@@ -49,23 +100,12 @@ exports.findUserByNickname = async (nickname) => {
     }
 }
 
-exports.findUserByEmailWithMenteeInfo = async (email) => {
+exports.getUserByEmailWithDetails = async (email) => {
     try {
-        return await userModel.findByEmailWithMenteeInfo(email)
-    } catch (err) {
-        logger.error(err.stack);
-        throw Error(err);
-    }
-}
-
-// Mentee
-exports.createMentee = async (data) => {
-    try {
-        const profile = await menteeModel.create(data);
-        return profile;
-    } catch(err) { 
-        logger.error(err.stack);
-        throw Error(err);
+        return await userModel.findByEmailWithDetails(email)
+    } catch(err) {
+        logger.error(err.stack)
+        throw Error(err)
     }
 }
 
@@ -73,16 +113,6 @@ exports.getMentees = async () => {
     try {
         let data = await menteeModel.findAll();
         return data;
-    } catch(err) {
-        logger.error(err.stack);
-        throw Error(err);
-    }
-}
-
-exports.getMenteeByEmail = async(email) => {
-    try {
-        let ret = await menteeModel.findOneByEmail(email);
-        return ret;
     } catch(err) {
         logger.error(err.stack);
         throw Error(err);
@@ -100,51 +130,10 @@ exports.updateMenteeRole = async (email, curState) => {
     }
 }
 
-exports.getMenteeByPhone = async(phone) => {
-    try {
-        let ret = await menteeModel.findOneByPhone(phone);
-        return ret;
-    } catch(err) {
-        logger.error(err.stack);
-        throw Error(err);
-    }
-}
-
-exports.getMenteeByNickname = async (nickname) => {
-    try {
-        let ret = await menteeModel.findOneByNickname(nickname);
-        return ret;
-    } catch(err) {
-        logger.error(err.stack);
-        throw Error(err);
-    }
-}
-
-// Mentor
-exports.createMentor = async (data) => {
-    try {
-        const profile = await mentorModel.create(data);
-        return profile;
-    } catch(err) { 
-        logger.error(err.stack);
-        throw Error(err);
-    }
-}
-
 exports.getMentors = async (keyword, startIdx, num) => {
     try {
-        let data = await mentorModel.findAll(keyword, startIdx, num);
+        let data = await userModel.findAll(keyword, startIdx, num);
         return data;
-    } catch(err) {
-        logger.error(err.stack);
-        throw Error(err);
-    }
-}
-
-exports.getMentorByEmail = async(email) => {
-    try {
-        let ret = await mentorModel.findOneByEmail(email);
-        return ret;
     } catch(err) {
         logger.error(err.stack);
         throw Error(err);
@@ -155,16 +144,6 @@ exports.updateMentorRole = async (email, curState) => {
     try {
         // Update role by swapping
         let ret = await mentorModel.findOneByEmailAndUpdateRole(email, curState);
-        return ret;
-    } catch(err) {
-        logger.error(err.stack);
-        throw Error(err);
-    }
-}
-
-exports.getMentorByPhone = async (phone) => {
-    try {
-        let ret = await mentorModel.findOneByPhone(phone);
         return ret;
     } catch(err) {
         logger.error(err.stack);
@@ -190,15 +169,5 @@ exports.updateMentorAllowSearch = async (email, curState) => {
     } catch(err) {
         logger.error(err.stack);
         throw Error(err);
-    }
-}
-
-exports.getMentorLength = async () => {
-    try {
-        let ret = await mentorModel.count();
-        return ret
-    } catch(err) {
-        logger.error(err.stack);
-        throw Error(err)
     }
 }

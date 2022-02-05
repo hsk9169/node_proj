@@ -5,39 +5,73 @@ const imgLoader = require('../middlewares/imgLoader');
 const multer = require('multer');
 const { read } = require('../config/winston');
 
-// DB test
+// Create User
 exports.postUser = async (req, res) => {
     logger.info('POST /users')
-    await userService.createUser(req.body)
-        .then(user => {
-            if (user) {
-                logger.info('user account created')
-                logger.info(user)
-                res.json(user)
-            } else {
-                logger.info('failed adding user account');
-                res.status(400).send('failed adding user');
+    imgLoader.uploadFiles(req, res, err => {
+        let files = {img: null, auth: null}
+        if (err instanceof multer.MulterError) {
+            logger.error(err)
+            res.status(400).send('file uploading failed')
+        } else {
+            logger.info('body found')
+            let data = {}
+            if (req.files) {
+                req.files.map(el => {
+                    if (el.fieldname === 'img') {
+                        files.img = el
+                        logger.info('image file found')
+                    } else if (el.fieldname === 'auth') {
+                        files.auth = el
+                        logger.info('auth file found')
+                    }
+                })
             }
-        })
-        .catch(err => {
-            logger.error('POST /users');
-            logger.error(err.stack);
-            res.status(500).send(err);
-        })
+            Object.keys(req.body).forEach(key => {
+                if (key !== 'auth') {
+                    data[key] = JSON.parse(req.body[key])
+                }
+            })
+            logger.info('profile data')
+            logger.info(JSON.stringify(data, null, 2))
+
+            userService.createUser(data, files)
+                .then(user => {
+                    if (user) {
+                        logger.info('user account created')
+                        logger.info(user)
+                        res.redirect(url.format({
+                            pathname: '/api/users/email',
+                            query: {
+                                email: user.profile.email,
+                            }
+                        }))
+                    } else {
+                        logger.info('failed adding user account');
+                        res.status(400).send('failed adding user');
+                    }
+                })
+                .catch(err => {
+                    logger.error('POST /users');
+                    logger.error(err.stack);
+                    res.status(500).send(err);
+                })
+        }
+    })
 }
 
+// Check if Nickname Duplicates
 exports.getUserByNickname = async (req, res, next) => {
     logger.info('GET /users/nickname')
-    console.log(req.body.nickname)
-    await userService.findUserByNickname(req.body.nickname)
+    const nickname = req.query.nickname
+    await userService.findUserByNickname(nickname)
         .then(user => {
             if (user) {
-                logger.info('user account found')
-                logger.info(user)
-                res.json(user)
+                logger.info('user account found : ' + nickname)
+                res.status(200).send('duplicates')
             } else {
-                logger.info('failed adding user account');
-                res.status(400).send('failed adding user');
+                logger.info('no user account found : ' + nickname);
+                res.status(200).send('available');
             }
         })
         .catch(err => {
@@ -47,43 +81,18 @@ exports.getUserByNickname = async (req, res, next) => {
         })
 }
 
-exports.getUserByEmailWithMenteeInfo = async (req, res, next) => {
-    logger.info('GET /users/menteeinfo')
-    await userService.findUserByEmailWithMenteeInfo(req.body.email)
+// Find User by Email and Return
+exports.getUserByEmailWithDetails = async (req, res, next) => {
+    logger.info('GET /users/email');
+    const email = req.query.email
+    await userService.getUserByEmailWithDetails(email)
         .then(user => {
-            console.log(user)
             if (user) {
-                logger.info('user account found')
-                logger.info(user)
+                logger.info('user account found : ' + email);
                 res.json(user)
             } else {
-                logger.info('failed adding user account');
-                res.status(400).send('failed adding user');
-            }
-        })
-        .catch(err => {
-            logger.error('GET /users/menteeinfo');
-            logger.error(err.stack);
-            res.status(500).send(err);
-        })
-}
-
-// Original
-exports.getUserByEmail = async (req, res, next) => {
-    logger.info('GET /users/email');
-    let found = false;
-    await userService.getMenteeByEmail(req.query.email)
-        .then(mentee => {
-            if (mentee) {
-                logger.info('mentee account found');
-                if (mentee.roleInfo.isActivated) {
-                    res.json(mentee);
-                    found = true;
-                } else {
-                    logger.info('inactivated as mentee');
-                }
-            } else {
-                logger.info('no mentee account found');
+                logger.info('no user account found : ' + email)
+                res.status(200).send('no user found')
             }
         })
         .catch(err => {
@@ -91,28 +100,6 @@ exports.getUserByEmail = async (req, res, next) => {
             logger.error(err.stack);
             res.status(400).send(err);
         });
-    if (!found) {
-        await userService.getMentorByEmail(req.query.email)
-            .then(mentor => {
-                if (mentor) {
-                    logger.info('mentor account found');
-                    if (mentor.roleInfo.isActivated) {
-                        res.json(mentor)
-                    } else {
-                        logger.info('inactivated as mentor');
-                    }
-                } else {
-                    logger.info('no mentor account found');
-                    logger.info('no user account found');
-                    res.status(204).send('no account found'); 
-                }
-            })
-            .catch(err => {
-                logger.error('GET /users/email');
-                logger.error(err.stack);
-                res.status(400).send(err);
-            });
-    }
 }
 
 exports.changeUserRole = async (req, res, next) => {
@@ -188,153 +175,6 @@ exports.postUserByPhone = async (req, res, next) => {
         });
 }        
 
-exports.postUserByNickname = async (req, res, next) => {
-    logger.info('POST /users/nickname');
-    await userService.getMenteeByNickname(req.body.nickname)
-        .then((mentee) => {
-            if(mentee) {
-                logger.info('mentee nickname duplicates');
-                res.status(200).send('duplicated');
-            } else {                
-                logger.info('no duplicated mentee nickname');
-                userService.getMentorByNickname(req.body.nickname)
-                    .then((mentor) => {
-                        if(mentor) {
-                            logger.info('mentor nickname duplicates');
-                            res.status(200).send('duplicated');
-                        } else {
-                            logger.info('no duplicated mentor nickname');
-                            res.status(200).send('available');
-                        }
-                    })            
-            }
-        })
-        .catch(err => {
-            logger.error('POST /users/mentee/nickname');
-            logger.error(err.stack);
-            res.status(500).send(err);
-        });
-}
-
-
-// Mentee
-exports.postMentee = async (req, res) => {
-    logger.info('POST /users/mentee/create');
-    imgLoader.uploadFiles(req, res, (err) => {
-        let imgFile = null;
-        if (err instanceof multer.MulterError) {
-            logger.error(err);
-            res.status(400).send('max image file size 50MB exceeded');
-        } else {
-            let data = {};
-            if (req.files) {
-                req.files.map(el => {
-                    if (el.fieldname === 'img') {
-                        imgFile = el;
-                    }
-                })
-                logger.info('img file found')
-                logger.info(imgFile)
-            }
-            console.log(req.body)
-            Object.keys(req.body).forEach(key => {
-                data[key] = JSON.parse(req.body[key])
-            })
-            logger.info('profile data')
-            logger.info(JSON.stringify(data, null, 2))
-            userService.createMentor({
-                userInfo: {
-                    email: data.email,
-                    age: data.age,
-                    gender: data.gender,
-                    nickname: data.nickname,
-                },
-                roleInfo: {
-                    role: 'mentor',
-                    isActivated: false,
-                },
-                searchAllow: false,
-                careerInfo: {
-                    job: [],
-                    compnay: [],
-                    years: '',
-                    topics: [],
-                    auth: {
-                        metnod: '',
-                        isAuth: null,
-                        file: {
-                            data: null,
-                            contentType: '',
-                        }
-                    },
-                    title: '',
-                    introduce: '',
-                    hashtags: []
-                },
-                appointment: {
-                    schedules: [],
-                    locations: [],
-                    fee: {
-                        select: null,
-                        value: '',
-                    },
-                },
-                profileImg: {
-                    data: (imgFile!==null ? imgFile.buffer : data.img),
-                    contentType: (imgFile!==null ? imgFile.mimetype : 'url'),
-                },
-            })
-            .then(mentor => {
-                if(mentor) {
-                    logger.info('mentor account added');
-                    logger.info(mentor)
-                } else {
-                    logger.info('failed adding mentor account');
-                    res.status(400).send('failed adding mentor');
-                }
-            })
-            .catch(err => {
-                logger.error('GET /users/mentee/email');
-                logger.error(err.stack);
-                res.status(500).send(err);
-            });
-            userService.createMentee({
-                userInfo: {
-                    email: data.email,
-                    age: data.age,
-                    gender: data.gender,
-                    nickname: data.nickname,
-                },
-                roleInfo: {
-                    role: 'mentee',
-                    isActivated: true,
-                },
-                interests: data.interests,
-                profileImg: {
-                    data: (imgFile!==null ? imgFile.buffer : data.img),
-                    contentType: (imgFile!==null ? imgFile.mimetype : 'url'),
-                },
-            }) 
-            .then(mentee => {
-                if(mentee) {
-                    logger.info('mentee account added');
-                    logger.info(mentee)
-                    res.json(mentee);
-                } else {
-                    logger.info('failed adding mentee account');
-                    res.status(400).send('failed adding mentee');
-                }
-            })
-            .catch(err => {
-                logger.error('GET /users/mentee/email');
-                logger.error(err.stack);
-                res.status(500).send(err);
-            });
-        } 
-        
-    });
-}
-
 exports.getMentees = async (req, res, next) => {
     logger.info('GET /users/mentee');
     
@@ -357,128 +197,6 @@ exports.getMentees = async (req, res, next) => {
         });
 }
 
-
-// Mentor
-exports.postMentor = async (req, res) => {
-    logger.info('POST /users/mentor/create');
-    imgLoader.uploadFiles(req, res, (err) => {
-        let imgFile = null, authFile = null;
-        if (err instanceof multer.MulterError) {
-            logger.error(err);
-            res.status(400).send('max image file size 50MB exceeded');
-        } else {
-            logger.info('body found');
-            let data = {};
-            if (req.files) {
-                req.files.map(el => {
-                    if (el.fieldname === 'img') {
-                        imgFile = el;
-                        logger.info('img file found')
-                    } else if (el.fieldname === 'auth') {
-                        authFile = el;
-                        logger.info('auth file found')
-                    }
-                })
-            }
-            Object.keys(req.body).forEach(key => {
-                if (key !== 'auth') {
-                    data[key] = JSON.parse(req.body[key])
-                }
-            })
-            logger.info('profile data')
-            logger.info(JSON.stringify(data, null, 2))
-            userService.createMentee({
-                userInfo: {
-                    email: data.email,
-                    age: data.age,
-                    gender: data.gender,
-                    nickname: data.nickname,
-                },
-                roleInfo: {
-                    role: 'mentee',
-                    isActivated: false,
-                },
-                interests: null,
-                profileImg: {
-                    data: (imgFile!==null ? imgFile.buffer : data.img),
-                    contentType: (imgFile!==null ? imgFile.mimetype : 'url'),
-                },
-            })
-            .then(mentee => {
-                if(mentee) {
-                    logger.info('mentee account added');
-                    logger.info(mentee)
-                } else {
-                    logger.info('failed adding mentee account');
-                    res.status(400).send('failed adding mentee');
-                }
-            })
-            .catch(err => {
-                logger.error('GET /users/mentor/email');
-                logger.error(err.stack);
-                res.status(500).send(err);
-            });
-            userService.createMentor({
-                userInfo: {
-                    email: data.email,
-                    age: data.age,
-                    gender: data.gender,
-                    nickname: data.nickname,
-                },
-                roleInfo: {
-                    role: 'mentor',
-                    isActivated: true,
-                },
-                searchAllow: true,
-                careerInfo: {
-                    job: data.job,
-                    company: data.company,
-                    years: data.years,
-                    topics: data.topics,
-                    auth: {
-                        method: data.authSelect,
-                        isAuth: data.isAuth,
-                        file: {
-                            data: (authFile!==null ? authFile.buffer : null),
-                            contentType: (authFile!==null ? authFile.mimetype : ''),
-                        }
-                    },
-                    introduce: data.introduce,
-                    title: data.title,
-                    hashtags: null,
-                },
-                appointment: {
-                    schedules: data.schedules,
-                    locations: data.cafes,
-                    fee: {
-                        select: data.feeSelect,
-                        value: data.fee,
-                    },
-                },
-                profileImg: {
-                    data: (imgFile!==null ? imgFile.buffer : data.img),
-                    contentType: (imgFile!==null ? imgFile.mimetype : 'url'),
-                },
-            }) 
-            .then((mentor) => {
-                if(mentor) {
-                    logger.info('mentor account added');
-                    logger.info(mentor);
-                    res.json(mentor);
-                } else {
-                    logger.info('failed adding mentor account');
-                    res.status(400).send('failed adding mentor');
-                }
-            })
-            .catch(err => {
-                logger.error('GET /users/mentor/email');
-                logger.error(err.stack);
-                res.status(500).send(err);
-            });
-        }
-    });
-}
-
 exports.getMentors = async (req, res, next) => {
     logger.info('GET /users/mentor');
     let keyword = null, startIdx = null, num = null;
@@ -489,7 +207,7 @@ exports.getMentors = async (req, res, next) => {
         startIdx === undefined ||
         num === undefined) {
         logger.info('invalid query parameter')
-        return res.status(204).send('invalid query parameter');
+        return res.status(400).send('invalid query parameter');
     } else {
         logger.info('keyword: ' + keyword + ' , startIdx: ' + startIdx + ' , num: ' + num)
         await userService.getMentors(keyword, startIdx, num)

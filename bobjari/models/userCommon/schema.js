@@ -33,19 +33,19 @@ let userSchema = {
     },
     searchAllow: {
         type: Boolean,
-        required: true,
+        default: true,
     },
-    menteeInfo: {
+    mentee: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Mentee',
     },
-    mentorInfo: {
+    mentor: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Mentor'
     },
     profileImage: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Images'
+        ref: 'ProfileImage'
     },
 };
 

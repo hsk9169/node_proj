@@ -8,6 +8,6 @@ router.use('/users', require('./users/index'));
 
 router.use('/auths', require('./auths/index'));
 
-router.use('/sign', require('./sign'));
+router.use('/signin', require('./signin'));
 
 module.exports = router;

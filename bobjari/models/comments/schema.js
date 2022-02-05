@@ -13,6 +13,7 @@ let commentSchema = {
     body: {
         type: String,
         maxLength: 100,
+        default: null,
     },
 }
 

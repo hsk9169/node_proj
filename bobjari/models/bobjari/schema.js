@@ -11,7 +11,10 @@ const appointmentModel = new mongoose.Schema({
         required: true,
         default: Date.now,
     },
-    apmtId: Number,
+    apmtId: {
+        type: Number,
+        default: null,
+    },
 }, { collection: 'appointmentinfos'} );
 
 module.exports = appointmentModel;

@@ -17,10 +17,12 @@ let reviewSchema = {
     title: {
         type: String,
         maxLength: 30,
+        default: null,
     },
     body: {
         type: String,
         maxLength: 300,
+        default: null,
     },
 }
 

@@ -5,8 +5,7 @@ const userService = require('../services/user');
 const config = require('../config/index');
 
 exports.signInKakao = async (req, res, next) => {
-    logger.info('POST /sign/in/kakao');
-
+    logger.info('POST /signin/kakao');
     res.redirect(url.format({
         pathname: '/api/users/email',
         query: {
@@ -16,24 +15,11 @@ exports.signInKakao = async (req, res, next) => {
 }
 
 exports.signInBob = async (req, res, next) => {
-    logger.info('POST /sign/in/bob');
+    logger.info('POST /signin/bob');
     res.redirect(url.format({
         pathname: '/api/users/email',
         query: {
             email: req.body.email,
-        }
-    }));
-}
-
-exports.signInTest = async(req, res, next) => {
-    logger.info('GET /test/jwt');
-    console.log(req.decoded);
-
-    // determine if Email / Phone sign in
-    res.redirect(url.format({
-        pathname: '/api/users/email',
-        query: {
-            email: req.decoded.email,
         }
     }));
 }
