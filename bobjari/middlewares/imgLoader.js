@@ -9,25 +9,16 @@ const storage = multer.diskStorage({
     }
 });
 
-exports.uploadImage = multer({
-    fileFilter: function (req, file, cb) {
-        const ext = path.extname(file.originalname);
-        if (ext !== '.png' && ext !== '.jpg' && ext !== '.gif' && ext !== '.jpeg') {
-            cb(new Error('Only images are allowed'), false);
-        }
-        cb(null, true);
-    },
-    limits: { fileSize: 500 * 1024 * 1024 }
-}).single('img');
-
 exports.uploadFiles = multer({
     fileFilter: function (req, file, cb) {
-        logger.info('file', file)
         const ext = path.extname(file.originalname);
         if (ext !== '.png' && ext !== '.jpg' && ext !== '.gif' && ext !== '.jpeg') {
             cb(new Error('Only images are allowed'), false);
         }
         cb(null, true);
     },
-    limits: { fileSize: 500 * 1024 * 1024 }
-}).any();
+    limits: { fileSize: 30 * 1024 },
+}).fields([
+    {name: 'img', maxCount: 1},
+    {name: 'auth', maxCount: 1}
+]);

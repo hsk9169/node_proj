@@ -10,9 +10,20 @@ const mentorSchema = {
     //    type: Date,
     //    required: true,
     //},
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: [true, 'User must be included'],
+    },
     career: {
-        job: [String],
-        company: [String],
+        job: {
+            type: String,
+            default: null,
+        },
+        company: {
+            type: String,
+            default: null,
+        },
         years: {
             type: Number,
             default: null,
@@ -27,60 +38,17 @@ const mentorSchema = {
                 type: Boolean,
                 default: false,
             },
-            file: {
-                type: mongoose.Schema.Types.ObjectId,
-                ref: 'AuthImage',
-            },
-        },
-        title: {
-            type: String,
-            maxLength: 30,
-            default: null,
-        },
-        introduce: {
-            type: String,
-            maxLength: 300,
-            default: null,
-        },
-        hashtags: [String],
-    },
-    preference: {
-        schedule: [
-            {
-                day: String,
-                startTime: String,
-                endTime: String,
-            }
-        ],
-        location: [
-            {
-                place_name: String,
-                address_name: String,
-                road_address_name: String,
-                category_group_name: String,
-                content_id: String,
-                place_url: String,
-                phone: String,
-                geolocation: {
-                    x: String,
-                    y: String,
-                    distance: String,
-                }
-            }
-        ],
-        fee: {
-            select: {
-                type: Number,
-                default: null,
-            },
-            value: {
-                type: String,
-                default: '0',
-            },
         },
     },
+    title: {
+        type: String,
+        maxLength: 30,
+        default: null,
+    },
+    hashtags: [String],
 };
 
 module.exports = new mongoose.Schema(
-    mentorSchema, { collection: 'mentorinfo' } 
+    mentorSchema, 
+    {toJSON: {virtuals: true}, toObject: {virtuals: true}}
 );

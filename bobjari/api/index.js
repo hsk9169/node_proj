@@ -4,10 +4,18 @@ const signController = require('../controllers/sign');
 const clientLogger = require('../middlewares/clientLogger');
 
 
-router.use('/users', require('./users/index'));
+router.use('/user', require('./user'))
 
-router.use('/auths', require('./auths/index'));
+router.use('/mentee', require('./mentee'))
 
-router.use('/signin', require('./signin'));
+router.use('/mentor', require('./mentor'))
 
-module.exports = router;
+router.use('/auth', require('./auth'))
+
+router.use('/signin', require('./signin'))
+
+router.use('/bobjari', require('./bobjari'))
+
+router.use('/like', require('./like'))
+
+module.exports = router

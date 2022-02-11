@@ -20,6 +20,10 @@ const config = {
         real: process.env.REAL_CLIENT_HOSTNAME,
     },
     secret: "ThIsIsSeCrEtKeYfOrEnCrYpT",
+    telegram: {
+        uri: process.env.TELEGRAM_URI,
+        chatId: process.env.TELEGRAM_CHAT_ID,
+    },
 }
 
 module.exports = config;

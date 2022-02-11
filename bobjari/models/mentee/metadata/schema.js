@@ -1,23 +1,20 @@
-let mongoose = require('mongoose')
+const mongoose = require('mongoose')
 
-let commentSchema = {
+const menteeMetaSchema = {
     updated: {
         type: Date,
         required: true,
         default: Date.now,
     },
-    targetId: {
+    mentee: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'review',
+        ref: 'User',
+        required: [true, 'Mentee ID must be included']
     },
-    body: {
-        type: String,
-        maxLength: 100,
-        default: null,
-    },
+    searchKeyword: [String],
 }
 
 module.exports = new mongoose.Schema(
-    commentSchema,
+    menteeMetaSchema,
     {toJSON: {virtuals: true}, toObject: {virtuals: true}}
 )

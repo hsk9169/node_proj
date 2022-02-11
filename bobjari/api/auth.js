@@ -1,7 +1,7 @@
 const router = require('express').Router();
-const authController = require('../../controllers/auth');
-const authChecker = require('../../middlewares/authChecker');
-const clientLogger = require('../../middlewares/clientLogger');
+const authController = require('../controllers/auth');
+const authChecker = require('../middlewares/authChecker');
+const clientLogger = require('../middlewares/clientLogger');
 
 
 router.post('/kakao', authController.authKakao);

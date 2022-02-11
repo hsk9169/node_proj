@@ -30,25 +30,24 @@ let userSchema = {
             required: true,
             unique: true,
         },
+        image: {
+            data: {
+                type: mongoose.Schema.Types.Mixed,
+                required: true,
+            },
+            contentType: {
+                type: String,
+                required: true,
+            },
+        }
     },
     searchAllow: {
         type: Boolean,
         default: true,
     },
-    mentee: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Mentee',
-    },
-    mentor: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Mentor'
-    },
-    profileImage: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'ProfileImage'
-    },
 };
 
 module.exports = new mongoose.Schema(
-    userSchema, { collections: 'user' }
+    userSchema,
+    {toJSON: {virtuals: true}, toObject: {virtuals: true}}
 );

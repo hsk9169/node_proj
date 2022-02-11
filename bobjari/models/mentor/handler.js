@@ -1,6 +1,26 @@
 let mongoose = require('mongoose');
 let mentorSchema = require('./schema');
 
+mentorSchema.virtual('bobjari', {
+    ref: 'Bobjari',
+    foreignField: 'mentor',
+    localField: '_id',
+})
+
+mentorSchema.virtual('metadata', {
+    ref: 'MentorMeta',
+    foreignField: 'mentor',
+    localField: '_id',
+    justOne: true,
+})
+
+mentorSchema.virtual('details', {
+    ref: 'MentorDetails',
+    foreignField: 'mentor',
+    localField: '_id',
+    justOne: true,
+})
+
 //------------ Static Properties ------------//
 // Create new mentor document
 mentorSchema.statics.create = function (payload) {
@@ -10,53 +30,27 @@ mentorSchema.statics.create = function (payload) {
     return mentor.save();
 };
 
-// Find All
-mentorSchema.statics.findAll = function (keyword, startIdx, num) {
-    // return promise
+// Get Mentor User Data with Bobjari
+mentorSchema.statics.findByIdWithMeta = function (mentorId) {
+    return this.findById(mentorId)
+                .populate('details')
+                .populate('user')
+                .exec()
+}
+
+// Find By Keyword
+mentorSchema.statics.findByKeyword = function(keyword, startIdx, num) {
     const query = new RegExp(keyword, 'i');
-    return this.find( {$or: [{ 'careerInfo.company': query },
-                             { 'userInfo.nickname': query }]})
-               .where('searchAllow').equals(true)
-               .skip(Number(startIdx))
-               .limit(Number(num))
-               .exec()
+    return this.find( {'career.job': query} )
+                .skip(Number(startIdx))
+                .limit(Number(num))
+                .populate({
+                    path:'user',
+                    match: { searchAllow: true }
+                })
+                .exec();
 };
 
-// Find By mentor email
-mentorSchema.statics.findOneByEmail = function(target, cb) {
-    const query = new RegExp('^'+target+'$', 'i');
-    return this.findOne( { 'userInfo.email': query } ).exec();
-};
-
-// Update mentor role by swapping
-mentorSchema.statics.findOneByEmailAndUpdateRole = function(target, curState) {
-    const query = new RegExp('^'+target+'$', 'i');
-    return this.findOneAndUpdate( 
-        {'userInfo.email': query }, 
-        {'roleInfo.isActivated': !curState},
-        {new: true}).exec();
-}
-
-// Find By mentor phone number
-mentorSchema.statics.findOneByPhone = function(target, cb) {
-    const query = new RegExp('^'+target+'$', 'i');
-    return this.findOne( { 'userInfo.phone': query } ).exec();
-};
-
-// Find By mentor nickname
-mentorSchema.statics.findOneByNickname = function (target) {
-    const query = new RegExp('^'+target+'$', 'i');
-    return this.findOne( { 'userInfo.nickname': query } ).exec();
-};
-
-// Toggle mentor search allow flag
-mentorSchema.statics.findOneByEmailAndToggleAllowSearch = async function(target, curState) {
-    const query = new RegExp('^'+target+'$', 'i');
-    return await this.findOneAndUpdate( 
-        {'userInfo.email': query},
-        {'searchAllow': !curState},
-        {new: true}).exec();
-}
 
 // Create Model & Export
 module.exports = 

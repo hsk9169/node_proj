@@ -1,5 +1,6 @@
 const logger = require('../config/winston');
 const config = require('../config/index')
+const axios = require('axios');
 
 exports.getHostname = (req, res, next) => {
     const forwardedIpStr = 
@@ -35,11 +36,33 @@ exports.getHostname = (req, res, next) => {
     }
 
     // process the promise
-    p.then((isMine) => {
+    p.then(async (isMine) => {
         if (!isMine) {
+            const ip = ipAddress.slice(7)
             logger.warn('not my front-end client server');
-            logger.warn('IP address: ' + ipAddress);
+            logger.warn('IP address: ' + ip);
             logger.warn('User agent: ' + userAgent);
+            /*
+            await axios.get('http://ip-api.com/json/'+ip)
+                .then(res => {
+                    const r = res.data
+                    logger.warn(r.country+' '+r.regionName+' '+r.city+' '+r.isp)
+                    axios({
+                        method: 'GET',
+                        url: config.telegram.uri,
+                        params: {
+                            chat_id: config.telegram.chatId,
+                            text: 'Unknown host connection detected!\n'
+                                + 'IP Adress  : ' + ip + '\n'
+                                + 'User Agent : ' + userAgent + '\n'
+                                + r.country+' '+r.regionName+' '+r.city+' '+r.isp,
+                        }
+                    })
+                })
+                .catch(err => {
+                    console.log(err)
+                })
+            */
         } else {
             logger.info('received from my front-end client server')
         }

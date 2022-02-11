@@ -1,16 +1,22 @@
-let mongoose = require('mongoose')
+const mongoose = require('mongoose')
 
-let appointmentSchema = {
+const mentorDetailsShcema = {
     updated: {
         type: Date,
         required: true,
-        default: Date.now,
+        default: Date.now
     },
-    mentorId: {
+    mentor: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Mentor',
+        required: [true, 'Mentor ID must be included'],
     },
-    agreement: {
+    introduce: {
+        type: String,
+        maxLength: 300,
+        default: null,
+    },
+    preference: {
         schedule: [
             {
                 day: String,
@@ -44,9 +50,10 @@ let appointmentSchema = {
                 default: '0',
             },
         },
-    }
+    },
 }
 
 module.exports = new mongoose.Schema(
-    appointmentSchema, { collections: 'appointmentInfo' }
+    mentorDetailsShcema,
+    {toJSON: {virtuals: true}, toObject: {virtuals: true}}
 )

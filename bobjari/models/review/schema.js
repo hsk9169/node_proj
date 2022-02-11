@@ -27,5 +27,6 @@ let reviewSchema = {
 }
 
 module.exports = new mongoose.Schema(
-    reviewSchema, { collections: 'review' }
+    reviewSchema,
+    {toJSON: {virtuals: true}, toObject: {virtuals: true}}
 )

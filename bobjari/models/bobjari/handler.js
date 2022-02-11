@@ -1,62 +1,38 @@
 const mongoose = require('mongoose');
-const menteeSchema = require('./schema');
+const bobjariSchema = require('./schema');
 const assert = require('assert')
 
-const menteeModel = new mongoose.Schema(
-                        menteeSchema, {
-                            collection: 'menteeinfos',
-                        });
-
 //------------ Static Properties ------------//
-// Create new mentee document
-menteeModel.statics.create = function (payload) {
+// Create new bobjari document
+bobjariSchema.statics.create = function (payload) {
     // this === Model
-    const mentee = new this(payload);
+    const bobjari = new this(payload);
     // return Promise
-    return mentee.save();
-};
-
-// Find All
-menteeModel.statics.findAll = function () {
-    // return promise
-    return this.find({});
+    return bobjari.save();
 };
 
 // Find One by menteeid
-menteeModel.statics.findOneByMenteeid = function (menteeid) {
-    return this.findOne({ menteeid });
+bobjariSchema.statics.getListByMenteeId = function (menteeId) {
+    return this.find({ 'mentee': menteeId })
+                .populate('mentee')
+                .exec()
 };
 
-// Update by menteeid
-menteeModel.statics.updateByMenteeid = function (menteeid, payload) {
-    // {new: true }: return the modified document 
-    // rather than the original. defaults to false
-    return this.findOneAndUpdate({ menteeid }, payload, { new: true });
+// Find One by mentorid
+bobjariSchema.statics.getListByMentorId = function (mentorId) {
+    return this.find({ 'mentor': mentorId })
+                .populate('mentor')
+                .exec()
 };
 
-// Delete by menteeid
-menteeModel.statics.deleteByMenteeid = function (menteeid) {
-    return this.deleteOne({ menteeid });
+// Update by bobjariId
+bobjariSchema.statics.updateLevel = function (bobjariId, level) {
+    return this.findByIdAndUpdate(bobjariId, 
+                                {'level': level}, 
+                                { new: true });
 };
 
-// Find By mentee email
-menteeModel.statics.findOneByEmail = function(target, cb) {
-    const query = new RegExp('^'+target+'$', 'i');
-    return this.findOne( { 'userInfo.email': query } ).exec();
+// Delete by bobjariId
+bobjariSchema.statics.removeById = function (bobjariId) {
+    return this.findByIdAndDelete(bobjariId);
 };
-
-// Find By mentee phone number
-menteeModel.statics.findOneByPhone = function(target, cb) {
-    const query = new RegExp('^'+target+'$', 'i');
-    return this.findOne( { 'userInfo.phone': query } ).exec();
-};
-
-// Find By mentee nickname
-menteeModel.statics.findOneByNickname = function (target) {
-    const query = new RegExp('^'+target+'$', 'i');
-    return this.findOne( { 'userInfo.nickname': query } ).exec();
-};
-
-// Create Model & Export
-module.exports = 
-    mongoose.admin_conn.model('Mentee', menteeModel);

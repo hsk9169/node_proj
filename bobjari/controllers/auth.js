@@ -4,7 +4,7 @@ const authService = require('../services/auth');
 const jwt = require('jsonwebtoken');
 
 exports.authKakao = async (req, res, next) => {
-    logger.info('POST /api/auths/kakao');
+    logger.info('POST /api/auth/kakao');
     await authService.authKakao(req.body)
         .then((profile) => {
             logger.info('got kakao profile');
@@ -13,12 +13,12 @@ exports.authKakao = async (req, res, next) => {
         .catch(err => {
             logger.error('POST /api/auths/kakao');
             logger.error(err.stack);
-            res.status(500).send(err);
+            res.status(500).send();
         });
 }
 
 exports.authEmail = async (req, res, next) => {
-    logger.info('POST /api/auths/email');
+    logger.info('POST /api/auth/email');
     await authService.authEmail(req.body.email)
         .then((authNum) => {
             logger.info('got auth number, response to client');
@@ -27,12 +27,12 @@ exports.authEmail = async (req, res, next) => {
         .catch(err => {
             logger.error('POST /api/auths/email');
             logger.error(err.stack);
-            res.status(500).send(err);
+            res.status(500).send();
         });
 }
 
 exports.authToken = async (req, res, next) => {
-    logger.info('GET /api/auths/token');
+    logger.info('GET /api/auth/token');
 
     let token = {accessToken: '', refreshToken: ''};
     if (req.query.email) {

@@ -10,9 +10,15 @@ let menteeSchema = {
     //    type: Date,
     //    required: true,
     //},
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: [true, 'User must be included'],
+    },
     interests: [String],
 };
 
 module.exports = new mongoose.Schema(
-    menteeSchema, { collections: 'menteeinfo' }
+    menteeSchema,
+    {toJSON: {virtuals: true}, toObject: {virtuals: true}}
 );

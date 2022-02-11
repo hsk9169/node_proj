@@ -1,6 +1,20 @@
 let mongoose = require('mongoose')
 let userSchema = require('./schema')
 
+userSchema.virtual('mentor', {
+    ref: 'Mentor',
+    foreignField: 'user',
+    localField: '_id',
+    justOne: true,
+})
+
+userSchema.virtual('mentee', {
+    ref: 'Mentee',
+    foreignField: 'user',
+    localField: '_id',
+    justOne: true,
+})
+
 // Create User with Role
 userSchema.statics.create = function (payload) {
     const user = new this(payload);
@@ -17,13 +31,51 @@ userSchema.statics.findByNickname = function (nickname) {
 // Get User Data with Details
 userSchema.statics.findByEmailWithDetails = function (email) {
     const query = new RegExp('^'+email+'$', 'i')
-    return this.findOne({'profile.email': query})
-                .populate(['mentee','mentor','profileImage'])
+    const ret = this.findOne({'profile.email': query})
+                    .populate([{
+                        path: 'mentor',
+                        populate: {
+                            path: 'metadata details',
+                        }
+                    },
+                    {
+                        path: 'mentee',
+                        populate: {
+                            path: 'metadata',
+                        }
+                    }])
+    return ret
+}
+
+// Change Role
+userSchema.statics.changeRoleByEmail = function (email, role) {
+    const query = new RegExp('^'+email+'$', 'i')
+    return this.findOneAndUpdate(
+                    {'profile.email': query},
+                    {'role': role},
+                    {new: true},
+                )
                 .exec()
 }
 
-// Find Mentor by Keywords
+// Toggle Search Allow Flag
+userSchema.statics.toggleSearchAllowByEmail = function (email, curState) {
+    const query = new RegExp('^'+email+'$', 'i')
+    return this.findOneAndUpdate(
+                    {'profile.email': query},
+                    {'searchAllow': !curState},
+                    {new: true},
+                )
+                .exec()
+}
 
+// Remove User & All of Chained Data
+//userSchema.statics.removeById = function (userId) {
+//    return this.findByIdAndDelete(userId, (err) => {
+//        if (err) return err
+//        userSchema.
+//    })
+//}
 
 module.exports = 
     mongoose.admin_conn.model('User', userSchema);
