@@ -10,7 +10,6 @@ const config = require('../config/index');
 
 // User
 exports.createUser = async (data, files) => {
-    console.log(data)
     try {
         let mentee, mentor, mentorDetails, menteeMeta, mentorMeta
         const userData = { 
@@ -30,8 +29,6 @@ exports.createUser = async (data, files) => {
         };
         
         const user = await userModel.create(userData);
-
-        console.log(data.job)
 
         try {
             mentor = await mentorModel.create({

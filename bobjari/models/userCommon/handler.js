@@ -69,13 +69,5 @@ userSchema.statics.toggleSearchAllowByEmail = function (email, curState) {
                 .exec()
 }
 
-// Remove User & All of Chained Data
-//userSchema.statics.removeById = function (userId) {
-//    return this.findByIdAndDelete(userId, (err) => {
-//        if (err) return err
-//        userSchema.
-//    })
-//}
-
 module.exports = 
     mongoose.admin_conn.model('User', userSchema);

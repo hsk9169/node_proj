@@ -8,11 +8,6 @@ const clientLogger = require('../middlewares/clientLogger');
 router.post('/', 
             clientLogger.getHostname,
             userController.postUser);
-            
-// Remove User
-//router.delete('/',
-//            clientLogger.getHostname,
-//            userController.removeUserById)
 
 // Check Dupliation of Nickname
 router.get('/nickname', 
