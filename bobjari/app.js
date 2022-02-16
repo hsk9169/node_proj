@@ -1,11 +1,24 @@
 // Dependencies
 const express = require('express');
+const http = require('http')
 const cors = require('cors');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-const fs = require('fs');
 const app = express();
-const path = require('path');
+const socket_server = http.createServer(app)
+const io = require('socket.io')(socket_server, {
+    cors: { 
+        origin: [
+            'http://ec2-3-131-93-42.us-east-2.compute.amazonaws.com:80',
+            'http://3.131.93.42',
+            'http://localhost:3000',
+            'http://localhost:5000'
+        ],
+        credentials: true,
+    },
+})
+
+const chatService = require('./services/chat')
 
 // App Configurations
 const config = require('./config/index');
@@ -23,10 +36,12 @@ app.use(cors({
     origin: [
         'http://ec2-3-131-93-42.us-east-2.compute.amazonaws.com:80',
         'http://3.131.93.42',
-        'http://localhost:3000'
+        'http://localhost:3000',
+        'http://localhost:5000'
     ],
     credentials: true,
 }));
+
 
 //  View HTMLs
 app.set('view engine','ejs');
@@ -67,6 +82,24 @@ try {
 //    logger.error(err.stack)
 //}
 
+const NEW_CHAT_MESSAGE_EVENT = 'newChatMessage'
+
+
+io.on('connection', socket => {
+    const {roomId} = socket.handshake.query
+    socket.join(roomId)
+    console.log('socket connected with roomId : ', roomId)
+    socket.on(NEW_CHAT_MESSAGE_EVENT, data => {
+        console.log('roomId : ', roomId)
+        console.log('message : ', data)
+        io.in(roomId).emit(NEW_CHAT_MESSAGE_EVENT, data)
+    })
+
+    socket.on('disconnect', () => {
+        console.log('User disconnected')
+        socket.leave(roomId)
+    })
+})
 
 // Routers
 app.use('/api', require('./api/index'));
@@ -75,3 +108,5 @@ app.use('/api', require('./api/index'));
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 
 app.listen(config.port, () => console.log(`Server listening on port ${config.port}`));
+
+socket_server.listen(config.socket_port, () => console.log(`Server listening on port ${config.socket_port}`))

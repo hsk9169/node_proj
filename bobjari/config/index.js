@@ -24,6 +24,7 @@ const config = {
         uri: process.env.TELEGRAM_URI,
         chatId: process.env.TELEGRAM_CHAT_ID,
     },
+    socket_port: process.env.SOCKET_PORT,
 }
 
 module.exports = config;
