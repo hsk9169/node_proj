@@ -19,7 +19,7 @@ const config = {
         dev:  process.env.DEV_CLIENT_HOSTNAME,
         real: process.env.REAL_CLIENT_HOSTNAME,
     },
-    secret: "ThIsIsSeCrEtKeYfOrEnCrYpT",
+    jwt_secret_key: process.env.JWT_SECRET_KEY,
     telegram: {
         uri: process.env.TELEGRAM_URI,
         chatId: process.env.TELEGRAM_CHAT_ID,

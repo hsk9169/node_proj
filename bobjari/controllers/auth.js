@@ -2,6 +2,7 @@ const url = require('url');
 const logger = require('../config/winston');
 const authService = require('../services/auth');
 const jwt = require('jsonwebtoken');
+const config = require('../config')
 
 exports.authKakao = async (req, res, next) => {
     logger.info('POST /api/auth/kakao');
@@ -37,14 +38,14 @@ exports.authToken = async (req, res, next) => {
     let token = {accessToken: '', refreshToken: ''};
     if (req.query.email) {
         token.accessToken = jwt.sign({ email: req.query.email}, 
-            'shhhhh', { expiresIn: 3600});
+            config.jwt_secret_key, { expiresIn: 3600});
         token.refreshToken = jwt.sign({ email: req.query.email}, 
-            'shhhhh', { expiresIn: 3600});
+            config.jwt_secret_key, { expiresIn: 3600});
     } else {
         token.accessToken = jwt.sign({ phone: req.query.phone, password: req.query.password}, 
-            'shhhhh', { expiresIn: 3600});
+            config.jwt_secret_key, { expiresIn: 3600});
         token.refreshToken = jwt.sign({ phone: req.query.phone, password: req.query.password}, 
-            'shhhhh', { expiresIn: 3600});
+            config.jwt_secret_key, { expiresIn: 3600});
     }
     res.json({
         token: token
