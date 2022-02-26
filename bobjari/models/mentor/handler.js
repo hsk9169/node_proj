@@ -45,6 +45,10 @@ mentorSchema.statics.findByKeyword = function(keyword, startIdx, num) {
                 .skip(Number(startIdx))
                 .limit(Number(num))
                 .populate({
+                    path: 'details',
+                    select: 'preference.fee',
+                })
+                .populate({
                     path:'user',
                     match: { searchAllow: true }
                 })

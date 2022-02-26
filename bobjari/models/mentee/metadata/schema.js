@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 
 const menteeMetaSchema = {
-    updated: {
+    createdAt: {
         type: Date,
         required: true,
         default: Date.now,

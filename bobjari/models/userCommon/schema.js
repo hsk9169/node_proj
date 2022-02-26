@@ -1,7 +1,7 @@
 let mongoose = require("mongoose");
 
 let userSchema = {
-    updated: { 
+    createdAt: { 
         type: Date,
         required: true,
         default: Date.now,

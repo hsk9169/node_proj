@@ -21,31 +21,65 @@ bobjariSchema.statics.create = function (payload) {
 // Find One by menteeid
 bobjariSchema.statics.getListByMenteeId = function (menteeId) {
     return this.find({ 'mentee': menteeId })
-                .populate('mentee')
+    .populate({
+        path: 'mentor',
+        populate: 'user',
+    })
+                .populate({
+                    path: 'chat',
+                    select: 'message createdAt',
+                    options: {
+                        sort: {createdAt: -1},
+                    },
+                })
+                .sort({updatedAt: -1})
                 .exec()
 };
 
 // Find One by mentorid
 bobjariSchema.statics.getListByMentorId = function (mentorId) {
     return this.find({ 'mentor': mentorId })
-                .populate('mentor')
+                .populate({
+                    path: 'mentee',
+                    populate: 'user'
+                })
+                .populate({
+                    path: 'chat',
+                    select: 'message createdAt',
+                    options: {
+                        sort: {createdAt: -1},
+                    }
+                })
+                .sort({updatedAt: -1})
                 .exec()
-};
-
-// Update by bobjariId
-bobjariSchema.statics.updateLevel = function (bobjariId, level) {
-    return this.findByIdAndUpdate(bobjariId, 
-                                {'level': level}, 
-                                { new: true });
 };
 
 // Get all Data for Entering the Chat Room
 bobjariSchema.statics.getRoomByBobjariId = function (bobjariId) {
     return this.findByBobjariId(bobjariId)
                 .populate('mentee mentor')
-                .populate('chat')
+                .populate({
+                    path: 'chat',
+                    options: {
+                        limit: 10,
+                        sort: {createdAt: -1},
+                    }
+                })
                 .exec()
 }
+
+bobjariSchema.statics.updateDate = function (bobjariId, datetime) {
+    return this.findByIdAndUpdate(bobjariId,
+                                {'updatedAt': datetime},
+                                {new: true})
+} 
+
+// Update by bobjariId
+bobjariSchema.statics.updateLevel = function (bobjariId, level) {
+    return this.findByIdAndUpdate(bobjariId, 
+                                {'status': level}, 
+                                { new: true });
+};
 
 // Delete by bobjariId
 bobjariSchema.statics.removeById = function (bobjariId) {

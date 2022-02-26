@@ -1,15 +1,16 @@
-const mongoose = require('mongoose')
-const chatSchema = require('./schema')
+let mongoose = require('mongoose')
+let chatSchema = require('./schema')
+
+chatSchema.index({createdAt: -1})
 
 chatSchema.statics.create = function (payload) {
     const chat = new this(payload)
     return chat.save()
 }
 
-// Get additional Messages WITHIN the Room
 chatSchema.statics.getByDateWithStep = function (bobjariId, startIdx, num) {
-    return this.findById(bobjariId)
-                .sort({updated: -1})
+    return this.find({bobjari: bobjariId})
+                .sort({createdAt: -1})
                 .skip(Number(startIdx))
                 .limit(Number(num))
                 .exec()

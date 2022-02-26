@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 
 const chatSchema = {
-    updated: {
+    createdAt: {
         type: Date,
         required: true,
         default: Date.now,
@@ -12,11 +12,7 @@ const chatSchema = {
         required: [true, 'Bobjari ID must be included'],
     },
     message: String,
-    user: mongoose.Schema.Types.ObjectId,
-    isRead: {
-        type: Boolean,
-        default: false,
-    },
+    author: mongoose.Schema.Types.ObjectId,
 }
 
 module.exports = new mongoose.Schema(

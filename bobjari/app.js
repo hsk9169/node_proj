@@ -18,8 +18,6 @@ const io = require('socket.io')(socket_server, {
     },
 })
 
-const chatService = require('./services/chat')
-
 // App Configurations
 const config = require('./config/index');
 
@@ -84,17 +82,19 @@ try {
 
 const NEW_CHAT_MESSAGE_EVENT = 'newChatMessage'
 
+const chatService = require('./services/chat')
 
 io.on('connection', socket => {
     const {roomId} = socket.handshake.query
     socket.join(roomId)
     console.log('socket connected with roomId : ', roomId)
-    socket.on(NEW_CHAT_MESSAGE_EVENT, data => {
-        console.log('roomId : ', roomId)
-        console.log('message : ', data)
-        io.in(roomId).emit(NEW_CHAT_MESSAGE_EVENT, data)
+    socket.on(NEW_CHAT_MESSAGE_EVENT, async(data) => {
+        await chatService.createChat(roomId, data.body, data.senderId)
+        const date = new Date().toISOString()
+        io.in(roomId).emit(NEW_CHAT_MESSAGE_EVENT, data, date)
+        
     })
-
+    
     socket.on('disconnect', () => {
         console.log('User disconnected')
         socket.leave(roomId)

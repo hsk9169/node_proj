@@ -24,35 +24,36 @@ exports.getMentorByEmailWithMeta = async (req, res) => {
 
 exports.getMentorsBySearchKeyword = async (req, res) => {
     logger.info('GET /mentor/search');
-    let keyword = null, startIdx = null, num = null;
-    try {keyword = req.query.keyword} catch{} 
-    try {startIdx = req.query.startIdx} catch{} 
-    try {num = req.query.num} catch{}
+    let keyword, startIdx, num
+
+    keyword = req.query.keyword 
+    startIdx = req.query.startIdx 
+    num = req.query.num
     if (keyword === undefined ||
         startIdx === undefined ||
         num === undefined) {
-        logger.info('invalid query parameter')
+        logger.info('isufficient query data received : ', req.query)
         res.statusMessage = 'invalid query parameters'
         res.status(400).end()
-    } else {
-        logger.info('keyword: ' + keyword + ' , startIdx: ' + startIdx + ' , num: ' + num)
-        await mentorService.getMentorsBySearchKeyword(keyword, startIdx, num)
-            .then((mentors) => {
-                console.log(mentors)
-                if(mentors === undefined) {
-                    logger.info('no data to GET');
-                    res.statusMessage = 'no user account found'
-                    res.status(204).end();
-                } else {
-                    logger.info('success GET');
-                    logger.info(mentors.length + ' mentors found')
-                    res.json(mentors);
-                }
-            })
-            .catch(err => {
-                logger.error('GET /mentor/search');
-                logger.error(err.stack);
-                res.status(500).send();
-            });
     }
+
+    logger.info('keyword: ' + keyword + ' , startIdx: ' + startIdx + ' , num: ' + num)
+    await mentorService.getMentorsBySearchKeyword(keyword, startIdx, num)
+        .then(mentors => {
+            if(mentors === undefined) {
+                logger.info('no data to GET');
+                res.statusMessage = 'no user account found'
+                res.status(204).end();
+            } else {
+                logger.info('success GET');
+                logger.info(mentors.length + ' mentors found')
+                res.json(mentors);
+            }
+        })
+        .catch(err => {
+            logger.error('GET /mentor/search');
+            logger.error(err.stack);
+            res.status(500).send();
+        });
+    
 }

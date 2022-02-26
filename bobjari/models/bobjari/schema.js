@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const bobjariSchema = {
-    updated: { 
+    createdAt: { 
         type: Date,
         required: true,
         default: Date.now,
@@ -22,6 +22,15 @@ const bobjariSchema = {
         // 3 : confirmed each other
         // 4 : accomplished
         // 0 : declined from mentor
+        type: Number,
+        default: 1,
+    },
+    updatedAt: {
+        type: Date,
+        required: true,
+        default: Date.now
+    },
+    numNews: {
         type: Number,
         default: 1,
     },

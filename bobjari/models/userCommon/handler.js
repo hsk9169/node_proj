@@ -32,18 +32,18 @@ userSchema.statics.findByNickname = function (nickname) {
 userSchema.statics.findByEmailWithDetails = function (email) {
     const query = new RegExp('^'+email+'$', 'i')
     const ret = this.findOne({'profile.email': query})
-                    .populate([{
+                    .populate({
                         path: 'mentor',
                         populate: {
                             path: 'metadata details',
                         }
-                    },
-                    {
+                    })
+                    .populate({
                         path: 'mentee',
                         populate: {
                             path: 'metadata',
                         }
-                    }])
+                    })
     return ret
 }
 

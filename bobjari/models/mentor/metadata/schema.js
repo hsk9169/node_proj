@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 
 const mentorMetaSchema = {
-    updated: {
+    createdAt: {
         type: Date,
         required: true,
         default: Date.now,

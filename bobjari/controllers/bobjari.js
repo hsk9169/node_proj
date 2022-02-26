@@ -34,15 +34,16 @@ exports.getSentBobjariList = async (req, res) => {
     logger.info('GET /api/bobjari/mentee')
     let menteeId
     try {
-        menteeId = req.body.menteeId
+        menteeId = req.query.menteeId
     } catch {
-        logger.warn('insufficient body data received : ', req.body)
-        res.statusMessage = 'invalid body data'
+        logger.warn('insufficient query data received : ', req.query)
+        res.statusMessage = 'invalid query data'
         res.status(400).end()
     }
     await bobjariService.getBobjariListByMenteeId(menteeId)
         .then(bobjariList => {
             logger.info('bobjari list found successfully')
+            console.log(bobjariList)
             res.json(bobjariList)
         })
         .catch(err => {
@@ -56,13 +57,13 @@ exports.getReceivedBobjari = async (req, res) => {
     logger.info('GET /api/bobjari/mentor')
     let mentorId
     try {
-        mentorId = req.body.mentorId
+        mentorId = req.query.mentorId
     } catch {
-        logger.warn('insufficient body data received : ', req.body)
-        res.statusMessage = 'invalid body data'
+        logger.warn('insufficient query data received : ', req.query)
+        res.statusMessage = 'invalid query data'
         res.status(400).end()
     }
-    await bobjariService.getBobjariListByMenteeId(mentorId)
+    await bobjariService.getBobjariListByMentorId(mentorId)
         .then(bobjariList => {
             logger.info('bobjari list found successfully')
             res.json(bobjariList)

@@ -1,7 +1,7 @@
 let mongoose = require("mongoose");
 
 let menteeSchema = {
-    updated: { 
+    createdAt: { 
         type: Date,
         required: true,
         default: Date.now,
