@@ -5,7 +5,7 @@ const clientLogger = require('../middlewares/clientLogger');
 
 
 router.get('/email',
-            clientLogger.getHostname,
+            [clientLogger.getHostname, authChecker.check],
             mentorController.getMentorByEmailWithMeta)
 
 router.get('/search', 

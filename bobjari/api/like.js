@@ -4,11 +4,11 @@ const likeController = require('../controllers/like');
 const clientLogger = require('../middlewares/clientLogger');
 
 router.post('/',
-            clientLogger.getHostname,
+            [clientLogger.getHostname, authChecker.check],
             likeController.addLikeInList)
 
 router.get('/list',
-            clientLogger.getHostname,
+            [clientLogger.getHostname, authChecker.check],
             likeController.getLikeList)
 
 module.exports = router
