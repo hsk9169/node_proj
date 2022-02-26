@@ -15,8 +15,6 @@ exports.createChat = async (bobjariId, message, userId) => {
                 return(chat)
             },
             async (chat) => {
-                console.log(chat.bobjari.toString())
-                console.log(chat.createdAt)                
                 const date = 
                     await bobjariModel.updateDate(chat.bobjari.toString(),
                                                   chat.createdAt)
@@ -24,7 +22,6 @@ exports.createChat = async (bobjariId, message, userId) => {
             },
         ], function(err, result) {
             if (err) throw err
-            console.log(result)
             return(result.chat)
         })
     } catch(err) {

@@ -87,7 +87,6 @@ const chatService = require('./services/chat')
 io.on('connection', socket => {
     const {roomId} = socket.handshake.query
     socket.join(roomId)
-    console.log('socket connected with roomId : ', roomId)
     socket.on(NEW_CHAT_MESSAGE_EVENT, async(data) => {
         await chatService.createChat(roomId, data.body, data.senderId)
         const date = new Date().toISOString()
@@ -96,7 +95,6 @@ io.on('connection', socket => {
     })
     
     socket.on('disconnect', () => {
-        console.log('User disconnected')
         socket.leave(roomId)
     })
 })

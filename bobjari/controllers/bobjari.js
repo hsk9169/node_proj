@@ -43,7 +43,6 @@ exports.getSentBobjariList = async (req, res) => {
     await bobjariService.getBobjariListByMenteeId(menteeId)
         .then(bobjariList => {
             logger.info('bobjari list found successfully')
-            console.log(bobjariList)
             res.json(bobjariList)
         })
         .catch(err => {
@@ -115,7 +114,6 @@ exports.removeBobjariById = async (req, res) => {
     }
     await bobjariService.removeBobjariById(bobjariId)
         .then(result => {
-            console.log(result)
             logger.info('bobjari removed successfully')
             res.status(200).send('success')
         })
