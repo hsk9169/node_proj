@@ -17,4 +17,6 @@ router.use('/chat', require('./chat'))
 
 router.use('/like', require('./like'))
 
+router.use('/review', require('./review'))
+
 module.exports = router

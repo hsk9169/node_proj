@@ -42,6 +42,7 @@ exports.getHostname = (req, res, next) => {
             logger.warn('not my front-end client server');
             logger.warn('IP address: ' + ip);
             logger.warn('User agent: ' + userAgent);
+            /*
             await axios.get('http://ip-api.com/json/'+ip)
                 .then(res => {
                     const r = res.data
@@ -61,6 +62,7 @@ exports.getHostname = (req, res, next) => {
                 .catch(err => {
                     console.log(err)
                 })
+            */
         } else {
             logger.info('received from my front-end client server')
         }

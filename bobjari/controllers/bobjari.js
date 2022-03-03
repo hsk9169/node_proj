@@ -9,8 +9,8 @@ exports.createBobjari = async (req, res) => {
     logger.info('POST /api/bobjari')
     let menteeId, mentorId, appointment
     try {
-        menteeId = req.body.mentee
-        mentorId = req.body.mentor
+        menteeId = req.body.menteeId
+        mentorId = req.body.mentorId
         appointment = req.body.appointment
     } catch {
         logger.warn('insufficient body data received : ', req.body)
@@ -26,7 +26,7 @@ exports.createBobjari = async (req, res) => {
         .catch(err => {
             logger.error('POST /api/bobjari')
             logger.error(err.stack)
-            res.status(500).send()
+            res.status(400).end()
         })
 }
 
@@ -48,7 +48,7 @@ exports.getSentBobjariList = async (req, res) => {
         .catch(err => {
             logger.error('GET /api/bobjari/mentee')
             logger.error(err.stack)
-            res.status(500).send()
+            res.status(400).end()
         })
 }
 
@@ -70,7 +70,7 @@ exports.getReceivedBobjari = async (req, res) => {
         .catch(err => {
             logger.error('GET /api/bobjari/mentor')
             logger.error(err.stack)
-            res.status(500).send()
+            res.status(400).end()
         })
 }
 
@@ -98,7 +98,7 @@ exports.updateBobjariLevel = async (req, res) => {
         .catch(err => {
             logger.error('POST /api/bobjari/level')
             logger.error(err.stack)
-            res.status(500).send()
+            res.status(400).end()
         })
 }
 
@@ -120,6 +120,6 @@ exports.removeBobjariById = async (req, res) => {
         .catch(err => {
             logger.error('DELETE /api/bobjari')
             logger.error(err.stack)
-            res.status(500).send()
+            res.status(400).end()
         })
 }

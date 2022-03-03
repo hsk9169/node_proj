@@ -4,6 +4,7 @@ const userService = require('../services/user');
 const imgLoader = require('../middlewares/imgLoader');
 const multer = require('multer');
 const { read } = require('../config/winston');
+const waterfall = require('async/waterfall')
 
 exports.postUser = (req, res) => {
     logger.info('POST /user')
@@ -25,28 +26,34 @@ exports.postUser = (req, res) => {
                     data[key] = JSON.parse(req.body[key])
                 }
             })
-            await userService.createUser(data, files)
-                .then(user => {
-                    if (user) {
-                        logger.info('user account created')
-                        logger.info(user)
-                        res.redirect(url.format({
-                            pathname: '/api/user/email',
-                            query: {
-                                email: user.profile.email,
-                            }
-                        }))
-                    } else {
-                        logger.info('failed adding user account');
-                        res.statusMessage = 'bad request for user creation'
-                        res.status(400).end()
-                    }
-                })
-                .catch(err => {
-                    logger.error('POST /users');
-                    logger.error(err.stack);
-                    res.status(500).send();
-                })
+
+            waterfall([
+                (cb) => {
+                    userService.createUser(data, files)
+                        .then(user => {
+                            logger.info('user created successfully')
+                            cb(null, user)
+                        })
+                        .catch(err => cb(err))
+                },
+                (user, cb) => {
+                    userService.getUserByEmailWithDetails(user.profile.email)
+                        .then(userDetails => {
+                            logger.info('user details found successfully')
+                            cb(null, userDetails)
+                        })
+                        .catch(err => cb(err))
+                }
+            ], (err, results) => {
+                if (err) {
+                    logger.error('failed creating user')
+                    logger.error(err.stack)
+                    res.status(400).end()
+                }
+                logger.info('user created successfully')
+                logger.info(results)
+                res.json(results)
+            })
         }
     })  
 }
@@ -68,73 +75,29 @@ exports.getUserByNickname = async (req, res, next) => {
         .catch(err => {
             logger.error('GET /users/nickname');
             logger.error(err.stack);
-            res.status(500).send();
+            res.status(400).end()
         })
 }
 
-// Find User by Email and Return
-exports.getUserByEmailWithDetails = async (req, res, next) => {
-    logger.info('GET /user/email');
-    const email = req.query.email
-    await userService.getUserByEmailWithDetails(email)
-        .then(user => {
-            if (user) {
-                logger.info('user account found : ' + email);
-                res.json(user)
-            } else {
-                logger.info('no user account found : ' + email)
-                res.status(200).send('no user found')
-            }
-        })
-        .catch(err => {
-            logger.error('GET /users/email');
-            logger.error(err.stack);
-            res.status(500).send();
-        });
-}
-
-exports.changeUserRoleByEmail = async (req, res, next) => {
+exports.changeUserRoleById = async (req, res, next) => {
     logger.info('GET /user/change')
     try {
         const curRole = req.query.role
-        const email = req.query.email
-        await userService.changeUserRoleByEmail(curRole, email)
+        const userId = req.query.userId
+        await userService.changeUserRoleById(curRole, userId)
             .then(user => {
                 if (user) {
                     logger.info('user role changed : ' + user.role)
                     res.json(user.role)
                 } else {
-                    logger.info('no user account found : ' + email)
+                    logger.info('no user account found : ' + userId)
                     res.status(200).send('no user found')
                 }
             })
             .catch(err => {
                 logger.error('GET /users/change');
                 logger.error(err.stack);
-                res.status(500).send();
-            })
-    } catch {
-        logger.info('invalid query parameters')
-        res.statusMessage = 'invalid query parameters'
-        res.status(400).end()
-    }
-}
-
-exports.toggleUserSearchAllowByEmail = async (req, res, next) => {
-    logger.info('GET /user/searchAllow')
-    try {
-        const email = req.query.email;
-        const curState = (req.query.curState === 'true' ? true : false);
-        await userService.toggleUserSearchAllowByEmail(email, curState)
-            .then(user => {
-                logger.info('toggle user search allow')
-                console.log(user.searchAllow)
-                res.json(user.searchAllow)
-            })
-            .catch(err => {
-                logger.error('GET /users/searchAllow')
-                logger.error(err.stack)
-                res.status(500).send()
+                res.status(400).end()
             })
     } catch {
         logger.info('invalid query parameters')
@@ -146,21 +109,21 @@ exports.toggleUserSearchAllowByEmail = async (req, res, next) => {
 exports.removeUserById = async (req, res) => {
     logger.info('DELETE /user')
     try {
-        const userId = req.query.email
+        const userId = req.query.userId
         await userService.removeUserById(userId)
             .then(ret => {
                 if (ret.deletedCount > 0) {
-                    logger.info('user deleted successfully : ' + email)
+                    logger.info('user deleted successfully : ' + userId)
                     res.status(200).send('removed successfully')
                 } else {
-                    logger.info('no matched user found : ' + email)
+                    logger.info('no matched user found : ' + userId)
                     res.status(204).send('no matched user found')
                 }
             })
             .catch(err => {
                 logger.error('DELETE /user')
                 logger.error(err.stack)
-                res.status(500).send()
+                res.status(400).end()
             })
     } catch {
         logger.info('invalid query parameters')

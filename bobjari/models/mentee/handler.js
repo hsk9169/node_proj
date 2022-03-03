@@ -22,15 +22,10 @@ menteeSchema.statics.create = function (payload) {
     return mentee.save();
 };
 
-menteeSchema.statics.findByEmailWithMeta = function (email) {
-    const query = new RegExp('^'+email+'$', 'i')
-    return this.findOne({'profile.email': query})
-                .populate({
-                    path: 'mentee',
-                    populate: {
-                        path: 'metadata',
-                    }
-                })
+menteeSchema.statics.findByIdWithMeta = function (menteeId) {
+    return this.findById(menteeId)
+                .populate('metadata')
+                .populate('user')
                 .exec() 
 }
 

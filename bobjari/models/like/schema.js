@@ -8,12 +8,12 @@ const likeSchema = {
     },
     mentee: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
+        ref: 'Mentee',
         required: [true, 'Mentee must be included']
     },
     mentor: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
+        ref: 'Mentor',
         required: [true, 'Mentor must be included']
     },
 }

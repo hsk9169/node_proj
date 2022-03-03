@@ -6,18 +6,19 @@ let reviewSchema = {
         required: true,
         default: Date.now,
     },
-    mentorId: {
+    mentor: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Mentor',
+        required: [true, 'Mentor ID must be included']
     },
-    menteeId: {
+    mentee: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Mentee',
+        required: [true, 'Mentee ID must be included']
     },
-    title: {
-        type: String,
-        maxLength: 30,
-        default: null,
+    score: {
+        type: Number,
+        required: [true, 'score must be included']
     },
     body: {
         type: String,

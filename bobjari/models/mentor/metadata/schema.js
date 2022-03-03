@@ -8,20 +8,30 @@ const mentorMetaSchema = {
     },
     mentor: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
+        ref: 'Mentor',
         required: [true, 'Mentor ID must be included']
     },
-    likeNum: {
+    numNews: {
         type: Number,
         default: 0,
     },
-    reviewNum: {
+    numLike: {
         type: Number,
         default: 0,
     },
-    bobjariNum: {
+    numBobjari: {
         type: Number,
         default: 0,
+    },
+    rate: {
+        score: {
+            type: Number,
+            default: 0,
+        },
+        num: {
+            type: Number,
+            default: 0,
+        },
     },
 }
 

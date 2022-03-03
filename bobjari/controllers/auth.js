@@ -12,9 +12,9 @@ exports.authKakao = async (req, res, next) => {
             res.json(profile);
         })
         .catch(err => {
-            logger.error('POST /api/auths/kakao');
+            logger.error('POST /api/auth/kakao');
             logger.error(err.stack);
-            res.status(500).send();
+            res.status(400).end();
         });
 }
 
@@ -26,9 +26,9 @@ exports.authEmail = async (req, res, next) => {
             res.json(authNum);
         })
         .catch(err => {
-            logger.error('POST /api/auths/email');
+            logger.error('POST /api/auth/email');
             logger.error(err.stack);
-            res.status(500).send();
+            res.status(400).end();
         });
 }
 

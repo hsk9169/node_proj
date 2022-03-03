@@ -31,7 +31,7 @@ userSchema.statics.findByNickname = function (nickname) {
 // Get User Data with Details
 userSchema.statics.findByEmailWithDetails = function (email) {
     const query = new RegExp('^'+email+'$', 'i')
-    const ret = this.findOne({'profile.email': query})
+    return this.findOne({'profile.email': query})
                     .populate({
                         path: 'mentor',
                         populate: {
@@ -43,30 +43,21 @@ userSchema.statics.findByEmailWithDetails = function (email) {
                         populate: {
                             path: 'metadata',
                         }
-                    })
+                    }).exec()
     return ret
 }
 
 // Change Role
-userSchema.statics.changeRoleByEmail = function (email, role) {
-    const query = new RegExp('^'+email+'$', 'i')
-    return this.findOneAndUpdate(
-                    {'profile.email': query},
+userSchema.statics.changeRoleById = function (userId, role) {
+    return this.findByIdAndUpdate(
+                    userId,
                     {'role': role},
                     {new: true},
-                )
-                .exec()
+                ).exec()
 }
 
-// Toggle Search Allow Flag
-userSchema.statics.toggleSearchAllowByEmail = function (email, curState) {
-    const query = new RegExp('^'+email+'$', 'i')
-    return this.findOneAndUpdate(
-                    {'profile.email': query},
-                    {'searchAllow': !curState},
-                    {new: true},
-                )
-                .exec()
+userSchema.statics.removeById = function (userId) {
+    return this.removeById(userId).exec()
 }
 
 module.exports = 

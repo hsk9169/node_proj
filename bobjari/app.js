@@ -1,5 +1,5 @@
 // Dependencies
-const express = require('express');
+const express = require('express')
 const http = require('http')
 const cors = require('cors');
 const mongoose = require('mongoose');
@@ -20,9 +20,6 @@ const io = require('socket.io')(socket_server, {
 
 // App Configurations
 const config = require('./config/index');
-
-// Swagger API
-const { swaggerUi, specs } = require('./config/swagger');
 
 const parser = bodyParser.urlencoded({extended: false});
 
@@ -101,9 +98,6 @@ io.on('connection', socket => {
 
 // Routers
 app.use('/api', require('./api/index'));
-
-// Swagger
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 
 app.listen(config.port, () => console.log(`Server listening on port ${config.port}`));
 

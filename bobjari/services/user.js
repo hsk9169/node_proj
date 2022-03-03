@@ -114,24 +114,15 @@ exports.getUserByEmailWithDetails = async (email) => {
     }
 }
 
-exports.changeUserRoleByEmail = async (curRole, email) => {
+exports.changeUserRoleById = async (curRole, userId) => {
     let role
     if (curRole === 'mentee') role = 'mentor'
     else role = 'mentee'
     try {
-        return await userModel.changeRoleByEmail(email, role)
+        return await userModel.changeRoleById(userId, role)
     } catch (err) {
         logger.error(err.stack)
         throw Error(err)
-    }
-}
-
-exports.toggleUserSearchAllowByEmail = async (email, curState) => {
-    try {
-        return await userModel.toggleSearchAllowByEmail(email, curState)  
-    } catch(err) {
-        logger.error(err.stack);
-        throw Error(err);
     }
 }
 

@@ -5,10 +5,14 @@ const clientLogger = require('../middlewares/clientLogger');
 
 router.post('/',
             [clientLogger.getHostname, authChecker.check],
-            likeController.addLikeInList)
+            likeController.createLike)
 
-router.get('/list',
+router.get('/',
             [clientLogger.getHostname, authChecker.check],
-            likeController.getLikeList)
+            likeController.getLikeByMenteeId)
+
+router.delete('/',
+            [clientLogger.getHostname, authChecker.check],
+            likeController.deleteLike)
 
 module.exports = router

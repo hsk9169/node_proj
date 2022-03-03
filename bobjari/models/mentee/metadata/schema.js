@@ -8,8 +8,12 @@ const menteeMetaSchema = {
     },
     mentee: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
+        ref: 'Mentee',
         required: [true, 'Mentee ID must be included']
+    },
+    numNews: {
+        type: Number,
+        default: 0,
     },
     searchKeyword: [String],
 }

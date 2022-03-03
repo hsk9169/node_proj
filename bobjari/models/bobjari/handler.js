@@ -21,10 +21,10 @@ bobjariSchema.statics.create = function (payload) {
 // Find One by menteeid
 bobjariSchema.statics.getListByMenteeId = function (menteeId) {
     return this.find({ 'mentee': menteeId })
-    .populate({
-        path: 'mentor',
-        populate: 'user',
-    })
+                .populate({
+                    path: 'mentor',
+                    populate: 'user',
+                })
                 .populate({
                     path: 'chat',
                     select: 'message createdAt',

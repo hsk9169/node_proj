@@ -41,10 +41,6 @@ let userSchema = {
             },
         }
     },
-    searchAllow: {
-        type: Boolean,
-        default: true,
-    },
 };
 
 module.exports = new mongoose.Schema(

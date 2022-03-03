@@ -24,6 +24,6 @@ exports.getMessagesByDateWithStep = async (req, res) => {
         .catch(err => {
             logger.error('GET /api/chat')
             logger.error(err.stack)
-            res.status(500).send()
+            res.status(400).end()
         })
 }

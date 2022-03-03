@@ -4,12 +4,17 @@ const authChecker = require('../middlewares/authChecker');
 const clientLogger = require('../middlewares/clientLogger');
 
 
-router.get('/email',
-            [clientLogger.getHostname, authChecker.check],
-            mentorController.getMentorByEmailWithMeta)
+router.get('/',
+            clientLogger.getHostname,
+            mentorController.getMentorByIdWithDetails)
 
 router.get('/search', 
             clientLogger.getHostname, 
             mentorController.getMentorsBySearchKeyword);
+
+// Toggle Search Allow
+router.get('/searchAllow', 
+            [clientLogger.getHostname, authChecker.check], 
+            mentorController.toggleMentorSearchAllowById);
 
 module.exports = router;

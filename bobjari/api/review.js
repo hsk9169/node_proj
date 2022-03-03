@@ -1,12 +1,15 @@
 const router = require('express').Router();
-const menteeController = require('../controllers/mentee');
 const authChecker = require('../middlewares/authChecker');
+const reviewController = require('../controllers/review');
 const clientLogger = require('../middlewares/clientLogger');
 
+router.post('/',
+            [clientLogger.getHostname, authChecker.check],
+            reviewController.createReview)
 
 router.get('/',
             [clientLogger.getHostname, authChecker.check],
-            menteeController.getMenteeByIdWithMeta)
+            reviewController.getReviewListByMentorId)
 
 
 module.exports = router;
