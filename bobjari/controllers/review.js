@@ -1,5 +1,7 @@
 const logger = require('../config/winston');
 const reviewService = require('../services/review');
+const mentorMetaService = require('../services/mentorMeta')
+const waterfall = require('async/waterfall')
 
 exports.createReview = async (req, res) => {
     logger.info('POST /api/review')
@@ -14,17 +16,34 @@ exports.createReview = async (req, res) => {
         res.statusMessage = 'invalid body data'
         res.status(400).end()
     }
-    await reviewService.createReview(menteeId, mentorId, score, text)
-        .then(review => {
-            logger.info('review created successfully')
-            logger.info(review)
-            res.status(200).send('success')
-        })
-        .catch(err => {
-            logger.error('POST /api/review')
+
+    waterfall([
+        (cb) => {
+            reviewService.createReview(menteeId, mentorId, score, text)
+                .then(review => {
+                    logger.info('review created successfully')
+                    cb(null, review)
+                })
+                .catch(err => cb(err))
+        },
+        (review, cb) => {
+            mentorMetaService.updateMentorRate(mentorId, score)
+                .then(mentorMeta => {
+                    logger.info('mentor rate updated successfully')
+                    cb(null, mentorMeta)
+                })
+                .catch(err => cb(err))
+        }
+    ], (err, results) => {
+        if (err) {
+            logger.error('failed creating user')
             logger.error(err.stack)
             res.status(400).end()
-        })
+        }
+        logger.info('review created successfully')
+        logger.info(results)
+        res.status(200).send('success')
+    })
 }
 
 exports.getReviewListByMentorId = async (req, res) => {
