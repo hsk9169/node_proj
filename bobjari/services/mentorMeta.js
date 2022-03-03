@@ -11,4 +11,14 @@ exports.updateMentorRate = async (mentorId, score) => {
     }
 }
 
+exports.increaseNumBobjari = async (mentorId) => {
+    try {
+        const mentorMeta = await mentorMetaModel.increaseNumBobjari(mentorId)
+        return mentorMeta
+    } catch(err) {
+        logger.error(err.stack)
+        throw Error(err)
+    }
+}
+
 //exports.increaseMentorNews = async (mentorId) => {}

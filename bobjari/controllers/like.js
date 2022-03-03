@@ -2,7 +2,6 @@ const logger = require('../config/winston')
 const url = require('url')
 const likeService = require('../services/like');
 
-
 exports.createLike = async (req, res) => {
     logger.info('POST /api/like')
     let menteeId, mentorId

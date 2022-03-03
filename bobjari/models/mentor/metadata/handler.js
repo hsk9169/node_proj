@@ -7,12 +7,19 @@ mentorMetaSchema.statics.create = function (payload) {
 }
 
 mentorMetaSchema.statics.updateRate = function (mentorId, score) {
-    return this.findOneAndUpdate({'mentor': mentorId},
-                                {$inc: 
-                                    {'rate.score': score,
-                                     'rate.num': 1}
-                                }, {new: true})
-                                .exec()
+    return this.findOneAndUpdate(
+                {'mentor': mentorId},
+                {$inc: {'rate.score': score, 'rate.num': 1}}, 
+                {new: true})
+                .exec()
+}
+
+mentorMetaSchema.statics.increaseNumBobjari = function (mentorId) {
+    return this.findOneAndUpdate(
+                {'mentor': mentorId},
+                {$inc: {'numBobjari': 1}}, 
+                {new: true})
+                .exec()
 }
 
 module.exports =

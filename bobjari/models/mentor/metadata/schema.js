@@ -15,10 +15,6 @@ const mentorMetaSchema = {
         type: Number,
         default: 0,
     },
-    numLike: {
-        type: Number,
-        default: 0,
-    },
     numBobjari: {
         type: Number,
         default: 0,
