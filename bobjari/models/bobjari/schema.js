@@ -37,24 +37,28 @@ const bobjariSchema = {
     appointment: {
         schedule: [
             {
-                day: String,
-                startTime: String,
-                endTime: String,
+                day: [Number],
+                dateDay: [Number],
+                time: [{
+                    startTime: String,
+                    endTime: String,
+                }],
+                month: Number,
+                year: Number,
             }
         ],
         location: [
             {
                 place_name: String,
                 address_name: String,
-                road_address_name: String,
-                category_group_name: String,
-                content_id: String,
-                place_url: String,
-                phone: String,
+                //road_address_name: String,
+                //category_group_name: String,
+                //content_id: String,
+                //place_url: String,
+                //phone: String,
                 geolocation: {
                     x: String,
                     y: String,
-                    distance: String,
                 }
             }
         ],

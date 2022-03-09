@@ -1,7 +1,7 @@
 const logger = require('../config/winston');
 const reviewService = require('../services/review');
 const mentorMetaService = require('../services/mentorMeta')
-const waterfall = require('async/waterfall')
+const parallel = require('async/parallel')
 
 exports.createReview = async (req, res) => {
     logger.info('POST /api/review')
@@ -17,7 +17,7 @@ exports.createReview = async (req, res) => {
         res.status(400).end()
     }
 
-    waterfall([
+    parallel([
         (cb) => {
             reviewService.createReview(menteeId, mentorId, score, text)
                 .then(review => {
@@ -26,7 +26,7 @@ exports.createReview = async (req, res) => {
                 })
                 .catch(err => cb(err))
         },
-        (review, cb) => {
+        (cb) => {
             mentorMetaService.updateMentorRate(mentorId, score)
                 .then(mentorMeta => {
                     logger.info('mentor rate updated successfully')
