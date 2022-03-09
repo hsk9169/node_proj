@@ -2,7 +2,8 @@ require('dotenv').config();
 
 const config = {
     port: process.env.PORT,
-    mongo_uri: process.env.MONGO_URI,
+    mongo_uri_admin: process.env.MONGO_URI_ADMIN,
+    mongo_uri_config: process.env.MONGO_URI_CONFIG,
     auth: {
         kakao: {
             clientID: process.env.CLIENT_ID,
@@ -14,7 +15,16 @@ const config = {
             mailPWD: process.env.NAVER_PWD,
         }
     },
-    secret: "ThIsIsSeCrEtKeYfOrEnCrYpT",
+    client_server: {
+        dev:  process.env.DEV_CLIENT_HOSTNAME,
+        real: process.env.REAL_CLIENT_HOSTNAME,
+    },
+    jwt_secret_key: process.env.JWT_SECRET_KEY,
+    telegram: {
+        uri: process.env.TELEGRAM_URI,
+        chatId: process.env.TELEGRAM_CHAT_ID,
+    },
+    socket_port: process.env.SOCKET_PORT,
 }
 
 module.exports = config;

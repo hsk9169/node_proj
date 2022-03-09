@@ -1,6 +1,7 @@
 const fs = require('fs');
 const jwt = require('jsonwebtoken');
 const logger = require('../config/winston');
+const config = require('../config')
 
 exports.check = (req, res, next) => {
     // read the token from header or url 
@@ -24,7 +25,7 @@ exports.check = (req, res, next) => {
     const p = new Promise(
         (resolve, reject) => {
             //const cert = fs.readFileSync('private_key.pem');
-            jwt.verify(token, 'shhhhh', (err, decoded) => {
+            jwt.verify(token, config.jwt_secret_key, (err, decoded) => {
                 if(err) reject(err);
                 resolve(decoded);
             });

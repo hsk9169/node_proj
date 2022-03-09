@@ -5,35 +5,41 @@ const userService = require('../services/user');
 const config = require('../config/index');
 
 exports.signInKakao = async (req, res, next) => {
-    logger.info('POST /sign/in/kakao');
-
-    res.redirect(url.format({
-        pathname: '/api/users/email',
-        query: {
-            email: req.body.email,
-        }
-    }))
+    logger.info('POST /signin/kakao');
+    const email = req.body.email
+    await userService.getUserByEmailWithDetails(email)
+        .then(user => {
+            if (user) {
+                logger.info('user account found : ' + email)
+                res.json(user)
+            } else {
+                logger.info('no user accound found : ' + email)
+                res.status(200).send('no user found')
+            }
+        })
+        .catch(err => {
+            logger.error('GET /signin/kakao')
+            logger.error(err.stack)
+            res.status(400).send()
+        })
 }
 
 exports.signInBob = async (req, res, next) => {
-    logger.info('POST /sign/in/bob');
-    res.redirect(url.format({
-        pathname: '/api/users/email',
-        query: {
-            email: req.body.email,
-        }
-    }));
-}
-
-exports.signInTest = async(req, res, next) => {
-    logger.info('GET /test/jwt');
-    console.log(req.decoded);
-
-    // determine if Email / Phone sign in
-    res.redirect(url.format({
-        pathname: '/api/users/email',
-        query: {
-            email: req.decoded.email,
-        }
-    }));
+    logger.info('POST /signin/bob');
+    const email = req.body.email
+    await userService.getUserByEmailWithDetails(email)
+        .then(user => {
+            if (user) {
+                logger.info('user account found : ' + email)
+                res.json(user)
+            } else {
+                logger.info('no user accound found : ' + email)
+                res.status(200).send('no user found')
+            }
+        })
+        .catch(err => {
+            logger.error('GET /signin/bob')
+            logger.error(err.stack)
+            res.status(400).send()
+        })
 }

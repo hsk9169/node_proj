@@ -1,14 +1,22 @@
 const router = require('express').Router();
-const authChecker = require('../middlewares/authChecker');
-const signController = require('../controllers/sign');
 
 
-router.use('/users', require('./users/index'));
+router.use('/user', require('./user'))
 
-router.use('/auths', require('./auths/index'));
+router.use('/mentee', require('./mentee'))
 
-router.use('/sign', require('./sign'));
+router.use('/mentor', require('./mentor'))
 
-router.get('/test/jwt', authChecker.check, signController.signInTest);
+router.use('/auth', require('./auth'))
 
-module.exports = router;
+router.use('/signin', require('./signin'))
+
+router.use('/bobjari', require('./bobjari'))
+
+router.use('/chat', require('./chat'))
+
+router.use('/like', require('./like'))
+
+router.use('/review', require('./review'))
+
+module.exports = router

@@ -1,151 +1,136 @@
 const { data } = require('../config/winston');
 const logger = require('../config/winston');
-const menteeModel = require('../models/user/mentee/handler');
-const mentorModel = require('../models/user/mentor/handler');
+const menteeModel = require('../models/mentee/handler');
+const mentorModel = require('../models/mentor/handler');
+const mentorDetailsModel = require('../models/mentor/details/handler');
+const menteeMetaModel = require('../models/mentee/metadata/handler')
+const mentorMetaModel = require('../models/mentor/metadata/handler')
+const userModel = require('../models/userCommon/handler');
 const config = require('../config/index');
-const crypto = require('crypto');
 
-// Mentee
-exports.createMentee = async (data) => {
+// User
+exports.createUser = async (data, files) => {
     try {
-        const profile = await menteeModel.create(data);
-        return profile;
-    } catch(err) { 
-        logger.error(err.stack);
-        throw Error(err);
-    }
-}
+        let mentee, mentor, mentorDetails, menteeMeta, mentorMeta
+        const userData = { 
+            profile: {
+                email: data.email,
+                age: data.age,
+                gender: data.gender,
+                nickname: data.nickname,
+                image: {
+                    data: (files.img !== null ?
+                        files.img.buffer : data.img),
+                    contentType: (files.img !== null ?
+                        files.img.mimetype : 'url'),
+                },
+            },
+            role: data.role,
+        };
+        
+        const user = await userModel.create(userData);
 
-exports.getMentees = async () => {
-    try {
-        let data = await menteeModel.findAll();
-        return data;
+        try {
+            mentor = await mentorModel.create({
+                user: user._id,
+                career: {
+                    job: data.job,
+                    company: data.company,
+                    years: data.years,
+                    topics: data.topics,
+                    auth: {
+                        method: data.authSelect,
+                        isAuth: data.isAuth,
+                    },
+                },
+                title: data.title,
+                hashtags: [],
+            });
+        } catch {
+            mentor = await mentorModel.create({
+                user: user._id,
+            })
+        }
+
+        try {
+            mentorDetails = await mentorDetailsModel.create({
+                mentor: mentor._id,
+                introduce: data.introduce,
+                preference: {
+                    schedule: data.schedules,
+                    location: data.cafes,
+                    fee: {
+                        select: data.feeSelect,
+                        value: data.fee,
+                    }
+                }
+            })
+        } catch {
+            mentorDetails = await mentorDetailsModel.create({
+                mentor: mentor._id,
+            })
+        }
+        
+        try {
+            mentee = await menteeModel.create({
+                user: user._id,
+                interests: (data.interests === undefined ? null : data.interests),
+            });
+        } catch {
+            mentee = await menteeModel.create({
+                user: user._id,
+            })
+        }
+
+        menteeMeta = await menteeMetaModel.create({
+                mentee: mentee._id,
+        })
+        mentorMeta = await mentorMetaModel.create({
+            mentor: mentor._id,
+    })
+        
+        return user;
     } catch(err) {
         logger.error(err.stack);
         throw Error(err);
     }
 }
 
-exports.getMenteeByEmail = async(email) => {
+exports.findUserByNickname = async (nickname) => {
     try {
-        let ret = await menteeModel.findOneByEmail(email);
-        return ret;
+        return await userModel.findByNickname(nickname)
     } catch(err) {
         logger.error(err.stack);
         throw Error(err);
     }
 }
 
-exports.updateMenteeRole = async (email, curState) => {
+exports.getUserByEmailWithDetails = async (email) => {
     try {
-        // Update role by swapping
-        let ret = await menteeModel.findOneByEmailAndUpdateRole(email, curState);
-        return ret;
+        return await userModel.findByEmailWithDetails(email)
     } catch(err) {
-        logger.error(err.stack);
-        throw Error(err);
+        logger.error(err.stack)
+        throw Error(err)
     }
 }
 
-exports.getMenteeByPhone = async(phone) => {
+exports.changeUserRoleById = async (curRole, userId) => {
+    let role
+    if (curRole === 'mentee') role = 'mentor'
+    else role = 'mentee'
     try {
-        let ret = await menteeModel.findOneByPhone(phone);
-        return ret;
-    } catch(err) {
-        logger.error(err.stack);
-        throw Error(err);
+        return await userModel.changeRoleById(userId, role)
+    } catch (err) {
+        logger.error(err.stack)
+        throw Error(err)
     }
 }
 
-exports.getMenteeByNickname = async (nickname) => {
+exports.removeUserById = async (userId) => {
     try {
-        let ret = await menteeModel.findOneByNickname(nickname);
-        return ret;
+        return await userModel.removeById(userId)
     } catch(err) {
-        logger.error(err.stack);
-        throw Error(err);
-    }
-}
-
-// Mentor
-exports.createMentor = async (data) => {
-    try {
-        const profile = await mentorModel.create(data);
-        return profile;
-    } catch(err) { 
-        logger.error(err.stack);
-        throw Error(err);
-    }
-}
-
-exports.getMentors = async (keyword, startIdx, num) => {
-    try {
-        let data = await mentorModel.findAll(keyword, startIdx, num);
-        return data;
-    } catch(err) {
-        logger.error(err.stack);
-        throw Error(err);
-    }
-}
-
-exports.getMentorByEmail = async(email) => {
-    try {
-        let ret = await mentorModel.findOneByEmail(email);
-        return ret;
-    } catch(err) {
-        logger.error(err.stack);
-        throw Error(err);
-    }
-}
-
-exports.updateMentorRole = async (email, curState) => {
-    try {
-        // Update role by swapping
-        let ret = await mentorModel.findOneByEmailAndUpdateRole(email, curState);
-        return ret;
-    } catch(err) {
-        logger.error(err.stack);
-        throw Error(err);
-    }
-}
-
-exports.getMentorByPhone = async (phone) => {
-    try {
-        let ret = await mentorModel.findOneByPhone(phone);
-        return ret;
-    } catch(err) {
-        logger.error(err.stack);
-        throw Error(err);
-    }
-}
-
-exports.getMentorByNickname = async (nickname) => {
-    try {
-        let ret = await mentorModel.findOneByNickname(nickname);
-        return ret;
-    } catch(err) {
-        logger.error(err.stack);
-        throw Error(err);
-    }
-}
-
-exports.updateMentorAllowSearch = async (email, curState) => {
-    try {
-        let ret = await mentorModel.findOneByEmailAndToggleAllowSearch(email, curState)
-        console.log(ret.searchAllow)
-        return ret;
-    } catch(err) {
-        logger.error(err.stack);
-        throw Error(err);
-    }
-}
-
-exports.getMentorLength = async () => {
-    try {
-        let ret = await mentorModel.count();
-        return ret
-    } catch(err) {
-        logger.error(err.stack);
+        logger.error(err.stack)
         throw Error(err)
     }
 }

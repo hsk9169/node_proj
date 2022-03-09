@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "dependencies": {
+    "async": "^3.2.3",
     "axios": "^0.21.4",
     "connect-mongo": "^4.6.0",
     "cors": "^2.8.5",
@@ -21,8 +22,10 @@
     "path": "^0.12.7",
     "pm2": "^5.1.2",
     "qs": "^6.10.1",
+    "redux-persist": "^6.0.0",
     "session": "^0.1.0",
     "session-file-store": "^1.5.0",
+    "socket.io": "^4.4.1",
     "text-encoder": "0.0.4",
     "whatwg-url": "^9.1.0",
     "winston": "^3.3.3",
@@ -51,6 +54,6 @@
   "homepage": "https://github.com/hsk9169/node_proj#readme",
   "description": "",
   "bin": {
-      "app": "./bobjari/app.js"
+    "app": "./bobjari/app.js"
   }
 }
