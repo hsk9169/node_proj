@@ -47,10 +47,11 @@ exports.getMentorByIdWithDetails = async (req, res) => {
             logger.error('failed getting mentor details')
             logger.error(err)
             res.status(400).end()
+        } else {
+            logger.info('mentor details got successfully')
+            logger.info(results)
+            res.json(results)
         }
-        logger.info('mentor details got successfully')
-        logger.info(results)
-        res.json(results)
     })
     
 }
@@ -89,6 +90,28 @@ exports.getMentorsBySearchKeyword = async (req, res) => {
             res.status(400).end()
         });
     
+}
+
+exports.getMentorRecommended = async (req, res) => {
+    logger.info('GET /api/mentor/recommend')
+    let num
+    try {
+        num = req.query.num
+    } catch {
+        logger.warn('insufficient query param received : ', req.query)
+        res.statusMessage = 'invalid query param'
+        res.status(400).end()
+    }
+    await mentorService.getMentorRecommended(num)
+        .then(mentors => {
+            logger.info('get mentor recommended')
+            res.json(mentors)
+        })
+        .catch(err => {
+            logger.error('GET /api/mentor/recommend')
+            logger.error(err.stack)
+            res.status(400).end()
+        })
 }
 
 exports.toggleMentorSearchAllowById = async (req, res, next) => {

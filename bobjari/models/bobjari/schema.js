@@ -34,7 +34,7 @@ const bobjariSchema = {
         type: Number,
         default: 1,
     },
-    appointment: {
+    proposal: {
         schedule: [
             {
                 day: [Number],
@@ -62,6 +62,66 @@ const bobjariSchema = {
                 }
             }
         ],
+        fee: {
+            select: {
+                type: Number,
+                default: null,
+            },
+            value: {
+                type: String,
+                default: '0',
+            },
+        },
+    },
+    appointment: {
+        schedule: {
+            day: {
+                type: Number,
+                default: 0,
+            },
+            dateDay: {
+                type: Number,
+                default: 0,
+            },
+            time: {
+                startTime: {
+                    type: String,
+                    default: '',
+                },
+                endTime: {
+                    type: String,
+                    default: '',
+                },
+            },
+            month: {
+                type: Number,
+                default: 0,
+            },
+            year: {
+                type: Number,
+                default: 0,
+            },
+        },
+        location: {
+            place_name: {
+                type: String,
+                default: '',
+            },
+            address_name: {
+                type: String,
+                default: '',
+            },
+            geolocation: {
+                x: {
+                    type: String,
+                    default: '',
+                },
+                y: {
+                    type: String,
+                    default: '',
+                },
+            }
+        },
         fee: {
             select: {
                 type: Number,

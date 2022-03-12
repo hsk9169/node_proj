@@ -49,10 +49,11 @@ exports.postUser = (req, res) => {
                     logger.error('failed creating user')
                     logger.error(err.stack)
                     res.status(400).end()
+                } else {
+                    logger.info('user created successfully')
+                    logger.info(results)
+                    res.json(results)
                 }
-                logger.info('user created successfully')
-                logger.info(results)
-                res.json(results)
             })
         }
     })  

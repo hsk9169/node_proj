@@ -16,10 +16,9 @@ exports.createReview = async (menteeId, mentorId, score, text) => {
     }
 }
 
-exports.getReviewListByMentorId = async (mentorId) => {
+exports.getRecentReviews = async (num) => {
     try {
-        const reviewList = await reviewModel.findByMentorId(mentorId)
-        return reviewList
+        return await reviewModel.findRecent(num)
     } catch(err) {
         logger.error(err.stack)
         throw Error(err)

@@ -12,6 +12,10 @@ router.get('/search',
             clientLogger.getHostname, 
             mentorController.getMentorsBySearchKeyword);
 
+router.get('/recommend',
+            clientLogger.getHostname, 
+            mentorController.getMentorRecommended)
+
 // Toggle Search Allow
 router.get('/searchAllow', 
             [clientLogger.getHostname, authChecker.check], 

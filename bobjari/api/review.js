@@ -7,9 +7,9 @@ router.post('/',
             [clientLogger.getHostname, authChecker.check],
             reviewController.createReview)
 
-router.get('/',
-            [clientLogger.getHostname, authChecker.check],
-            reviewController.getReviewListByMentorId)
+router.get('/recent',
+            clientLogger.getHostname,
+            reviewController.getRecentReviews)
 
 
 module.exports = router;

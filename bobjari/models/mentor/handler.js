@@ -71,8 +71,24 @@ mentorSchema.statics.findByKeyword = function (keyword, startIdx, num) {
                     select: 'preference.fee',
                 })
                 .populate('user')
+                .populate({
+                    path: 'metadata',
+                    select: 'rate'
+                })
                 .exec();
 };
+
+mentorSchema.statics.findRecommended = function (num) {
+    return this.find()
+                .sort({createdAt: -1})
+                .limit(Number(num))
+                .select('career.job career.company')
+                .populate({
+                    path: 'user',
+                    select: 'profile.nickname profile.image'
+                })
+                .exec()
+}
 
 // Toggle Search Allow Flag
 mentorSchema.statics.toggleSearchAllowById = function (mentorId, curState) {

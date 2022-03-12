@@ -6,14 +6,24 @@ reviewSchema.statics.create = function (payload) {
     return review.save()
 }
 
-reviewSchema.statics.findByMentorId = function (mentorId) {
-    return this.find( {'mentor': mentorId} )
-                .limit(5)
+reviewSchema.statics.findRecent = function (num) {
+    return this.find({'body': {'$ne': ''}})
+                .sort({createdAt: -1})
+                .limit(Number(num))
+                .select('createdAt body')
                 .populate({
                     path: 'mentee',
                     populate: {
                         path: 'user',
-                        select: 'profile.nickname profile.image',
+                        select: 'profile.nickname',
+                    }
+                })
+                .populate({
+                    path: 'mentor',
+                    select: 'career.job',
+                    populate: {
+                        path: 'user',
+                        select: 'profile.nickname'
                     }
                 })
 }

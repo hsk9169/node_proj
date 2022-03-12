@@ -39,30 +39,31 @@ exports.createReview = async (req, res) => {
             logger.error('failed creating user')
             logger.error(err.stack)
             res.status(400).end()
+        } else {
+            logger.info('review created successfully')
+            logger.info(results)
+            res.status(200).send('success')
         }
-        logger.info('review created successfully')
-        logger.info(results)
-        res.status(200).send('success')
     })
 }
 
-exports.getReviewListByMentorId = async (req, res) => {
-    logger.info('GET /api/review')
-    let mentorId
+exports.getRecentReviews = async (req, res) => {
+    logger.info('GET /api/review/recent')
+    let num
     try {
-        mentorId = req.query.mentorId
+        num = req.query.num
     } catch {
         logger.warn('insufficient query data received : ', req.query)
         res.statusMessage = 'invalid query data'
         res.status(400).end()
     }
-    await reviewService.getReviewListByMentorId(mentorId)
-        .then(reviewList => {
+    await reviewService.getRecentReviews(num)
+        .then(reviews => {
             logger.info('review list found successfully')
-            res.json(reviewList)
+            res.json(reviews)
         })
         .catch(err => {
-            logger.error('GET /api/review')
+            logger.error('GET /api/review/recent')
             logger.error(err.stack)
             res.status(400).end()
         })

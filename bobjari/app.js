@@ -12,7 +12,7 @@ const io = require('socket.io')(socket_server, {
             'http://ec2-3-131-93-42.us-east-2.compute.amazonaws.com:80',
             'http://3.131.93.42',
             'http://localhost:3000',
-            'http://localhost:5000'
+            'http://localhost:5000',
         ],
         credentials: true,
     },
@@ -32,7 +32,7 @@ app.use(cors({
         'http://ec2-3-131-93-42.us-east-2.compute.amazonaws.com:80',
         'http://3.131.93.42',
         'http://localhost:3000',
-        'http://localhost:5000'
+        'http://localhost:5000',
     ],
     credentials: true,
 }));
