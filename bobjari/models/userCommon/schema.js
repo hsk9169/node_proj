@@ -13,8 +13,13 @@ let userSchema = {
     profile: {
         email: {
             type: String,
-            required: true,
             unique: true,
+            default: '',
+        },
+        phone: {
+            type: String,
+            unique: true,
+            default: '',
         },
         age: {
             type: Number,

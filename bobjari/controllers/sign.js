@@ -14,7 +14,7 @@ exports.signInKakao = async (req, res, next) => {
                 res.json(user)
             } else {
                 logger.info('no user accound found : ' + email)
-                res.status(200).send('no user found')
+                res.status(204).send('no user found')
             }
         })
         .catch(err => {
@@ -26,15 +26,15 @@ exports.signInKakao = async (req, res, next) => {
 
 exports.signInBob = async (req, res, next) => {
     logger.info('POST /signin/bob');
-    const email = req.body.email
-    await userService.getUserByEmailWithDetails(email)
+    const phone = req.body.phone
+    await userService.getUserByPhoneWithDetails(phone)
         .then(user => {
             if (user) {
-                logger.info('user account found : ' + email)
+                logger.info('user account found : ' + phone)
                 res.json(user)
             } else {
-                logger.info('no user accound found : ' + email)
-                res.status(200).send('no user found')
+                logger.info('no user accound found : ' + phone)
+                res.status(204).send('no user found')
             }
         })
         .catch(err => {

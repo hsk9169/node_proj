@@ -47,6 +47,25 @@ userSchema.statics.findByEmailWithDetails = function (email) {
     return ret
 }
 
+// Get User Data with Details
+userSchema.statics.findByPhoneWithDetails = function (phone) {
+    const query = new RegExp('^'+phone+'$', 'i')
+    return this.findOne({'profile.phone': query})
+                    .populate({
+                        path: 'mentor',
+                        populate: {
+                            path: 'metadata details',
+                        }
+                    })
+                    .populate({
+                        path: 'mentee',
+                        populate: {
+                            path: 'metadata',
+                        }
+                    }).exec()
+    return ret
+}
+
 // Change Role
 userSchema.statics.changeRoleById = function (userId, role) {
     return this.findByIdAndUpdate(

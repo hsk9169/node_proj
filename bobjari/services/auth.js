@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 const logger = require('../config/winston');
-const kakaoAuth = require('../subscribers/auth');
+const authSubscriber = require('../subscribers/auth');
 const nodemailer = require('nodemailer');
 const ejs = require('ejs');
 const path = require('path');
@@ -14,8 +14,8 @@ const makeAuthNum = () => {
 };
 
 exports.authKakao = async (authData) => {
-    const accessToken = await kakaoAuth.getAccessToken(authData);
-    const account = await kakaoAuth.getAccount(accessToken);
+    const accessToken = await authSubscriber.getKakaoAccessToken(authData);
+    const account = await authSubscriber.getKakaoAccount(accessToken);
     const profile = {
         email: account.email,
         gender: account.gender,
@@ -68,6 +68,16 @@ exports.authEmail = async (email) => {
     return authNum;
 }
 
+exports.authPhone = async (phone) => {
+    const authNum = makeAuthNum()
+    const authResult = await authSubscriber.getNcpSmsAuth(phone, authNum)
+    const result = {
+        authNum: authNum,
+        authResult: authResult
+    }
+    return result
+}
+
 exports.authAccessToken = async (profile) => {
     //const privateKey = fs.readFileSync('private_key.pem');
     //const refreshKey = fs.readFileSync('refresh_key.pem')
@@ -109,3 +119,4 @@ exports.authRefreshToken = async (profile) => {
     //    console.log(token);
     //};
 }
+

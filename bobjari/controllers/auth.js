@@ -32,6 +32,30 @@ exports.authEmail = async (req, res, next) => {
         });
 }
 
+exports.authPhone = async (req, res, next) => {
+    logger.info('POST /api/auth/phone')
+    let phone
+    try {
+        phone = req.body.phone
+    } catch {
+        logger.warn('insufficient body param received : ', req.body)
+        res.statusMessage = 'invalid body param'
+        res.status(400).end()
+    }
+
+    await authService.authPhone(phone)
+        .then(authResult => {
+            logger.info('got auth number, response to client')
+            console.log('auth result', authResult)
+            res.json(authResult)
+        })
+        .catch(err => {
+            logger.error('POST /api/auth/phone')
+            logger.error(err.stack)
+            res.status(400).end()
+        })
+}
+
 exports.authToken = async (req, res, next) => {
     logger.info('GET /api/auth/token');
 

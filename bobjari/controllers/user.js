@@ -37,12 +37,19 @@ exports.postUser = (req, res) => {
                         .catch(err => cb(err))
                 },
                 (user, cb) => {
-                    userService.getUserByEmailWithDetails(user.profile.email)
-                        .then(userDetails => {
+                    userService.getUserByPhoneWithDetails(user.profile.phone)
+                        .then(userDetailsPhone => {
                             logger.info('user details found successfully')
-                            cb(null, userDetails)
+                            cb(null, userDetailsPhone)
                         })
-                        .catch(err => cb(err))
+                },
+                (user, cb) => {
+                    console.log(user.profile.email)
+                    userService.getUserByEmailWithDetails(user.profile.email)
+                        .then(userDetailsEmail => {
+                            logger.info('user details found successfully')
+                            cb(null, userDetailsEmail)
+                        })
                 }
             ], (err, results) => {
                 if (err) {
@@ -92,7 +99,7 @@ exports.changeUserRoleById = async (req, res, next) => {
                     res.json(user.role)
                 } else {
                     logger.info('no user account found : ' + userId)
-                    res.status(200).send('no user found')
+                    res.status(204).send('no user found')
                 }
             })
             .catch(err => {

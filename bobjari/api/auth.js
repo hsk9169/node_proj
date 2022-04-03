@@ -11,6 +11,10 @@ router.post('/email',
             clientLogger.getHostname, 
             authController.authEmail);
 
+router.post('/phone',
+            clientLogger.getHostname,
+            authController.authPhone)
+
 router.get('/token', 
             clientLogger.getHostname, 
             authController.authToken);
@@ -18,6 +22,5 @@ router.get('/token',
 router.get('/verify', 
             [clientLogger.getHostname, authChecker.check], 
             authController.verifyToken);
-
 
 module.exports = router;

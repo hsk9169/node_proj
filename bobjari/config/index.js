@@ -25,6 +25,13 @@ const config = {
         chatId: process.env.TELEGRAM_CHAT_ID,
     },
     socket_port: process.env.SOCKET_PORT,
+    ncp_sens: {
+        secretKey: process.env.NCP_SECRET_KEY,
+        accessKey: process.env.NCP_KEY,
+        baseUrl: process.env.NCP_SENS_BASE_URL,
+        servicePath: process.env.NCP_SENS_SERVICE_PATH
+                    + process.env.NCP_SENS_SERVICE_ID + '/messages',
+    }
 }
 
 module.exports = config;

@@ -13,6 +13,7 @@ const io = require('socket.io')(socket_server, {
             'http://3.131.93.42',
             'http://localhost:3000',
             'http://localhost:5000',
+            'http://172.20.10.10',
         ],
         credentials: true,
     },
@@ -33,6 +34,7 @@ app.use(cors({
         'http://3.131.93.42',
         'http://localhost:3000',
         'http://localhost:5000',
+        'http://172.20.10.10',
     ],
     credentials: true,
 }));

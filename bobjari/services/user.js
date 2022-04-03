@@ -14,7 +14,8 @@ exports.createUser = async (data, files) => {
         let mentee, mentor, mentorDetails, menteeMeta, mentorMeta
         const userData = { 
             profile: {
-                email: data.email,
+                email: data.email !== null ? data.email : '',
+                phone: data.phone !== null ? data.phone : '',
                 age: data.age,
                 gender: data.gender,
                 nickname: data.nickname,
@@ -108,6 +109,15 @@ exports.findUserByNickname = async (nickname) => {
 exports.getUserByEmailWithDetails = async (email) => {
     try {
         return await userModel.findByEmailWithDetails(email)
+    } catch(err) {
+        logger.error(err.stack)
+        throw Error(err)
+    }
+}
+
+exports.getUserByPhoneWithDetails = async (phone) => {
+    try {
+        return await userModel.findByPhoneWithDetails(phone)
     } catch(err) {
         logger.error(err.stack)
         throw Error(err)

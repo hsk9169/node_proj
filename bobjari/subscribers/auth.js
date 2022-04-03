@@ -2,8 +2,10 @@ const router = require('express').Router();
 const axios = require('axios');
 const qs = require('qs');
 const logger = require('../config/winston');
+const config = require('../config')
+const crypto = require('crypto-js')
 
-exports.getAccessToken = async (authData) => {
+exports.getKakaoAccessToken = async (authData) => {
     let accessToken;
     const options = {
         method: 'POST',
@@ -32,7 +34,7 @@ exports.getAccessToken = async (authData) => {
     return accessToken;
 };
 
-exports.getAccount = async (accessToken) => {
+exports.getKakaoAccount = async (accessToken) => {
     let profile;
     const options = {
         method: 'GET',
@@ -52,3 +54,60 @@ exports.getAccount = async (accessToken) => {
         
     return profile;
 };
+
+exports.getNcpSmsAuth = async (phone, authNum) => {
+    let result
+    const reqUri = config.ncp_sens.baseUrl + config.ncp_sens.servicePath
+    const servicePath = config.ncp_sens.servicePath
+    const secretKey = config.ncp_sens.secretKey
+    const accessKey = config.ncp_sens.accessKey
+    const timestamp = Date.now().toString()
+    const method = 'POST'
+    const space = ' '
+    const newLine = '\n'
+
+    const hmac = crypto.algo.HMAC.create(crypto.algo.SHA256, secretKey)
+    hmac.update(method)
+    hmac.update(space)
+    hmac.update(servicePath)
+    hmac.update(newLine)
+    hmac.update(timestamp)
+    hmac.update(newLine)
+    hmac.update(accessKey)
+    const hash = hmac.finalize()
+    const signature = hash.toString(crypto.enc.Base64)
+
+    await axios({
+        method: method,
+        url: reqUri,
+        headers: {
+            'Content-Type': 'application/json; charset=utf-8',
+            'x-ncp-iam-access-key': accessKey,
+            'x-ncp-apigw-timestamp': timestamp,
+            'x-ncp-apigw-signature-v2': signature,
+        },
+        data: {
+            type: "SMS",
+            countryCode: "82",
+            from: "01084770706",
+            content: `밥자리 인증 번호 [${authNum}]를 입력해주세요.`,
+            messages: [{ to: `${phone}` }],
+        }
+    })
+        .then(res => {
+            if (res.status === 200 || 
+                res.status === 202)
+            {
+                logger.info('NCP Sens Auth succeeded')
+                result = 'authorized'
+            } else {
+                logger.info('NCP Sens Auth failed')
+                result = 'unauthorized'
+            }
+        })
+        .catch(err => {
+            console.log(err.response)
+        })
+
+    return result
+}
