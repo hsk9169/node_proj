@@ -11,6 +11,7 @@ const config = require('../config/index');
 // User
 exports.createUser = async (data, files) => {
     try {
+        console.log('req data', data)
         let mentee, mentor, mentorDetails, menteeMeta, mentorMeta
         const userData = { 
             profile: {

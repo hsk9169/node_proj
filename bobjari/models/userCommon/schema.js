@@ -14,12 +14,12 @@ let userSchema = {
         email: {
             type: String,
             unique: true,
-            default: '',
+            default: null,
         },
         phone: {
             type: String,
             unique: true,
-            default: '',
+            default: null,
         },
         age: {
             type: Number,

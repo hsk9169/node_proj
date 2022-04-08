@@ -16,6 +16,7 @@ exports.postUser = (req, res) => {
             res.status(400).end()
         } else {
             let data = {}
+            let _profile
             let files = {img: null, auth: null}
             try { files.img = req.files.img[0] }
             catch {}
@@ -31,24 +32,26 @@ exports.postUser = (req, res) => {
                 (cb) => {
                     userService.createUser(data, files)
                         .then(user => {
+                            _profile = user.profile
                             logger.info('user created successfully')
-                            cb(null, user)
+                            cb(null)
                         })
                         .catch(err => cb(err))
                 },
-                (user, cb) => {
-                    userService.getUserByPhoneWithDetails(user.profile.phone)
+                (cb) => {
+                    userService.getUserByPhoneWithDetails(_profile.phone)
                         .then(userDetailsPhone => {
+                            console.log('find phone',userDetailsPhone)
                             logger.info('user details found successfully')
                             cb(null, userDetailsPhone)
                         })
                 },
-                (user, cb) => {
-                    console.log(user.profile.email)
-                    userService.getUserByEmailWithDetails(user.profile.email)
+                (userDetailsPhone, cb) => {
+                    userService.getUserByEmailWithDetails(_profile.email)
                         .then(userDetailsEmail => {
+                            console.log('find email',userDetailsEmail)
                             logger.info('user details found successfully')
-                            cb(null, userDetailsEmail)
+                            cb(null, [userDetailsPhone, userDetailsEmail])
                         })
                 }
             ], (err, results) => {
@@ -58,8 +61,11 @@ exports.postUser = (req, res) => {
                     res.status(400).end()
                 } else {
                     logger.info('user created successfully')
-                    logger.info(results)
-                    res.json(results)
+                    results.map(el => {
+                        if(el !== null) {
+                            res.json(el)
+                        }
+                    })
                 }
             })
         }
