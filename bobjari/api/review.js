@@ -4,7 +4,8 @@ const reviewController = require('../controllers/review');
 const clientLogger = require('../middlewares/clientLogger');
 
 router.post('/',
-            [clientLogger.getHostname, authChecker.check],
+            //[clientLogger.getHostname, authChecker.check],
+            clientLogger.getHostname,
             reviewController.createReview)
 
 router.get('/recent',

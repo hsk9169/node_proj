@@ -4,7 +4,8 @@ const bobjariController = require('../controllers/bobjari');
 const clientLogger = require('../middlewares/clientLogger');
 
 router.post('/',
-            [clientLogger.getHostname, authChecker.check],
+            //[clientLogger.getHostname, authChecker.check],
+            [clientLogger.getHostname],
             bobjariController.createBobjari)
 
 router.delete('/',
@@ -12,7 +13,7 @@ router.delete('/',
             bobjariController.removeBobjariById)
 
 router.get('/mentee',
-            [clientLogger.getHostname, authChecker.check],
+            clientLogger.getHostname,
             bobjariController.getSentBobjariList)
 
 router.get('/mentor',

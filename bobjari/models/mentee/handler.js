@@ -25,7 +25,7 @@ menteeSchema.statics.create = function (payload) {
 menteeSchema.statics.findByIdWithMeta = function (menteeId) {
     return this.findById(menteeId)
                 .populate('metadata')
-                .populate('user')
+                .populate('userDetail')
                 .exec() 
 }
 

@@ -6,9 +6,18 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const app = express();
 const socket_server = http.createServer(app)
+var admin = require("firebase-admin");
+
+var serviceAccount = require("./config/serviceAccountKey.json");
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount)
+});
+
 const io = require('socket.io')(socket_server, {
     cors: { 
         origin: [
+            'http://127.0.0.1:5000',
             'http://ec2-3-131-93-42.us-east-2.compute.amazonaws.com:80',
             'http://3.131.93.42',
             'http://localhost:3000',
@@ -27,9 +36,10 @@ const parser = bodyParser.urlencoded({extended: false});
 // Log Plugin
 const logger = require('./config/winston');
 
-// CORS 
+// CORS
 app.use(cors({
     origin: [
+        'http://127.0.0.1:5000',
         'http://ec2-3-131-93-42.us-east-2.compute.amazonaws.com:80',
         'http://3.131.93.42',
         'http://localhost:3000',
@@ -84,17 +94,32 @@ const NEW_CHAT_MESSAGE_EVENT = 'newChatMessage'
 const chatService = require('./services/chat')
 
 io.on('connection', socket => {
+    logger.info('socket IO client connected');
+    logger.info('remote address : ' + socket.handshake.address)
+    var date = new Date();
+    var year = date.getFullYear();
+    var month = date.getMonth();
+    var today = date.getDate();
+    var hours = date.getHours();
+    var minutes = date.getMinutes();
+    var seconds = date.getSeconds();
+    var milliseconds = date.getMilliseconds();
+    var korDate = new Date(Date.UTC(year, month, today, hours, minutes, seconds, milliseconds));
     const {roomId} = socket.handshake.query
+    logger.info('joined roomId : ' + roomId)
     socket.join(roomId)
+    logger.info('current room state : ' + Object.keys(socket.adapter.rooms))
     socket.on(NEW_CHAT_MESSAGE_EVENT, async(data) => {
-        await chatService.createChat(roomId, data.body, data.senderId)
-        const date = new Date().toISOString()
-        io.in(roomId).emit(NEW_CHAT_MESSAGE_EVENT, data, date)
-        
+        console.log(data)
+        await chatService.createChat(roomId, data.body, data.senderId, data.nickname, data.deviceToken)
+        const dateString = korDate.toISOString()
+        io.in(roomId).emit(NEW_CHAT_MESSAGE_EVENT, data, dateString)
+        logger.info('room ' + roomId + ' new message [' + data.body + '] ' + 'from ' + data.senderId)
     })
     
     socket.on('disconnect', () => {
         socket.leave(roomId)
+        console.log(Object.keys(socket.adapter.rooms))
     })
 })
 
@@ -103,4 +128,4 @@ app.use('/api', require('./api/index'));
 
 app.listen(config.port, () => console.log(`Server listening on port ${config.port}`));
 
-socket_server.listen(config.socket_port, () => console.log(`Server listening on port ${config.socket_port}`))
+socket_server.listen(config.socket_port, '0.0.0.0', () => console.log(`Server listening on port ${config.socket_port}`))

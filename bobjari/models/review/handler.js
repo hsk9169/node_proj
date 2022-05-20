@@ -14,7 +14,7 @@ reviewSchema.statics.findRecent = function (num) {
                 .populate({
                     path: 'mentee',
                     populate: {
-                        path: 'user',
+                        path: 'userDetail',
                         select: 'profile.nickname',
                     }
                 })
@@ -22,7 +22,7 @@ reviewSchema.statics.findRecent = function (num) {
                     path: 'mentor',
                     select: 'career.job',
                     populate: {
-                        path: 'user',
+                        path: 'userDetail',
                         select: 'profile.nickname'
                     }
                 })

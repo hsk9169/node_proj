@@ -40,7 +40,7 @@ mentorSchema.statics.create = function (payload) {
 mentorSchema.statics.findByIdWithDetails = function (mentorId) {
     return this.findById(mentorId)
                 .populate('details')
-                .populate('user')
+                .populate('userDetail')
                 .populate({
                     path: 'metadata',
                     select: 'numBobjari rate'
@@ -51,7 +51,7 @@ mentorSchema.statics.findByIdWithDetails = function (mentorId) {
                     populate: {
                         path: 'mentee',
                         populate: {
-                            path: 'user',
+                            path: 'userDetail',
                             select: 'profile.nickname profile.image',
                         }
                     }
@@ -70,7 +70,7 @@ mentorSchema.statics.findByKeyword = function (keyword, startIdx, num) {
                     path: 'details',
                     select: 'preference.fee',
                 })
-                .populate('user')
+                .populate('userDetail')
                 .populate({
                     path: 'metadata',
                     select: 'rate'
@@ -84,7 +84,7 @@ mentorSchema.statics.findRecommended = function (num) {
                 .limit(Number(num))
                 .select('career.job career.company')
                 .populate({
-                    path: 'user',
+                    path: 'userDetail',
                     select: 'profile.nickname profile.image'
                 })
                 .exec()

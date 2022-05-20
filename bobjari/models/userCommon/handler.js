@@ -3,14 +3,14 @@ let userSchema = require('./schema')
 
 userSchema.virtual('mentor', {
     ref: 'Mentor',
-    foreignField: 'user',
+    foreignField: 'userId',
     localField: '_id',
     justOne: true,
 })
 
 userSchema.virtual('mentee', {
     ref: 'Mentee',
-    foreignField: 'user',
+    foreignField: 'userId',
     localField: '_id',
     justOne: true,
 })

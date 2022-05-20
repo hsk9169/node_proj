@@ -4,6 +4,7 @@ const likeService = require('../services/like');
 
 exports.createLike = async (req, res) => {
     logger.info('POST /api/like')
+    console.log(req.body.menteeId)
     let menteeId, mentorId
     try {
         menteeId = req.body.menteeId

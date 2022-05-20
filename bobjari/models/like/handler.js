@@ -13,7 +13,7 @@ likeSchema.statics.findByMenteeId = function (menteeId) {
                     select: 'career.company career.job career.years',
                     populate: [
                         {
-                            path: 'user',
+                            path: 'userDetail',
                             select: 'profile.nickname profile.image'
                         },
                         {

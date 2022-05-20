@@ -10,10 +10,13 @@ let menteeSchema = {
     //    type: Date,
     //    required: true,
     //},
-    user: {
+    userId: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: [true, 'User must be included'],
+    },
+    userDetail: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
-        required: [true, 'User must be included'],
     },
     interests: [String],
 };

@@ -10,6 +10,10 @@ let userSchema = {
         type: String,
         required: true,
     },
+    deviceToken: {
+        type: String,
+        default: null,
+    },
     profile: {
         email: {
             type: String,

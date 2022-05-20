@@ -4,7 +4,8 @@ const chatController = require('../controllers/chat');
 const clientLogger = require('../middlewares/clientLogger');
 
 router.get('/',
-            [clientLogger.getHostname, authChecker.check],
+            //[clientLogger.getHostname, authChecker.check],
+            clientLogger.getHostname,
             chatController.getMessagesByDateWithStep)
 
 module.exports = router;

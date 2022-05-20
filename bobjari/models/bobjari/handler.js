@@ -23,7 +23,7 @@ bobjariSchema.statics.getListByMenteeId = function (menteeId) {
     return this.find({ 'mentee': menteeId })
                 .populate({
                     path: 'mentor',
-                    populate: 'user',
+                    populate: 'userDetail',
                 })
                 .populate({
                     path: 'chat',
@@ -41,7 +41,7 @@ bobjariSchema.statics.getListByMentorId = function (mentorId) {
     return this.find({ 'mentor': mentorId })
                 .populate({
                     path: 'mentee',
-                    populate: 'user'
+                    populate: 'userDetail'
                 })
                 .populate({
                     path: 'chat',
