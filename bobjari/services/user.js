@@ -96,8 +96,8 @@ exports.createUser = async (data, files) => {
             mentor: mentor._id,
             introduce: data.introduce === undefined ? null : data.introduce,
             preference: {
-                schedule: data.schedules === undefined ? null : data.schedules,
-                location: data.cafes === undefined ? null : data.cafes,
+                schedule: data.schedules === undefined ? [] : data.schedules,
+                location: data.cafes === undefined ? [] : data.cafes,
                 fee: {
                     select: data.feeSelect === undefined ? null : data.feeSelect,
                     value: data.fee === undefined ? null : data.fee,

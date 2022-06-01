@@ -110,7 +110,7 @@ io.on('connection', socket => {
     socket.join(roomId)
     logger.info('current room state : ' + Object.keys(socket.adapter.rooms))
     socket.on(NEW_CHAT_MESSAGE_EVENT, async(data) => {
-        console.log(data)
+        console.log(data.deviceToken)
         await chatService.createChat(roomId, data.body, data.senderId, data.nickname, data.deviceToken)
         const dateString = korDate.toISOString()
         io.in(roomId).emit(NEW_CHAT_MESSAGE_EVENT, data, dateString)
@@ -119,7 +119,6 @@ io.on('connection', socket => {
     
     socket.on('disconnect', () => {
         socket.leave(roomId)
-        console.log(Object.keys(socket.adapter.rooms))
     })
 })
 

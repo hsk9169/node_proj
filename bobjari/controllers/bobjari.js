@@ -7,17 +7,17 @@ const { read } = require('../config/winston');
 
 exports.createBobjari = async (req, res) => {
     logger.info('POST /api/bobjari')
-    let menteeId, mentorId, appointment
+    let menteeId, mentorId, proposal
     try {
         menteeId = req.body.menteeId
         mentorId = req.body.mentorId
-        appointment = req.body.appointment
+        proposal = JSON.parse(req.body.proposal)
     } catch {
         logger.warn('insufficient body data received : ', req.body)
         res.statusMessage = 'invalid body data'
-        res.status(400).end()
+        res.status(400).end('failed')
     }
-    await bobjariService.createBobjari(menteeId, mentorId, appointment)
+    await bobjariService.createBobjari(menteeId, mentorId, proposal)
         .then(bobjari => {
             logger.info('bobjari created successfully')
             logger.info(bobjari)
@@ -26,7 +26,7 @@ exports.createBobjari = async (req, res) => {
         .catch(err => {
             logger.error('POST /api/bobjari')
             logger.error(err.stack)
-            res.status(400).end()
+            res.status(400).end('failed')
         })
 }
 

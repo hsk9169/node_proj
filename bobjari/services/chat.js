@@ -25,8 +25,8 @@ exports.createChat = async (bobjariId, message, userId, nickname, deviceToken) =
             if (err) throw err
             return(result.chat)
         })
+        
         // FCM Test
-        //let target_token = 'ft4MTAlzhUuujLwCGA3lpX:APA91bFz7FdaeLH0Ac-5zkscjjbKYufKSvKdoNiOJm0lwCpGOH30t68z3mUM2CvAwXMYxmI2pVOgH8Qc0efYJuJPAraDTs2pkRvyLZQbltHSay8K1W_1HUXH-jNi_oNElcRb8vhfAAPj'
         let noti_message = {
             notification: {
                 title: nickname,
@@ -37,7 +37,7 @@ exports.createChat = async (bobjariId, message, userId, nickname, deviceToken) =
             prioritiy: 'high',
             timeToLive: 60 * 60 * 24
         }
-        if (deviceToken !== null) {
+        if (deviceToken !== '') {
             admin
             .messaging()
             .sendToDevice(deviceToken, noti_message, options)
