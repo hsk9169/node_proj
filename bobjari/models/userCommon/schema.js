@@ -12,7 +12,7 @@ let userSchema = {
     },
     deviceToken: {
         type: String,
-        default: null,
+        default: '',
     },
     profile: {
         email: {
