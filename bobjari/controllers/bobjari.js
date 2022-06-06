@@ -17,6 +17,7 @@ exports.createBobjari = async (req, res) => {
         res.statusMessage = 'invalid body data'
         res.status(400).end('failed')
     }
+    logger.info(`${menteeId} requested to ${mentorId} : ${proposal}`)
     await bobjariService.createBobjari(menteeId, mentorId, proposal)
         .then(bobjari => {
             logger.info('bobjari created successfully')

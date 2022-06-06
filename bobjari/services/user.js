@@ -28,9 +28,9 @@ exports.createUser = async (data, files) => {
             },
             role: data.role === undefined ? null : data.role,
             deviceToken: data.deviceToken === undefined ? null : data.deviceToken,
-        };
+        }
         const user = await userModel.create(userData);
-
+        
 /*
         try {
             mentor = await mentorModel.create({
@@ -104,24 +104,19 @@ exports.createUser = async (data, files) => {
                 }
             }
         })
-/*
+
         try {
             mentee = await menteeModel.create({
-                user: user._id,
-                interests: (data.interests === undefined ? null : data.interests),
+                userId: user._id,
+                userDetail: user._id,
+                interests: data.interests === undefined ? null : data.interests,
             });
         } catch {
             mentee = await menteeModel.create({
                 user: user._id,
+                userDetail: user._id,
             })
         }
-*/
-
-        mentee = await menteeModel.create({
-            userId: user._id,
-            userDetail: user._id,
-            interests: data.interests === undefined ? null : data.interests,
-        });
 
         menteeMeta = await menteeMetaModel.create({
             mentee: mentee._id,

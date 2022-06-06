@@ -54,14 +54,15 @@ exports.createBobjari = async (menteeId, mentorId, proposal) => {
             priority: 'high',
             timeToLive: 60 * 60 * 24
         }
-        if (deviceToken !== '') {
+        if (deviceToken !== '' && deviceToken !== null) {
+            logger.info(`${menteeNickname} device token : ${deviceToken}`)
             admin
             .messaging()
             .sendToDevice(deviceToken, noti_message, options)
             .then(res => {
-                console.log('Successfully sent message: ', res)
+                logger.info('Successfully sent message: ', res)
             })
-            .catch(err => console.log('Error Sending message: ', err))
+            .catch(err => logger.error('Error Sending message: ', err))
         } else {}
 
         return bobjari        

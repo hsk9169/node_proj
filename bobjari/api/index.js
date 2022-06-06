@@ -19,4 +19,6 @@ router.use('/like', require('./like'))
 
 router.use('/review', require('./review'))
 
+router.use('/autocomplete', require('./autocomplete'))
+
 module.exports = router
