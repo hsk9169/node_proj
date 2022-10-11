@@ -21,4 +21,6 @@ router.use('/review', require('./review'))
 
 router.use('/autocomplete', require('./autocomplete'))
 
+router.use('/fcm', require('./fcm'))
+
 module.exports = router

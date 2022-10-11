@@ -8,6 +8,7 @@ const app = express();
 const socket_server = http.createServer(app)
 var admin = require("firebase-admin");
 
+//var serviceAccount = require("./config/bobjariServiceAccountKey.json");
 var serviceAccount = require("./config/serviceAccountKey.json");
 
 admin.initializeApp({
@@ -108,7 +109,7 @@ io.on('connection', socket => {
     const {roomId} = socket.handshake.query
     logger.info('joined roomId : ' + roomId)
     socket.join(roomId)
-    logger.info('current room state : ' + Object.keys(socket.adapter.rooms))
+    logger.info('current room status : ' + Object.keys(socket.adapter.rooms))
     socket.on(NEW_CHAT_MESSAGE_EVENT, async(data) => {
         console.log(data.deviceToken)
         await chatService.createChat(roomId, data.body, data.senderId, data.nickname, data.deviceToken)

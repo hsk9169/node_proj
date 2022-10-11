@@ -30,30 +30,6 @@ exports.createUser = async (data, files) => {
             deviceToken: data.deviceToken === undefined ? null : data.deviceToken,
         }
         const user = await userModel.create(userData);
-        
-/*
-        try {
-            mentor = await mentorModel.create({
-                user: user._id,
-                career: {
-                    job: data.job,
-                    company: data.company,
-                    years: data.years,
-                    topics: data.topics,
-                    auth: {
-                        method: data.authSelect,
-                        isAuth: data.isAuth,
-                    },
-                },
-                title: data.title,
-                hashtags: [],
-            });
-        } catch {
-            mentor = await mentorModel.create({
-                user: user._id,
-            })
-        }
-*/
 
         mentor = await mentorModel.create({
             userId: user._id,
@@ -71,26 +47,6 @@ exports.createUser = async (data, files) => {
             title: data.title === undefined ? null : data.title,
             hashtags: data.hashtags === undefined ? null : data.hashtags,
         })
-/*
-        try {
-            mentorDetails = await mentorDetailsModel.create({
-                mentor: mentor._id,
-                introduce: data.introduce,
-                preference: {
-                    schedule: data.schedules,
-                    location: data.cafes,
-                    fee: {
-                        select: data.feeSelect,
-                        value: data.fee,
-                    }
-                }
-            })
-        } catch {
-            mentorDetails = await mentorDetailsModel.create({
-                mentor: mentor._id,
-            })
-        }
-*/
 
         mentorDetails = await mentorDetailsModel.create({
             mentor: mentor._id,
